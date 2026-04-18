@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -304,10 +304,21 @@
                             <hr class="my-2 text-muted">
                             <div class="d-flex justify-content-between mb-2 text-primary fw-bold" style="font-size:1.1rem;"><span>Pagado:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblPagado">0.00</span></span></div>
                             <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo" style="font-size:1.1rem;color:#dc3545;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblSaldo">0.00</span></span></div>
-                            <div class="d-flex gap-2 mt-auto">
-                                <button class="btn btn-factu flex-grow-1 fw-bold py-3 fs-5" id="btnPagar" disabled
-                                    title="Atajo: F12" data-bs-toggle="modal" data-bs-target="#modalAprobarFactura" aria-label="Aprobar facturación">
-                                    <i data-lucide="check-circle" class="me-1" aria-hidden="true"></i> Aprobar
+                            <div class="d-flex gap-2 mt-auto flex-wrap">
+                                <!-- Pausar: guarda en espera y limpia pantalla -->
+                                
+                                <!-- Cancelar: descarta sin guardar -->
+                                <button class="btn btn-outline-danger fw-bold py-2 flex-fill" id="btnCancelarFactura"
+                                    aria-label="Cancelar y descartar factura actual" title="Descartar factura">
+                                    <i data-lucide="x-circle" class="me-1" style="width:18px;" aria-hidden="true"></i>
+                                    <span class="d-none d-sm-inline">Cancelar</span>
+                                </button>
+                                <!-- Aprobar: emite definitivamente -->
+                                <button class="btn btn-factu fw-bold py-2 flex-grow-1 fs-6" id="btnPagar" disabled
+                                    title="Atajo: F12" data-bs-toggle="modal" data-bs-target="#modalAprobarFactura"
+                                    aria-label="Aprobar y emitir factura">
+                                    <i data-lucide="check-circle" class="me-1" aria-hidden="true"></i>
+                                    <span>Aprobar</span>
                                 </button>
                             </div>
                         </div>
@@ -402,7 +413,38 @@
                     </div>
                 </div>
             </div>
+        </div>
     </main>
+
+    <!-- ===== PANEL FACTURAS EN ESPERA (offcanvas bottom, mobile-friendly) ===== -->
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="panelEspera" aria-labelledby="panelEsperaLabel"
+        style="height:auto;max-height:60vh;border-radius:16px 16px 0 0;">
+        <div class="offcanvas-header border-bottom pb-2">
+            <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="panelEsperaLabel">
+                <i data-lucide="clock" class="text-warning" style="width:18px;height:18px;" aria-hidden="true"></i>
+                Facturas en Espera
+                <span class="badge bg-warning text-dark ms-1" id="contadorEsperaModal"></span>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar panel de espera"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <ul class="list-group list-group-flush" id="listaEspera" role="list" aria-label="Facturas en espera"></ul>
+            <div class="p-3 text-center text-muted small" id="listaEsperaVacia" style="display:none;">Sin facturas en espera</div>
+        </div>
+    </div>
+
+    <!-- Botón flotante para abrir panel de espera (solo visible cuando hay espera) -->
+    <button class="btn btn-warning fw-bold shadow-lg d-none" id="btnAbrirEspera"
+        data-bs-toggle="offcanvas" data-bs-target="#panelEspera"
+        aria-label="Ver facturas en espera" aria-controls="panelEspera"
+        style="position:fixed;bottom:1.5rem;left:1.5rem;z-index:1040;border-radius:50px;padding:.6rem 1.1rem;">
+        <i data-lucide="clock" style="width:16px;height:16px;" aria-hidden="true"></i>
+        <span class="ms-1 fw-bold" id="contadorEspera"></span>
+        <span class="ms-1 d-none d-sm-inline">en espera</span>
+    </button>
+
+    <!-- Wrap oculto requerido por el JS (conecta listas) -->
+    <div id="listaEsperaWrap" class="d-none"></div>
 
         <!-- ⚙️ Panel Accesibilidad SIMPLIFICADO -->
     <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="panelAccesibilidad" aria-labelledby="panelAccesibilidadLabel" style="width:300px;max-width:100vw;">
@@ -416,12 +458,14 @@
             <!-- TEMA -->
             <p class="a11y-label">Tema</p>
             <div class="a11y-grid-2 mb-4">
-                <div class="a11y-card" id="a11yTheme_light" onclick="A11y.setTheme('light')">
-                    <i data-lucide="sun" style="width:22px;height:22px;"></i>
+                <div class="a11y-card" id="a11yTheme_light" onclick="A11y.setTheme('light')" role="button" tabindex="0"
+                    aria-label="Tema claro" aria-pressed="false">
+                    <i data-lucide="sun" style="width:22px;height:22px;" aria-hidden="true"></i>
                     <div style="font-size:.82rem;" class="mt-1">Claro</div>
                 </div>
-                <div class="a11y-card" id="a11yTheme_dark" onclick="A11y.setTheme('dark')">
-                    <i data-lucide="moon" style="width:22px;height:22px;"></i>
+                <div class="a11y-card" id="a11yTheme_dark" onclick="A11y.setTheme('dark')" role="button" tabindex="0"
+                    aria-label="Tema oscuro" aria-pressed="false">
+                    <i data-lucide="moon" style="width:22px;height:22px;" aria-hidden="true"></i>
                     <div style="font-size:.82rem;" class="mt-1">Oscuro</div>
                 </div>
             </div>
@@ -429,23 +473,36 @@
             <!-- TAMAÑO TEXTO -->
             <p class="a11y-label">Tamaño de texto</p>
             <div class="a11y-grid-3 mb-4">
-                <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')">
+                <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')" role="button" tabindex="0" aria-label="Texto normal">
                     <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
                     <div style="font-size:.72rem;" class="mt-1">Normal</div>
                 </div>
-                <div class="a11y-card" id="a11yFont_large" onclick="A11y.setFont('large')">
+                <div class="a11y-card" id="a11yFont_large" onclick="A11y.setFont('large')" role="button" tabindex="0" aria-label="Texto grande">
                     <span style="font-size:1.4rem;font-weight:700;line-height:1;">A</span>
                     <div style="font-size:.72rem;" class="mt-1">Grande</div>
                 </div>
-                <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')">
+                <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')" role="button" tabindex="0" aria-label="Texto máximo">
                     <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
                     <div style="font-size:.72rem;" class="mt-1">Máximo</div>
                 </div>
             </div>
 
+            <!-- ALTO CONTRASTE -->
+            <p class="a11y-label">Contraste</p>
+            <div class="a11y-grid-2 mb-4">
+                <div class="a11y-card" id="a11yContrast_normal" onclick="A11y.setContrast('normal')" role="button" tabindex="0" aria-label="Contraste normal">
+                    <i data-lucide="circle-half-stroke" style="width:20px;height:20px;" aria-hidden="true"></i>
+                    <div style="font-size:.8rem;" class="mt-1">Normal</div>
+                </div>
+                <div class="a11y-card" id="a11yContrast_high-contrast" onclick="A11y.setContrast('high-contrast')" role="button" tabindex="0" aria-label="Alto contraste">
+                    <i data-lucide="contrast" style="width:20px;height:20px;" aria-hidden="true"></i>
+                    <div style="font-size:.8rem;" class="mt-1">Alto</div>
+                </div>
+            </div>
+
             <hr class="my-3">
-            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()">
-                <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i> Restablecer
+            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()" aria-label="Restablecer configuración de accesibilidad">
+                <i data-lucide="rotate-ccw" style="width:14px;height:14px;" aria-hidden="true"></i> Restablecer
             </button>
         </div>
     </div>

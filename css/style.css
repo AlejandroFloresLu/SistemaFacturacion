@@ -420,10 +420,33 @@ body {
 [data-a11y="high-contrast"] *:focus-visible     { outline: 4px solid #000 !important; }
 
 /* ==========================================================================
-   TAMAÑO DE FUENTE
+   TAMAÑO DE FUENTE — solo en pantallas medianas y mayores
    ========================================================================== */
-html[data-font="large"]  { font-size: 112%; }
-html[data-font="xlarge"] { font-size: 130%; }
+@media (min-width: 768px) {
+    html[data-font="large"]  { font-size: 112%; }
+    html[data-font="xlarge"] { font-size: 130%; }
+}
+
+/* ==========================================================================
+   FACTURAS-LISTA — DATE INPUTS COMPACT EN MÓVIL
+   ========================================================================== */
+@media (max-width: 575.98px) {
+    #filtroDesde,
+    #filtroHasta {
+        font-size: .75rem !important;
+        padding: .35rem .3rem !important;
+        min-width: 0;
+    }
+    #filtroDesde + .input-group-text,
+    #filtroHasta + .input-group-text,
+    .input-group-text:has(+ #filtroDesde),
+    .input-group-text:has(+ #filtroHasta) {
+        padding: .35rem .4rem !important;
+    }
+    /* Ocultar el icono del calendario en los date inputs en xs */
+    #filtroDesde::-webkit-calendar-picker-indicator,
+    #filtroHasta::-webkit-calendar-picker-indicator { display: none; }
+}
 
 /* ==========================================================================
    DALTONISMO (simulaciones por filtro CSS)

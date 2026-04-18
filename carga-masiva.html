@@ -187,9 +187,22 @@
                 </div>
             </div>
 
-            <hr class="my-3">
-            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()">
-                <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i> Restablecer
+
+            <!-- ALTO CONTRASTE -->
+            <p class="a11y-label">Contraste</p>
+            <div class="a11y-grid-2 mb-4">
+                <div class="a11y-card" id="a11yContrast_normal" onclick="A11y.setContrast('normal')" role="button" tabindex="0" aria-label="Contraste normal">
+                    <i data-lucide="circle-half-stroke" style="width:20px;height:20px;" aria-hidden="true"></i>
+                    <div style="font-size:.8rem;" class="mt-1">Normal</div>
+                </div>
+                <div class="a11y-card" id="a11yContrast_high-contrast" onclick="A11y.setContrast('high-contrast')" role="button" tabindex="0" aria-label="Alto contraste">
+                    <i data-lucide="contrast" style="width:20px;height:20px;" aria-hidden="true"></i>
+                    <div style="font-size:.8rem;" class="mt-1">Alto</div>
+                </div>
+            </div>
+
+            <hr class="my-3">            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()" aria-label="Restablecer configuracion de accesibilidad">
+                <i data-lucide="rotate-ccw" style="width:14px;height:14px;" aria-hidden="true"></i> Restablecer
             </button>
         </div>
     </div>
