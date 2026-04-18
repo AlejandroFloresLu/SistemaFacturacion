@@ -124,3 +124,78 @@ function toggleFavorite(event, starElement, label, href) {
     // ... (aquí va el código de la función que ya tenías)
     console.log(`Añadido a favoritos: ${label}`);
 }
+
+// ==========================================================================
+// ACCESSIBILITY MANAGER — A11y
+// Persiste preferencias en localStorage y las aplica como data-* en <html>
+// ==========================================================================
+window.A11y = (function () {
+    const KEY  = 'factu_a11y';
+    const html = document.documentElement;
+
+    function load() {
+        try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+        catch (e) { return {}; }
+    }
+    function save(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
+
+    function apply(p) {
+        p.theme === 'dark'
+            ? html.setAttribute('data-theme', 'dark')
+            : html.removeAttribute('data-theme');
+
+        (p.font && p.font !== 'normal')
+            ? html.setAttribute('data-font', p.font)
+            : html.removeAttribute('data-font');
+
+        p.contrast === 'high-contrast'
+            ? html.setAttribute('data-a11y', 'high-contrast')
+            : html.removeAttribute('data-a11y');
+
+        (p.color && p.color !== 'none')
+            ? html.setAttribute('data-color', p.color)
+            : html.removeAttribute('data-color');
+
+        syncUI(p);
+    }
+
+    function syncUI(p) {
+        document.querySelectorAll('.a11y-card').forEach(el => el.classList.remove('active'));
+        const get = id => document.getElementById(id);
+        const activate = id => { const el = get(id); if (el) el.classList.add('active'); };
+        activate('a11yTheme_'    + (p.theme    || 'light'));
+        activate('a11yFont_'     + (p.font     || 'normal'));
+        activate('a11yContrast_' + (p.contrast || 'normal'));
+        activate('a11yColor_'    + (p.color    || 'none'));
+    }
+
+    function init() {
+        apply(load());
+        const panel = document.getElementById('panelAccesibilidad');
+        if (panel) panel.addEventListener('shown.bs.offcanvas', () => syncUI(load()));
+    }
+
+    return {
+        setTheme(v)    { const p = load(); p.theme    = v; save(p); apply(p); },
+        setFont(v)     { const p = load(); p.font     = v; save(p); apply(p); },
+        setContrast(v) { const p = load(); p.contrast = v; save(p); apply(p); },
+        setColor(v)    { const p = load(); p.color    = v; save(p); apply(p); },
+        reset()        { localStorage.removeItem(KEY); apply({}); },
+        init
+    };
+})();
+
+// Aplicar preferencias inmediatamente (antes del DOMContentLoaded)
+// para evitar flash de contenido sin tema
+(function () {
+    try {
+        const p = JSON.parse(localStorage.getItem('factu_a11y')) || {};
+        const h = document.documentElement;
+        if (p.theme === 'dark')             h.setAttribute('data-theme', 'dark');
+        if (p.font && p.font !== 'normal')  h.setAttribute('data-font', p.font);
+        if (p.contrast === 'high-contrast') h.setAttribute('data-a11y', 'high-contrast');
+        if (p.color && p.color !== 'none')  h.setAttribute('data-color', p.color);
+    } catch (e) {}
+})();
+
+document.addEventListener('DOMContentLoaded', function () { A11y.init(); });

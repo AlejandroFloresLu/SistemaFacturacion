@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    <div class="d-lg-none bg-white border-bottom p-3 sticky-top">
+    <div class="d-lg-none page-header-topbar p-3 sticky-top">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
                 <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menú">
@@ -20,6 +20,7 @@
                 </button>
                 <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
             </div>
+            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuracion"><i data-lucide="settings-2" style="width:18px;height:18px;" aria-hidden="true"></i></button>
         </div>
     </div>
 
@@ -65,6 +66,10 @@
 
             </div>
 
+            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+                <i data-lucide="settings-2" class="me-2" style="width:16px;height:16px;" aria-hidden="true"></i>
+                <span class="small fw-medium">Configuración</span>
+            </button>
             <div class="mt-auto p-3 bg-light rounded-4 border">
                 <div class="d-flex align-items-center gap-3">
                     <div class="avatar-circle" style="background-color: #0b4182;">AF</div>
@@ -77,85 +82,271 @@
         </div>
     </div>
 
-    <main class="main-content p-4 bg-light" style="min-height: 100vh;"" role="main">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;" role="main">
+        <div class="page-header-wrap">
             <div>
-                <h2 class="fw-bold m-0 text-dark"><i data-lucide="users" class="me-2 text-primary" aria-hidden="true"></i>Directorio de Clientes</h2>
-                <p class="text-muted mt-1 mb-0">Administra a tus clientes y agencias de viaje asociados.</p>
+                <h2 class="page-title"><i data-lucide="users" class="me-2 text-primary" aria-hidden="true"></i>Directorio de Clientes</h2>
+                <p class="page-subtitle text-muted">Administra a tus clientes y agencias de viaje asociados.</p>
             </div>
-            <button class="btn btn-factu shadow-sm"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> Nuevo Cliente</button>
+            <div class="page-actions">
+                <button class="btn btn-factu shadow-sm" onclick="abrirNuevoCliente()"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> Nuevo Cliente</button>
+            </div>
         </div>
-        
+
         <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
-            <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
-                <div class="input-group" style="max-width: 400px;">
+            <div class="card-header border-0 pt-4 pb-2 d-flex gap-2 align-items-center">
+                <div class="input-group flex-grow-1">
                     <span class="input-group-text bg-light border-0"><i data-lucide="search" class="text-muted" aria-hidden="true"></i></span>
-                    <input type="text" class="form-control bg-light border-0 shadow-none" placeholder="Buscar por nombre, correo o RUC...">
+                    <input type="text" class="form-control bg-light border-0 shadow-none" id="clienteSearch" placeholder="Buscar por nombre, correo o RUC..." oninput="filtrarClientes()" aria-label="Buscar cliente">
+                    <button class="btn btn-factu" onclick="filtrarClientes()" aria-label="Buscar"><i data-lucide="search" style="width:15px;"></i></button>
                 </div>
-                <button class="btn btn-outline-secondary btn-sm"><i data-lucide="filter" class="me-1" style="width: 14px;" aria-hidden="true"></i> Filtros</button>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0 align-middle">
-                    <thead class="bg-light text-muted">
-                        <tr>
-                            <th class="ps-4">Cliente</th>
-                            <th>Identificación (RUC/CC)</th>
-                            <th>Contacto</th>
-                            <th>Última Compra</th>
-                            <th class="text-end pe-4">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3" style="width:36px; height:36px; font-size:14px;">AF</div>
-                                    <div class="fw-bold text-dark">Alejandro Flores</div>
-                                </div>
-                            </td>
-                            <td>1201201201</td>
-                            <td class="text-muted small">0999999999<br>alejandro@email.com</td>
-                            <td><span class="badge bg-light text-dark border">Hace 2 días</span></td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light border-0 text-primary me-1" aria-label="Editar" title="Editar"><i data-lucide="edit-2" style="width:16px;" aria-hidden="true"></i></button>
-                                <button class="btn btn-sm btn-light border-0 text-danger" aria-label="Eliminar" title="Eliminar"><i data-lucide="trash-2" style="width:16px;" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3" style="width:36px; height:36px; font-size:14px;">MT</div>
-                                    <div class="fw-bold text-dark">María Torres</div>
-                                </div>
-                            </td>
-                            <td>1104845567</td>
-                            <td class="text-muted small">0988888888<br>maria@agencia.com</td>
-                            <td><span class="badge bg-light text-dark border">Hace 1 mes</span></td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light border-0 text-primary me-1" aria-label="Editar" title="Editar"><i data-lucide="edit-2" style="width:16px;" aria-hidden="true"></i></button>
-                                <button class="btn btn-sm btn-light border-0 text-danger" aria-label="Eliminar" title="Eliminar"><i data-lucide="trash-2" style="width:16px;" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light text-muted" style="font-size:.78rem;letter-spacing:.4px;">
+                            <tr>
+                                <th class="ps-4">Cliente</th>
+                                <th class="d-none d-md-table-cell">Identificación (RUC/CC)</th>
+                                <th class="d-none d-lg-table-cell">Contacto</th>
+                                <th class="d-none d-md-table-cell">Última Compra</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesTbody"></tbody>
+                    </table>
+                </div>
             </div>
-            <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center text-muted small">
-                Mostrando 2 de 24 clientes
-                <ul class="pagination pagination-sm m-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
-                </ul>
+            <div class="card-footer border-top p-3 d-flex justify-content-between align-items-center">
+                <span class="text-muted small" id="clientesContador">Mostrando 0 clientes</span>
+                <div class="d-flex gap-1">
+                    <button class="btn btn-sm btn-light border" id="cliPrev" onclick="cliPagina(-1)">‹</button>
+                    <span class="btn btn-sm btn-factu disabled px-3" id="cliPaginaNum">1</span>
+                    <button class="btn btn-sm btn-light border" id="cliNext" onclick="cliPagina(1)">›</button>
+                </div>
             </div>
         </div>
     </main>
 
+    <!-- Modal: Editar Cliente -->
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                <div class="modal-header border-0" style="background: linear-gradient(135deg,#0b4182,#1d4ed8); border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                    <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
+                        <i data-lucide="edit-3" style="width:18px;height:18px;"></i> Editar Cliente
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="editCliIdx">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label text-muted small fw-bold">Nombre</label>
+                            <input type="text" class="form-control" id="editCliNombre">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-muted small fw-bold">Apellido</label>
+                            <input type="text" class="form-control" id="editCliApellido">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold">RUC / Cédula</label>
+                            <input type="text" class="form-control bg-light" id="editCliRuc" readonly>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-muted small fw-bold">Teléfono</label>
+                            <input type="text" class="form-control" id="editCliTel">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-muted small fw-bold">Correo</label>
+                            <input type="text" class="form-control" id="editCliEmail">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pb-4">
+                    <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-factu fw-bold px-4" onclick="guardarEdicionCliente()"><i data-lucide="save" style="width:15px;" class="me-1"></i> Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar Eliminar Cliente -->
+    <div class="modal fade" id="modalEliminarCliente" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3 text-danger" style="font-size:2.5rem;">🗑️</div>
+                    <h5 class="fw-bold text-dark mb-1">¿Eliminar cliente?</h5>
+                    <p class="text-muted small mb-3">Esta acción no se puede deshacer. El cliente <strong id="elimCliNombre"></strong> será eliminado permanentemente.</p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-danger fw-bold flex-grow-1" onclick="confirmarEliminarCliente()">Sí, eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- ⚙️ Panel Accesibilidad SIMPLIFICADO -->
+    <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="panelAccesibilidad" aria-labelledby="panelAccesibilidadLabel" style="width:300px;max-width:100vw;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="panelAccesibilidadLabel">
+                <i data-lucide="settings-2" class="text-primary" style="width:20px;height:20px;"></i> Personalización
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- TEMA -->
+            <p class="a11y-label">Tema</p>
+            <div class="a11y-grid-2 mb-4">
+                <div class="a11y-card" id="a11yTheme_light" onclick="A11y.setTheme('light')">
+                    <i data-lucide="sun" style="width:22px;height:22px;"></i>
+                    <div style="font-size:.82rem;" class="mt-1">Claro</div>
+                </div>
+                <div class="a11y-card" id="a11yTheme_dark" onclick="A11y.setTheme('dark')">
+                    <i data-lucide="moon" style="width:22px;height:22px;"></i>
+                    <div style="font-size:.82rem;" class="mt-1">Oscuro</div>
+                </div>
+            </div>
+
+            <!-- TAMAÑO TEXTO -->
+            <p class="a11y-label">Tamaño de texto</p>
+            <div class="a11y-grid-3 mb-4">
+                <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')">
+                    <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
+                    <div style="font-size:.72rem;" class="mt-1">Normal</div>
+                </div>
+                <div class="a11y-card" id="a11yFont_large" onclick="A11y.setFont('large')">
+                    <span style="font-size:1.4rem;font-weight:700;line-height:1;">A</span>
+                    <div style="font-size:.72rem;" class="mt-1">Grande</div>
+                </div>
+                <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')">
+                    <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
+                    <div style="font-size:.72rem;" class="mt-1">Máximo</div>
+                </div>
+            </div>
+
+            <hr class="my-3">
+            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()">
+                <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i> Restablecer
+            </button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        // Inicializar iconos de Lucide
+    lucide.createIcons();
+
+    // ── Dataset Clientes ─────────────────────────────────────────────────────
+    let DB_CLIENTES = [
+        { id:1, nombre:'Alejandro', apellido:'Flores',   ruc:'1201201201', tel:'0999999999', email:'alejandro@email.com',  ultimaCompra:'Hace 2 días'  },
+        { id:2, nombre:'María',     apellido:'Torres',   ruc:'1104845567', tel:'0988888888', email:'maria@agencia.com',    ultimaCompra:'Hace 1 mes'   },
+        { id:3, nombre:'Carlos',    apellido:'Mendoza',  ruc:'0912345678', tel:'0977777777', email:'carlos@tour.com',      ultimaCompra:'Hace 3 días'  },
+        { id:4, nombre:'Laura',     apellido:'Suárez',   ruc:'1755432100', tel:'0966666666', email:'laura@viajes.ec',      ultimaCompra:'Hace 1 semana'},
+        { id:5, nombre:'Pedro',     apellido:'Alvarado', ruc:'0800112233', tel:'0955555555', email:'pedro@empresa.com',    ultimaCompra:'Hace 2 meses' },
+        { id:6, nombre:'Ana',       apellido:'Rodríguez',ruc:'1300223344', tel:'0944444444', email:'ana@hoteles.ec',       ultimaCompra:'Hace 5 días'  },
+    ];
+
+    let cliPaginaActual = 1, CLI_POR_PAGINA = 5, cliFiltrados = [...DB_CLIENTES], elimIdx = null;
+
+    function filtrarClientes() {
+        const q = (document.getElementById('clienteSearch').value||'').toLowerCase();
+        cliFiltrados = DB_CLIENTES.filter(c =>
+            (c.nombre+' '+c.apellido).toLowerCase().includes(q) ||
+            c.ruc.includes(q) || c.email.toLowerCase().includes(q));
+        cliPaginaActual = 1; renderClientes();
+    }
+
+    function cliPagina(dir) {
+        const tot = Math.ceil(cliFiltrados.length / CLI_POR_PAGINA);
+        cliPaginaActual = Math.max(1, Math.min(cliPaginaActual + dir, tot));
+        renderClientes();
+    }
+
+    function renderClientes() {
+        const tbody  = document.getElementById('clientesTbody');
+        const inicio = (cliPaginaActual-1)*CLI_POR_PAGINA;
+        const pag    = cliFiltrados.slice(inicio, inicio+CLI_POR_PAGINA);
+        const tot    = Math.ceil(cliFiltrados.length/CLI_POR_PAGINA)||1;
+        document.getElementById('clientesContador').textContent = `Mostrando ${cliFiltrados.length} de ${DB_CLIENTES.length} clientes`;
+        document.getElementById('cliPaginaNum').textContent = `${cliPaginaActual} / ${tot}`;
+        document.getElementById('cliPrev').disabled = cliPaginaActual<=1;
+        document.getElementById('cliNext').disabled = cliPaginaActual>=tot;
+
+        if (!pag.length) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5">Sin resultados</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = pag.map((c,i) => {
+            const initials = (c.nombre[0]||'')+(c.apellido[0]||'');
+            const idx = DB_CLIENTES.indexOf(c);
+            return `<tr>
+              <td class="ps-4"><div class="d-flex align-items-center">
+                <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3" style="width:36px;height:36px;font-size:14px;">${initials}</div>
+                <div class="fw-bold">${c.nombre} ${c.apellido}</div>
+              </div></td>
+              <td class="d-none d-md-table-cell">${c.ruc}</td>
+              <td class="d-none d-lg-table-cell text-muted small">${c.tel}<br>${c.email}</td>
+              <td class="d-none d-md-table-cell"><span class="badge bg-light text-dark border">${c.ultimaCompra}</span></td>
+              <td class="text-end pe-4">
+                <button class="btn btn-sm btn-light border-0 text-primary me-1" title="Editar" onclick="editarCliente(${idx})"><i data-lucide="edit-2" style="width:15px;"></i></button>
+                <button class="btn btn-sm btn-light border-0 text-danger" title="Eliminar" onclick="pedirEliminarCliente(${idx})"><i data-lucide="trash-2" style="width:15px;"></i></button>
+              </td>
+            </tr>`;
+        }).join('');
         lucide.createIcons();
+    }
+
+    function abrirNuevoCliente() { mostrarToast('📋 Formulario de nuevo cliente — funcionalidad completa próximamente', 'info'); }
+
+    function editarCliente(idx) {
+        const c = DB_CLIENTES[idx];
+        document.getElementById('editCliIdx').value    = idx;
+        document.getElementById('editCliNombre').value  = c.nombre;
+        document.getElementById('editCliApellido').value= c.apellido;
+        document.getElementById('editCliRuc').value     = c.ruc;
+        document.getElementById('editCliTel').value     = c.tel;
+        document.getElementById('editCliEmail').value   = c.email;
+        new bootstrap.Modal(document.getElementById('modalEditarCliente')).show();
+    }
+
+    function guardarEdicionCliente() {
+        const idx = +document.getElementById('editCliIdx').value;
+        DB_CLIENTES[idx].nombre   = document.getElementById('editCliNombre').value.trim() || DB_CLIENTES[idx].nombre;
+        DB_CLIENTES[idx].apellido = document.getElementById('editCliApellido').value.trim() || DB_CLIENTES[idx].apellido;
+        DB_CLIENTES[idx].tel      = document.getElementById('editCliTel').value.trim();
+        DB_CLIENTES[idx].email    = document.getElementById('editCliEmail').value.trim();
+        bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente')).hide();
+        filtrarClientes();
+        mostrarToast('✅ Cliente editado con éxito', 'success');
+    }
+
+    function pedirEliminarCliente(idx) {
+        elimIdx = idx;
+        document.getElementById('elimCliNombre').textContent = DB_CLIENTES[idx].nombre+' '+DB_CLIENTES[idx].apellido;
+        new bootstrap.Modal(document.getElementById('modalEliminarCliente')).show();
+    }
+
+    function confirmarEliminarCliente() {
+        if (elimIdx === null) return;
+        const nombre = DB_CLIENTES[elimIdx].nombre;
+        DB_CLIENTES.splice(elimIdx, 1);
+        elimIdx = null;
+        bootstrap.Modal.getInstance(document.getElementById('modalEliminarCliente')).hide();
+        filtrarClientes();
+        mostrarToast(`🗑️ Cliente "${nombre}" eliminado`, 'danger');
+    }
+
+    function mostrarToast(msg, tipo='success') {
+        const t = document.createElement('div');
+        t.className = `factu-toast ${tipo}`; t.innerHTML = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3500);
+    }
+
+    filtrarClientes();
     </script>
 </body>
 </html>

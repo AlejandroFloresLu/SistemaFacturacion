@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -8,21 +8,72 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+    /* ── factura.html — Mobile Adjustments ──────────────────────── */
+    @media (max-width: 767.98px) {
+        /* Empresa header: avatar pequeño */
+        .factu-empresa-avatar {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 14px !important;
+            margin-right: 10px !important;
+            flex-shrink: 0;
+        }
+        .factu-empresa-nombre { font-size: .9rem !important; margin-bottom: 2px !important; }
+        .factu-empresa-info   { font-size: .72rem !important; }
+
+        /* Cabecera de comprobante */
+        .factu-comprobante-num  { font-size: .85rem !important; }
+        .factu-tipo-btn label   { font-size: .72rem !important; padding: .2rem .55rem !important; }
+        .factu-fecha-info       { font-size: .72rem !important; }
+
+        /* Tabla de productos: texto más pequeño, menos padding */
+        #invoiceItems td, #invoiceItems th,
+        .table thead th { font-size:.75rem !important; padding:.4rem .35rem !important; }
+
+        /* Panel de pagos: apila columnas y compacta */
+        .factu-pagos-col  { padding: .75rem !important; }
+        .factu-totales-col { padding: .75rem !important; }
+        .factu-pagos-col h6 { font-size:.7rem !important; margin-bottom:.5rem !important; }
+        .factu-select-pago { width: 44% !important; font-size:.8rem !important; }
+        #paymentAmount    { font-size:.85rem !important; }
+        .factu-totales-col .d-flex span { font-size:.82rem !important; }
+        .factu-totales-col .h4 { font-size:1rem !important; }
+        .factu-totales-col [id="lblPagado"],
+        .factu-totales-col [id="lblSaldo"] { font-size:.85rem !important; }
+        [style*="font-size: 1.1rem"] { font-size:.88rem !important; }
+
+        /* Botón Aprobar más compacto */
+        #btnPagar { font-size:.95rem !important; padding:.6rem !important; }
+
+        /* Input búsqueda cliente */
+        #clienteSearch { font-size:.85rem !important; }
+
+        /* Reducir padding en main */
+        .main-content { padding: .75rem !important; }
+
+        /* Row de empresa-factura: una encima de otra, menos gap */
+        .factu-header-row { --bs-gutter-y: .5rem; --bs-gutter-x: .5rem; }
+        .factu-header-row .card-body { padding: .65rem .85rem !important; }
+    }
+    </style>
 </head>
 
 <body>
 
-    <div class="d-lg-none bg-white border-bottom p-3 sticky-top">
+    <div class="d-lg-none page-header-topbar p-3 sticky-top">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
                 <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#sidebarMenu">
+                    data-bs-target="#sidebarMenu" aria-label="Abrir menú">
                     <i data-lucide="menu" aria-hidden="true"></i>
                 </button>
                 <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
             </div>
+            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+                <i data-lucide="settings-2" style="width:18px;height:18px;" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 
@@ -75,6 +126,10 @@
 
             </div>
 
+            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+                <i data-lucide="settings-2" class="me-2" style="width:16px;height:16px;" aria-hidden="true"></i>
+                <span class="small fw-medium">Configuración</span>
+            </button>
             <div class="mt-auto p-3 bg-light rounded-4 border">
                 <div class="d-flex align-items-center gap-3">
                     <div class="avatar-circle" style="background-color: #0b4182;">AF</div>
@@ -89,17 +144,17 @@
 
     <main class="main-content p-4 bg-light" style="min-height: 100vh;" role="main">
         <!-- Encabezado de Factura: Empresa y Datos -->
-        <div class="row mb-3 g-3">
+        <div class="row mb-3 g-3 factu-header-row">
             <div class="col-md-7">
                 <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
                     <div class="card-body d-flex align-items-center">
-                        <div class="avatar-circle" style="background-color: var(--primary-color); width: 64px; height: 64px; font-size: 24px; margin-right: 15px;">
+                        <div class="avatar-circle factu-empresa-avatar" style="background-color: var(--primary-color); width:64px;height:64px;font-size:24px;margin-right:15px;">
                             FT
                         </div>
                         <div>
-                            <h5 class="fw-bold mb-1" style="color: var(--text-dark);">Agencia de Viajes FACTU S.A.</h5>
-                            <p class="text-muted small mb-0"><i data-lucide="map-pin" style="width:14px; margin-right:4px;" aria-hidden="true"></i>Av. Siempre Viva 123 y Las Naciones</p>
-                            <p class="text-muted small mb-0"><i data-lucide="phone" style="width:14px; margin-right:4px;" aria-hidden="true"></i>+593 999 999 999 &nbsp; | &nbsp; RUC: 1792929292001</p>
+                            <h5 class="fw-bold mb-1 factu-empresa-nombre" style="color: var(--text-dark);">Agencia de Viajes FACTU S.A.</h5>
+                            <p class="text-muted small mb-0 factu-empresa-info"><i data-lucide="map-pin" style="width:14px;margin-right:4px;" aria-hidden="true"></i>Av. Siempre Viva 123 y Las Naciones</p>
+                            <p class="text-muted small mb-0 factu-empresa-info"><i data-lucide="phone" style="width:14px;margin-right:4px;" aria-hidden="true"></i>+593 999 999 999 &nbsp;|&nbsp; RUC: 1792929292001</p>
                         </div>
                     </div>
                 </div>
@@ -108,16 +163,15 @@
                 <div class="card shadow-sm border-0 h-100 bg-primary bg-opacity-10" style="border-radius: var(--border-radius);">
                     <div class="card-body text-end d-flex flex-column justify-content-center pt-2 pb-2">
                         <div class="d-flex flex-column align-items-end mb-2">
-                            <div class="btn-group btn-group-sm mb-2 shadow-sm rounded">
+                            <div class="btn-group btn-group-sm mb-2 shadow-sm rounded factu-tipo-btn">
                                 <input type="radio" class="btn-check" name="tipoComprobanteRadio" id="radioFactura" value="factura" autocomplete="off" checked>
                                 <label class="btn btn-outline-primary px-3 fw-bold" for="radioFactura">FACTURA</label>
-                              
                                 <input type="radio" class="btn-check" name="tipoComprobanteRadio" id="radioNC" value="nc" autocomplete="off">
                                 <label class="btn btn-outline-primary px-3 fw-bold" for="radioNC">NOTA DE CRÉDITO</label>
                             </div>
-                            <span class="fs-6 fw-bold text-dark" id="numeroComprobante">Nº 001-002-000000104</span>
+                            <span class="fs-6 fw-bold text-dark factu-comprobante-num" id="numeroComprobante">Nº 001-002-000000104</span>
                         </div>
-                        
+
                         <div id="contenedorVinculacionNC" class="d-none mb-1 mt-1">
                             <div class="input-group input-group-sm">
                                 <input type="text" id="facturaVinculada" class="form-control border-1 border-primary shadow-none text-end" placeholder="* Fac. Origen..." title="Pega el código original (Atajo: Ctrl+V)">
@@ -125,8 +179,8 @@
                             </div>
                         </div>
 
-                        <div class="text-muted small mt-1"><strong>Fecha de Emisión:</strong> <span id="fechaEmision"></span></div>
-                        <div class="text-muted small"><strong>Cajero:</strong> Alejandro Flores</div>
+                        <div class="text-muted small mt-1 factu-fecha-info"><strong>Fecha de Emisión:</strong> <span id="fechaEmision"></span></div>
+                        <div class="text-muted small factu-fecha-info"><strong>Cajero:</strong> Alejandro Flores</div>
                     </div>
                 </div>
             </div>
@@ -224,10 +278,10 @@
                 <!-- Mixed Payments & Totals Panel -->
                 <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
                     <div class="row g-0">
-                        <div class="col-md-6 border-end p-4">
+                        <div class="col-md-6 border-end p-4 factu-pagos-col">
                             <h6 class="text-uppercase text-muted fw-bold mb-3 small">Módulo de Pagos Multimétodo</h6>
                             <div class="d-flex gap-2 mb-3">
-                                <select class="form-select w-50 shadow-none border-1" id="paymentMethod">
+                                <select class="form-select w-50 shadow-none border-1 factu-select-pago" id="paymentMethod">
                                     <option value="efectivo">Efectivo 💵</option>
                                     <option value="transferencia">Transferencia 🏦</option>
                                     <option value="tarjeta">Tarjeta 💳</option>
@@ -235,28 +289,26 @@
                                 <div class="input-group">
                                     <span class="input-group-text border-1 bg-light">$</span>
                                     <input type="number" class="form-control border-1 shadow-none fw-bold"
-                                        id="paymentAmount" value="0.00" disabled>
-                                    <button class="btn btn-outline-secondary" id="btnAddPayment" disabled aria-label="Agregar pago"><i
-                                            data-lucide="plus"></i></button>
+                                        id="paymentAmount" value="0.00" disabled
+                                        onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();">
+                                    <button class="btn btn-outline-secondary" id="btnAddPayment" disabled aria-label="Agregar pago"><i data-lucide="plus"></i></button>
                                 </div>
                             </div>
                             <ul class="list-group list-group-flush small" id="paymentList"></ul>
                         </div>
-                        <div class="col-md-6 p-4 bg-light text-end d-flex flex-column justify-content-center"
+                        <div class="col-md-6 p-4 bg-light text-end d-flex flex-column justify-content-center factu-totales-col"
                             style="border-radius: 0 var(--border-radius) var(--border-radius) 0;">
-                            <div class="d-flex justify-content-between mb-1 text-muted"><span>Subtotal:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblSubtotal">0.00</span></span></div>
-                            <div class="d-flex justify-content-between mb-2 text-muted"><span>IVA (15%):</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblIva">0.00</span></span></div>
-                            <div class="d-flex justify-content-between mb-3 h4 fw-bold text-dark"><span>Total:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblTotal">0.00</span></span></div>
-
+                            <div class="d-flex justify-content-between mb-1 text-muted"><span>Subtotal:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblSubtotal">0.00</span></span></div>
+                            <div class="d-flex justify-content-between mb-2 text-muted"><span>IVA (15%):</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblIva">0.00</span></span></div>
+                            <div class="d-flex justify-content-between mb-3 h4 fw-bold text-dark"><span>Total:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblTotal">0.00</span></span></div>
                             <hr class="my-2 text-muted">
-                            <div class="d-flex justify-content-between mb-2 text-primary fw-bold"
-                                style="font-size: 1.1rem;"><span>Pagado:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblPagado">0.00</span></span></div>
-                            <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo"
-                                style="font-size: 1.1rem; color: #dc3545;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblSaldo">0.00</span></span></div>
-
+                            <div class="d-flex justify-content-between mb-2 text-primary fw-bold" style="font-size:1.1rem;"><span>Pagado:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblPagado">0.00</span></span></div>
+                            <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo" style="font-size:1.1rem;color:#dc3545;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblSaldo">0.00</span></span></div>
                             <div class="d-flex gap-2 mt-auto">
                                 <button class="btn btn-factu flex-grow-1 fw-bold py-3 fs-5" id="btnPagar" disabled
-                                    title="Atajo: F12" data-bs-toggle="modal" data-bs-target="#modalAprobarFactura" aria-label="Aprobar facturación"><i data-lucide="check-circle" class="me-1" aria-hidden="true"></i> Aprobar</button>
+                                    title="Atajo: F12" data-bs-toggle="modal" data-bs-target="#modalAprobarFactura" aria-label="Aprobar facturación">
+                                    <i data-lucide="check-circle" class="me-1" aria-hidden="true"></i> Aprobar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -352,13 +404,56 @@
             </div>
     </main>
 
+        <!-- ⚙️ Panel Accesibilidad SIMPLIFICADO -->
+    <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="panelAccesibilidad" aria-labelledby="panelAccesibilidadLabel" style="width:300px;max-width:100vw;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="panelAccesibilidadLabel">
+                <i data-lucide="settings-2" class="text-primary" style="width:20px;height:20px;"></i> Personalización
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- TEMA -->
+            <p class="a11y-label">Tema</p>
+            <div class="a11y-grid-2 mb-4">
+                <div class="a11y-card" id="a11yTheme_light" onclick="A11y.setTheme('light')">
+                    <i data-lucide="sun" style="width:22px;height:22px;"></i>
+                    <div style="font-size:.82rem;" class="mt-1">Claro</div>
+                </div>
+                <div class="a11y-card" id="a11yTheme_dark" onclick="A11y.setTheme('dark')">
+                    <i data-lucide="moon" style="width:22px;height:22px;"></i>
+                    <div style="font-size:.82rem;" class="mt-1">Oscuro</div>
+                </div>
+            </div>
+
+            <!-- TAMAÑO TEXTO -->
+            <p class="a11y-label">Tamaño de texto</p>
+            <div class="a11y-grid-3 mb-4">
+                <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')">
+                    <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
+                    <div style="font-size:.72rem;" class="mt-1">Normal</div>
+                </div>
+                <div class="a11y-card" id="a11yFont_large" onclick="A11y.setFont('large')">
+                    <span style="font-size:1.4rem;font-weight:700;line-height:1;">A</span>
+                    <div style="font-size:.72rem;" class="mt-1">Grande</div>
+                </div>
+                <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')">
+                    <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
+                    <div style="font-size:.72rem;" class="mt-1">Máximo</div>
+                </div>
+            </div>
+
+            <hr class="my-3">
+            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()">
+                <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i> Restablecer
+            </button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/factura.ui.js"></script>
-    <script>
-        // Inicializar iconos de Lucide
-        lucide.createIcons();
-    </script>
+    <script>lucide.createIcons();</script>
 </body>
 
 </html>
