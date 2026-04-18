@@ -77,20 +77,25 @@
         </div>
     </div>
 
-    <main class="main-content p-4 bg-light" style="min-height: 100vh;"" role="main">
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;" role="main">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h2 class="fw-bold m-0 text-dark"><i data-lucide="package" class="me-2 text-primary" aria-hidden="true"></i>Inventario Comercial</h2>
                 <p class="text-muted mt-1 mb-0">Gestión de boletos, tours y paquetes turísticos.</p>
             </div>
             <div class="d-flex gap-2">
-                <select class="form-select shadow-sm" style="width: auto;">
-                    <option>Todos (Categoría)</option>
-                    <option>Tours</option>
-                    <option>Boletos Aéreos</option>
-                    <option>Seguros</option>
+                <select class="form-select shadow-sm" style="width: auto;" id="filtroCategoria" onchange="window.filtrarProductos(this.value)">
+                    <option value="ALL">Todos (Categoría)</option>
+                    <option value="VUE">Boletos Aéreos (VUE)</option>
+                    <option value="ALO">Alojamiento (ALO)</option>
+                    <option value="TRA">Traslados (TRA)</option>
+                    <option value="TOU">Tours (TOU)</option>
+                    <option value="PAQ">Paquetes (PAQ)</option>
+                    <option value="CRU">Cruceros (CRU)</option>
+                    <option value="SEG">Seguros (SEG)</option>
+                    <option value="ADM">Cargos (ADM)</option>
                 </select>
-                <button class="btn btn-factu shadow-sm"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> Añadir Producto</button>
+                <button class="btn btn-factu shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> Añadir Producto</button>
             </div>
         </div>
         
@@ -103,63 +108,172 @@
                             <th class="text-end pe-4">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="ps-4 py-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-light border rounded p-2 me-3 text-primary"><i data-lucide="map" aria-hidden="true"></i></div>
-                                    <div>
-                                        <div class="fw-bold text-dark">Tour Isla de Plata</div>
-                                        <div class="text-muted small">P-001 • Tour Terrestre</div>
-                                    </div>
-                                </div>
-                            </td>
-                            </td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light border-0 text-primary"><i data-lucide="edit" style="width:16px;" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4 py-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-light border rounded p-2 me-3 text-primary"><i data-lucide="plane" aria-hidden="true"></i></div>
-                                    <div>
-                                        <div class="fw-bold text-dark">Vuelo Nacional UI-GYE</div>
-                                        <div class="text-muted small">B-104 • Boleto Aéreo</div>
-                                    </div>
-                                </div>
-                            </td>
-                            </td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light border-0 text-primary"><i data-lucide="edit" style="width:16px;" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4 py-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-light border rounded p-2 me-3 text-primary"><i data-lucide="shield-check" aria-hidden="true"></i></div>
-                                    <div>
-                                        <div class="fw-bold text-dark">Seguro de Viaje</div>
-                                        <div class="text-muted small">S-005 • Seguro</div>
-                                    </div>
-                                </div>
-                            </td>
-                            </td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light border-0 text-primary"><i data-lucide="edit" style="width:16px;" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
+                    <tbody id="productosBody">
+                        <!-- Llenado por JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
 
+    <!-- Modal: Añadir Producto -->
+    <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLabel" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="modalNuevoProductoLabel">
+                        <i data-lucide="package-plus" class="me-2 text-primary" aria-hidden="true"></i>Nuevo Producto
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body pt-3">
+                    <div class="mb-3">
+                        <label for="nuevoProdCategoria" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Categoría</label>
+                        <select class="form-select" id="nuevoProdCategoria">
+                            <option value="VUE">Boletos Aéreos (VUE)</option>
+                            <option value="ALO">Alojamiento (ALO)</option>
+                            <option value="TRA">Traslados (TRA)</option>
+                            <option value="TOU">Tours (TOU)</option>
+                            <option value="PAQ">Paquetes (PAQ)</option>
+                            <option value="CRU">Cruceros (CRU)</option>
+                            <option value="SEG">Seguros (SEG)</option>
+                            <option value="ADM">Cargos (ADM)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nuevoProdCodigo" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Código</label>
+                        <input type="text" class="form-control" id="nuevoProdCodigo" placeholder="Ej: VUE-010" maxlength="10">
+                        <div class="form-text">Se generará automáticamente si lo dejas vacío.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nuevoProdDesc" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Descripción</label>
+                        <input type="text" class="form-control" id="nuevoProdDesc" placeholder="Ej: Boleto aéreo nacional – Business Class">
+                    </div>
+                    <div class="mb-1">
+                        <label for="nuevoProdPrecio" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Precio Unitario ($)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">$</span>
+                            <input type="number" class="form-control" id="nuevoProdPrecio" placeholder="0.00" min="0" step="0.01"
+                                onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-factu" id="btnGuardarProducto">
+                        <i data-lucide="save" class="me-1" aria-hidden="true"></i>Guardar Producto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        // Inicializar iconos de Lucide
+    // ── Inventario compartido (misma fuente que factura.ui.js) ──
+    const DB_PRODUCTS = [
+        { id: 'VUE-001', desc: 'Boleto aéreo nacional - Económica',           price: 120.00 },
+        { id: 'VUE-002', desc: 'Boleto aéreo nacional - Ejecutiva',            price: 250.00 },
+        { id: 'VUE-003', desc: 'Boleto aéreo internacional - Económica',       price: 800.00 },
+        { id: 'VUE-004', desc: 'Boleto aéreo internacional - Ejecutiva',       price: 1500.00 },
+        { id: 'ALO-001', desc: 'Estancia en hotel nacional - Estándar',        price: 60.00 },
+        { id: 'ALO-005', desc: 'Resort todo incluido - Nacional',              price: 200.00 },
+        { id: 'TRA-001', desc: 'Alquiler de vehículo - Económica',            price: 40.00 },
+        { id: 'TRA-004', desc: 'Traslado privado (Aeropuerto - Hotel)',        price: 30.00 },
+        { id: 'PAQ-001', desc: 'Paquete turístico nacional - Estándar',       price: 350.00 },
+        { id: 'PAQ-006', desc: 'Paquete vacacional - Luna de Miel',           price: 1200.00 },
+        { id: 'CRU-003', desc: 'Cabina de crucero - Balcón / Suite',          price: 2500.00 },
+        { id: 'SEG-002', desc: 'Póliza asistencia viajero - Internacional',   price: 85.00 },
+        { id: 'TOU-002', desc: 'Excursión guiada día completo',               price: 75.00 },
+        { id: 'ADM-002', desc: 'Cargo emisión de boleto (Fee agencia)',        price: 25.00 }
+    ];
+
+    // Contadores por categoría para autogenerar códigos
+    const catCounters = {};
+
+    // ── Renderizado de tabla ──
+    window.filtrarProductos = function(cat) {
+        const lista = cat === 'ALL' ? DB_PRODUCTS : DB_PRODUCTS.filter(p => p.id.startsWith(cat));
+        const tbody = document.getElementById('productosBody');
+
+        if (lista.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-5">
+                <i data-lucide="inbox" style="width:48px;height:48px;" class="mb-2 opacity-50"></i><br>Sin productos en esta categoría.</td></tr>`;
+        } else {
+            tbody.innerHTML = lista.map(p => {
+                const prefix = p.id.split('-')[0];
+                const badgeColor = {
+                    VUE:'#0b4182', ALO:'#15803d', TRA:'#92400e',
+                    PAQ:'#6d28d9', CRU:'#0e7490', SEG:'#b45309',
+                    TOU:'#065f46', ADM:'#991b1b'
+                }[prefix] || '#374151';
+                return `
+                <tr>
+                    <td class="ps-4 py-3">
+                        <span class="badge me-2" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span>
+                        <span class="fw-semibold">${p.desc}</span>
+                    </td>
+                    <td class="text-end pe-4 py-3">
+                        <span class="text-muted me-3 fw-bold">$${p.price.toFixed(2)}</span>
+                        <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="eliminarProducto('${p.id}')" title="Eliminar">
+                            <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
         lucide.createIcons();
+    };
+
+    // ── Eliminar producto ──
+    window.eliminarProducto = function(id) {
+        const idx = DB_PRODUCTS.findIndex(p => p.id === id);
+        if (idx !== -1) {
+            if (confirm(`¿Eliminar el producto ${id}?`)) {
+                DB_PRODUCTS.splice(idx, 1);
+                filtrarProductos(document.getElementById('filtroCategoria').value);
+            }
+        }
+    };
+
+    // ── Guardar nuevo producto desde modal ──
+    document.getElementById('btnGuardarProducto').addEventListener('click', () => {
+        const cat  = document.getElementById('nuevoProdCategoria').value;
+        const desc = document.getElementById('nuevoProdDesc').value.trim();
+        const price = parseFloat(document.getElementById('nuevoProdPrecio').value);
+        let   codigo = document.getElementById('nuevoProdCodigo').value.trim().toUpperCase();
+
+        if (!desc) { alert('La descripción es obligatoria.'); return; }
+        if (isNaN(price) || price <= 0) { alert('El precio debe ser mayor a 0.'); return; }
+
+        // Autogenerar código si está vacío
+        if (!codigo) {
+            catCounters[cat] = (catCounters[cat] || DB_PRODUCTS.filter(p => p.id.startsWith(cat)).length) + 1;
+            codigo = `${cat}-${String(catCounters[cat]).padStart(3, '0')}`;
+        }
+
+        // Verificar duplicado
+        if (DB_PRODUCTS.some(p => p.id === codigo)) {
+            alert(`El código ${codigo} ya existe. Usa uno diferente.`); return;
+        }
+
+        DB_PRODUCTS.push({ id: codigo, desc, price });
+        bootstrap.Modal.getInstance(document.getElementById('modalNuevoProducto')).hide();
+
+        // Limpiar modal
+        document.getElementById('nuevoProdCodigo').value = '';
+        document.getElementById('nuevoProdDesc').value   = '';
+        document.getElementById('nuevoProdPrecio').value = '';
+
+        // Actualizar filtro al de la nueva categoría
+        document.getElementById('filtroCategoria').value = cat;
+        filtrarProductos(cat);
+    });
+
+    // ── Render inicial ──
+    lucide.createIcons();
+    filtrarProductos('ALL');
     </script>
 </body>
 </html>

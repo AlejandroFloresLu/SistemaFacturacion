@@ -83,57 +83,60 @@
                 <h2 class="fw-bold m-0 text-dark"><i data-lucide="upload-cloud" class="me-2 text-primary" aria-hidden="true"></i>Carga Masiva de Datos</h2>
                 <p class="text-muted mt-1 mb-0">Importar múltiples productos o clientes mediante hoja de cálculo .xlsx o .csv.</p>
             </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-9 text-center mb-3">
-                <!-- Multimodal Tabs -->
-                <div class="btn-group shadow-sm bg-white rounded-5 p-1 mb-4" role="group">
-                    <input type="radio" class="btn-check" name="cargaTabs" id="tabProductos" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary border-0 rounded-pill px-4 py-2 fw-bold" for="tabProductos"><i data-lucide="package" style="width:18px;" class="me-1"></i> Productos</label>
-
-                    <input type="radio" class="btn-check" name="cargaTabs" id="tabClientes" autocomplete="off">
-                    <label class="btn btn-outline-primary border-0 rounded-pill px-4 py-2 fw-bold" for="tabClientes"><i data-lucide="users" style="width:18px;" class="me-1"></i> Clientes</label>
-
-                    <input type="radio" class="btn-check" name="cargaTabs" id="tabFacturas" autocomplete="off">
-                    <label class="btn btn-outline-primary border-0 rounded-pill px-4 py-2 fw-bold" for="tabFacturas"><i data-lucide="file-text" style="width:18px;" class="me-1"></i> Facturas</label>
-                </div>
-
-                <!-- Template Download Button middle prominent -->
-                <div class="mb-4">
-                    <button class="btn btn-light border shadow-sm px-4 py-2 rounded-pill fw-bold hover-grow text-primary"><i data-lucide="download-cloud" class="me-2" aria-hidden="true" style="width: 20px;"></i> Descargar Plantilla .XLSX</button>
-                </div>
-
-                <!-- Drag and Drop Area -->
-                <div class="card shadow-sm border-0 text-start" style="border-radius: var(--border-radius);">
-                    <div class="card-body p-4 p-md-5">
-                        <div id="dropZone" class="border-2 rounded border-primary border-dashed p-5 text-center transition-all cursor-pointer" style="border-style: dashed; background-color: #f8fafc;"  onclick="document.getElementById('fileInput').click()" tabindex="0" role="button" aria-label="Área para subir archivo de carga masiva">
-                            <input type="file" id="fileInput" class="d-none" accept=".csv, .xlsx">
-                            <div class="mb-3 d-flex justify-content-center">
-                                <div class="bg-primary bg-opacity-10 rounded-circle text-primary d-flex align-items-center justify-content-center" style="width:80px; height:80px;">
-                                    <i data-lucide="upload-cloud" style="width: 40px; height: 40px;" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <h4 class="fw-bold text-dark">Arrastra tu archivo aquí</h4>
-                            <p class="text-muted mb-0">O haz clic para explorar tus archivos</p>
-                            <p class="small text-muted mt-2 opacity-50 fw-bold border bg-white px-2 py-1 rounded d-inline-block">Soporta: XLSX, CSV</p>
+        </div>
+        <div class="row g-4 mt-2">
+            <!-- Contenedor Productos -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
+                    <div class="card-header bg-white border-0 pt-4 text-center">
+                        <i data-lucide="package" class="text-primary mb-2" style="width: 32px; height: 32px;"></i>
+                        <h5 class="fw-bold m-0">Productos</h5>
+                    </div>
+                    <div class="card-body text-center d-flex flex-column">
+                        <button class="btn btn-light fw-bold text-primary mb-4 w-100 border hover-grow"><i data-lucide="download-cloud" class="me-2" style="width: 18px;"></i> Descargar Plantilla</button>
+                        <div id="dropZoneProd" class="flex-grow-1 border-2 rounded border-primary border-dashed p-4 d-flex flex-column justify-content-center align-items-center transition-all cursor-pointer" style="border-style: dashed; background-color: #f8fafc;" onclick="document.getElementById('fileProd').click()">
+                            <input type="file" id="fileProd" class="d-none" accept=".csv, .xlsx">
+                            <i data-lucide="upload-cloud" style="width: 36px; height: 36px;" class="mb-2 text-primary opacity-50 d-block" aria-hidden="true"></i>
+                            <span class="fw-bold small text-dark d-block">Soltar archivo aquí</span>
+                            <span class="small text-muted mt-1 opacity-50">.XLSX o .CSV</span>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Progress Bar (Hidden by default) -->
-                        <div id="uploadProgress" class="mt-4 d-none">
-                            <div class="d-flex justify-content-between mb-1 small fw-bold">
-                                <span class="text-primary"><i data-lucide="loader" class="me-1 spinner-border spinner-border-sm" aria-hidden="true"></i> Procesando archivo...</span>
-                                <span id="progressText">0%</span>
-                            </div>
-                            <div class="progress" style="height: 10px; border-radius: 10px">
-                                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
-                            </div>
+            <!-- Contenedor Clientes -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
+                    <div class="card-header bg-white border-0 pt-4 text-center">
+                        <i data-lucide="users" class="text-primary mb-2" style="width: 32px; height: 32px;"></i>
+                        <h5 class="fw-bold m-0">Clientes</h5>
+                    </div>
+                    <div class="card-body text-center d-flex flex-column">
+                        <button class="btn btn-light fw-bold text-primary mb-4 w-100 border hover-grow"><i data-lucide="download-cloud" class="me-2" style="width: 18px;"></i> Descargar Plantilla</button>
+                        <div id="dropZoneCli" class="flex-grow-1 border-2 rounded border-primary border-dashed p-4 d-flex flex-column justify-content-center align-items-center transition-all cursor-pointer" style="border-style: dashed; background-color: #f8fafc;" onclick="document.getElementById('fileCli').click()">
+                            <input type="file" id="fileCli" class="d-none" accept=".csv, .xlsx">
+                            <i data-lucide="upload-cloud" style="width: 36px; height: 36px;" class="mb-2 text-primary opacity-50 d-block" aria-hidden="true"></i>
+                            <span class="fw-bold small text-dark d-block">Soltar archivo aquí</span>
+                            <span class="small text-muted mt-1 opacity-50">.XLSX o .CSV</span>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Success Alert (Hidden by default) -->
-                        <div id="uploadSuccess" class="alert alert-success mt-4 d-none d-flex align-items-center rounded-3 border-0">
-                            <i data-lucide="check-circle" class="me-2" aria-hidden="true"></i> 
-                            <div>
-                                <strong>¡Carga Completada!</strong> El inventario ha sido actualizado.
-                            </div>
+            <!-- Contenedor Facturas -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
+                    <div class="card-header bg-white border-0 pt-4 text-center">
+                        <i data-lucide="file-text" class="text-primary mb-2" style="width: 32px; height: 32px;"></i>
+                        <h5 class="fw-bold m-0">Facturas</h5>
+                    </div>
+                    <div class="card-body text-center d-flex flex-column">
+                        <button class="btn btn-light fw-bold text-primary mb-4 w-100 border hover-grow"><i data-lucide="download-cloud" class="me-2" style="width: 18px;"></i> Descargar Plantilla</button>
+                        <div id="dropZoneFac" class="flex-grow-1 border-2 rounded border-primary border-dashed p-4 d-flex flex-column justify-content-center align-items-center transition-all cursor-pointer" style="border-style: dashed; background-color: #f8fafc;" onclick="document.getElementById('fileFac').click()">
+                            <input type="file" id="fileFac" class="d-none" accept=".csv, .xlsx">
+                            <i data-lucide="upload-cloud" style="width: 36px; height: 36px;" class="mb-2 text-primary opacity-50 d-block" aria-hidden="true"></i>
+                            <span class="fw-bold small text-dark d-block">Soltar archivo aquí</span>
+                            <span class="small text-muted mt-1 opacity-50">.XLSX o .CSV</span>
                         </div>
                     </div>
                 </div>
