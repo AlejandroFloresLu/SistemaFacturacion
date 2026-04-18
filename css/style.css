@@ -1,0 +1,295 @@
+/* ==========================================================================
+   FACTU - SISTEMA CONTABLE (Variables Globales)
+   ========================================================================== */
+:root {
+    --sidebar-width: 280px;
+    --primary-color: #0b4182;    /* Azul Cobalto FACTU */
+    --primary-hover: #083265;
+    --bg-light: #f8fafc;
+    --text-muted: #64748b;
+    --text-dark: #1e293b;
+    --white: #ffffff;
+    --border-radius: 15px;
+}
+
+body { 
+    background-color: var(--bg-light); 
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-dark);
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD WCAG 2.2 - OPERABILIDAD
+   ========================================================================== */
+*:focus-visible {
+    outline: 3px solid var(--primary-color) !important;
+    outline-offset: 3px !important;
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(11, 65, 130, 0.2);
+}
+
+
+/* ==========================================================================
+   LAYOUT Y ESTRUCTURA (Main & Sidebar)
+   ========================================================================== */
+.sidebar {
+    background-color: var(--white);
+    border-right: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        position: fixed;
+        top: 0; left: 0;
+        z-index: 1045;
+    }
+    .main-content { 
+        margin-left: var(--sidebar-width); 
+        padding: 20px;
+        min-height: 100vh;
+    }
+}
+
+/* ==========================================================================
+   NAVEGACIÓN (Acordeón y Enlaces)
+   ========================================================================== */
+.accordion-button-custom {
+    width: 100%;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.accordion-button-custom:not(.collapsed) {
+    color: var(--primary-color);
+    background-color: #f0f4f8;
+}
+
+/* Flecha del Acordeón (SVG Dinámico) */
+.accordion-button-custom::after {
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2364748b'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-left: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Rotación y cambio de color de la flecha (Filtro para Azul Cobalto) */
+.accordion-button-custom:not(.collapsed)::after {
+    transform: rotate(-180deg);
+    filter: invert(18%) sepia(48%) saturate(2914%) hue-rotate(195deg) brightness(92%) contrast(101%);
+}
+
+.sub-nav-link {
+    padding: 0.6rem 1rem 0.6rem 3.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 0.4rem;
+    transition: all 0.2s;
+}
+
+.sub-nav-link:hover, .sub-nav-link.active-link,
+.nav-link-custom:hover, .nav-link-custom.active-link {
+    background-color: var(--bg-light);
+    color: var(--primary-color) !important;
+    font-weight: 600;
+}
+
+/* Estrellas de favoritos */
+.star-btn {
+    color: #dee2e6;
+    transition: color 0.2s;
+}
+.star-active {
+    color: #ffc107 !important;
+    fill: #ffc107;
+}
+
+/* ==========================================================================
+   COMPONENTES DE TABLA (Diseño Premium)
+   ========================================================================== */
+.card-table { 
+    border-radius: var(--border-radius); 
+    border: none; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Mantiene los bordes redondeados */
+    background-color: var(--white);
+}
+
+.table thead th { 
+    background-color: #fcfcfd; 
+    color: var(--text-muted); 
+    text-transform: uppercase; 
+    font-size: 0.75rem; 
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid #eef2f6;
+}
+
+/* Padding lateral para que el texto no choque con los bordes de la card */
+.table th:first-child, .table td:first-child { padding-left: 1.5rem !important; }
+.table th:last-child, .table td:last-child { padding-right: 1.5rem !important; }
+
+.table tbody td { 
+    padding: 1rem; 
+    vertical-align: middle; 
+}
+
+/* ==========================================================================
+   BOTONES Y UI ELEMENTS
+   ========================================================================== */
+/* Botón Principal FACTU */
+.btn-factu {
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-factu:hover {
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(11, 65, 130, 0.2);
+}
+
+/* Botones de Acción Suaves (Edit/Delete) */
+.btn-edit-soft {
+    background-color: #eef2ff !important;
+    color: #000000 !important;
+    border: none;
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+.btn-delete-soft {
+    background-color: #fff1f2 !important;
+    color: #000000 !important;
+    border: none;
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+.btn-edit-soft:hover, .btn-delete-soft:hover {
+    filter: brightness(0.95);
+}
+
+/* Avatares y Badges */
+.avatar-circle {
+    width: 40px; height: 40px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+}
+
+.badge-status {
+    padding: 0.5em 1em;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.badge-active { 
+    background-color: #dcfce7 !important; 
+    color: #15803d !important; 
+}
+
+/* Buscador */
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(11, 65, 130, 0.1);
+}
+/* ==========================================================================
+   FACTURACIÓN ÁGIL (Agility POS UI)
+   ========================================================================== */
+.favorite-card {
+    background-color: var(--white);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+
+.favorite-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 15px -3px rgba(11, 65, 130, 0.1);
+    border-color: #c7d2fe !important;
+    background-color: #f8fafc;
+}
+
+.favorite-card:active {
+    transform: scale(0.96);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.btn-draft {
+    transition: all 0.2s;
+}
+
+.btn-draft:hover {
+    background-color: #e2e8f0;
+    color: #1e293b !important;
+}
+
+/* Color para el número de página activo */
+.pagination .page-item.active .page-link {
+    background-color: #1e293b !important; 
+    border-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+/* Color para los números no activos */
+.pagination .page-link {
+    color: #64748b; /* Un gris suave */
+    border: none;
+    transition: all 0.2s;
+}
+
+/* Efecto al pasar el mouse por los números */
+.pagination .page-link:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+/* ==========================================================================
+   CRUD UI & CARGA MASIVA (Drag & Drop)
+   ========================================================================== */
+.border-dashed {
+    border-style: dashed !important;
+}
+
+.transition-all {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-grow:hover {
+    transform: scale(1.03);
+}
+
+/* Estado de Drag and drop activo */
+.drag-active {
+    background-color: #eff6ff !important;
+    border-color: #3b82f6 !important;
+    transform: scale(1.02);
+}
+
+.table.align-middle td, .table.align-middle th {
+    vertical-align: middle;
+}

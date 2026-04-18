@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTU - Facturación</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <div class="d-lg-none bg-white border-bottom p-3 sticky-top">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarMenu">
+                    <i data-lucide="menu" aria-hidden="true"></i>
+                </button>
+                <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebarMenu">
+
+        <div class="p-4 border-bottom d-flex align-items-center gap-3">
+            <div class="text-white p-2 rounded-3" style="background-color: #0b4182;">
+                <i data-lucide="calculator" aria-hidden="true"></i>
+            </div>
+            <span class="h4 mb-0 fw-bold">FACTU</span>
+            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas"
+                data-bs-target="#sidebarMenu"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column p-3 overflow-y-auto">
+
+            <div id="section-favoritos" class="mb-4 d-none">
+                <p class="text-uppercase text-muted fw-bold mb-2 px-3 small" style="letter-spacing: 1px;">Favoritos</p>
+                <div id="favoritos-list" class="nav flex-column gap-1"></div>
+                <hr class="mx-3 my-3">
+            </div>
+
+            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
+
+                <a href="index.html"
+                    class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded"
+                    style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="pie-chart" class="me-2" aria-hidden="true"></i> Dashboard
+                </a>
+
+                <a href="factura.html"
+                    class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded factura-nav-link"
+                    style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
+                    <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
+                </a>
+
+                <a href="clientes.html"
+                    class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded"
+                    style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="users" class="me-2" aria-hidden="true"></i> Clientes
+                </a>
+
+                <a href="productos.html"
+                    class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded"
+                    style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="package" class="me-2" aria-hidden="true"></i> Productos
+                </a>
+
+                <a href="carga-masiva.html"
+                    class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded"
+                    style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="upload-cloud" class="me-2" aria-hidden="true"></i> Carga Masiva
+                </a>
+
+            </div>
+
+            <div class="mt-auto p-3 bg-light rounded-4 border">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-circle" style="background-color: #0b4182;">AF</div>
+                    <div>
+                        <div class="fw-bold">Admin</div>
+                        <div class="text-muted small">Alejandro Flores</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;"" role="main">
+        <!-- Top Panel: Client Identification -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
+                    <div class="card-body d-flex align-items-center justify-content-between p-3">
+                        <div class="d-flex align-items-center flex-grow-1 me-4">
+                            <div class="flex-grow-1 position-relative">
+                                <input type="text" class="form-control form-control-lg border-0 bg-light shadow-none"
+                                    id="clienteSearch" placeholder="Buscar cliente por Cédula, RUC o Nombre..."
+                                    autofocus>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 me-2">
+                                <i data-lucide="user-search" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-secondary px-3 py-2 fs-6" id="clienteBadge">Sin cliente</span>
+                            <button class="btn btn-outline-danger btn-sm px-3 ms-2 d-none" id="btnEscape" title="Cancelar factura" aria-label="Cancelar selección de cliente"><i data-lucide="x" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <!-- Left Panel: Products, Cmd+K, Totals & Mixed Payments -->
+            <div class="col-lg-12 d-flex flex-column gap-12">
+
+                <!-- Invoice Details Table -->
+                <div class="card shadow-sm border-0 flex-grow-1"
+                    style="border-radius: var(--border-radius); min-height: 250px;">
+                    <div class="card-body p-0 overflow-y-auto" style="max-height: 350px;">
+                        <table class="table table-hover mb-0">
+                            <thead class="sticky-top bg-white">
+                                <tr>
+                                    <th width="45%">Descripción</th>
+                                    <th width="15%" class="text-center">Cant.</th>
+                                    <th width="20%" class="text-end">P. Unit</th>
+                                    <th width="20%" class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoiceItems">
+                                <tr id="emptyInvoiceRow">
+                                    <td colspan="4" class="text-center text-muted py-5"><i data-lucide="inbox"
+                                            class="mb-2 opacity-50" style="width: 48px; height: 48px;" aria-hidden="true"></i><br>Agrega
+                                        productos a la factura</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Mixed Payments & Totals Panel -->
+                <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
+                    <div class="row g-0">
+                        <div class="col-md-6 border-end p-4">
+                            <h6 class="text-uppercase text-muted fw-bold mb-3 small">Módulo de Pagos Multimétodo</h6>
+                            <div class="d-flex gap-2 mb-3">
+                                <select class="form-select w-50 shadow-none border-1" id="paymentMethod">
+                                    <option value="efectivo">Efectivo 💵</option>
+                                    <option value="transferencia">Transferencia 🏦</option>
+                                    <option value="tarjeta">Tarjeta 💳</option>
+                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-text border-1 bg-light">$</span>
+                                    <input type="number" class="form-control border-1 shadow-none fw-bold"
+                                        id="paymentAmount" value="0.00" disabled>
+                                    <button class="btn btn-outline-secondary" id="btnAddPayment" disabled aria-label="Agregar pago"><i
+                                            data-lucide="plus"></i></button>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush small" id="paymentList"></ul>
+                        </div>
+                        <div class="col-md-6 p-4 bg-light text-end d-flex flex-column justify-content-center"
+                            style="border-radius: 0 var(--border-radius) var(--border-radius) 0;">
+                            <div class="d-flex justify-content-between mb-1 text-muted"><span>Subtotal:</span> $<span
+                                    id="lblSubtotal">0.00</span></div>
+                            <div class="d-flex justify-content-between mb-2 text-muted"><span>IVA (15%):</span> $<span
+                                    id="lblIva">0.00</span></div>
+                            <div class="d-flex justify-content-between mb-3 h4 fw-bold text-dark"><span>Total:</span>
+                                $<span id="lblTotal">0.00</span></div>
+
+                            <hr class="my-2 text-muted">
+                            <div class="d-flex justify-content-between mb-2 text-primary fw-bold"
+                                style="font-size: 1.1rem;"><span>Pagado:</span> $<span id="lblPagado">0.00</span></div>
+                            <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo"
+                                style="font-size: 1.1rem; color: #dc3545;"><span>Saldo Restante:</span> $<span
+                                    id="lblSaldo">0.00</span></div>
+
+                            <div class="d-flex gap-2 mt-auto">
+                                <button class="btn border flex-grow-1 fw-bold text-muted btn-draft bg-white"
+                                    title="Guardar como Borrador"><i data-lucide="archive" class="me-1" aria-hidden="true"></i>
+                                    Borrador</button>
+                                <button class="btn btn-factu flex-grow-1 fw-bold" id="btnPagar" disabled
+                                    title="Atajo: F12"><i data-lucide="check-circle" class="me-1" aria-hidden="true"></i> Aprobar
+                                    (F12)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Modal Nuevo Cliente -->
+            <div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                        <div class="modal-header border-0 bg-white"
+                            style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i
+                                    data-lucide="user-plus" class="me-2 text-primary"></i> Alta Rápida de Cliente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4 pt-0">
+                            <hr class="text-muted mt-0 mb-4 opacity-10">
+                            <form id="formNuevoCliente">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Cédula / RUC Deteactada</label>
+                                    <input type="text" class="form-control fw-bold bg-light" id="modalRuc" readonly>
+                                </div>
+                                <div class="row mb-3 g-2">
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small fw-bold">Nombres</label>
+                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre"
+                                            required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small fw-bold">Apellidos</label>
+                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Dirección Mínima</label>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Teléfono/WhatsApp</label>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalTel">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white"
+                            style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                            <button type="button" class="btn btn-light fw-bold"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-factu fw-bold px-4" id="btnGuardarCliente"><i
+                                    data-lucide="save" class="me-2" style="width: 16px;"></i> Guardar y Usar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/factura.ui.js"></script>
+    <script>
+        // Inicializar iconos de Lucide
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

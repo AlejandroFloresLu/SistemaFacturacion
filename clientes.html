@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTU - Clientes</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="d-lg-none bg-white border-bottom p-3 sticky-top">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menú">
+                    <i data-lucide="menu" aria-hidden="true"></i>
+                </button>
+                <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebarMenu">
+        
+        <div class="p-4 border-bottom d-flex align-items-center gap-3">
+            <div class="text-white p-2 rounded-3" style="background-color: #0b4182;">
+                <i data-lucide="calculator" aria-hidden="true"></i>
+            </div>
+            <span class="h4 mb-0 fw-bold">FACTU</span>
+            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar menú"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column p-3 overflow-y-auto">
+            
+            <div id="section-favoritos" class="mb-4 d-none">
+                <p class="text-uppercase text-muted fw-bold mb-2 px-3 small" style="letter-spacing: 1px;">Favoritos</p>
+                <div id="favoritos-list" class="nav flex-column gap-1"></div>
+                <hr class="mx-3 my-3">
+            </div>
+
+            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
+                
+                <a href="index.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="pie-chart" class="me-2" aria-hidden="true"></i> Dashboard
+                </a>
+
+                <a href="factura.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-1 rounded factura-nav-link" style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
+                    <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
+                </a>
+
+                <a href="facturas-lista.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded border" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s; font-size: 0.95rem; background-color: #f8fafc; margin-left: 10px;">
+                    <i data-lucide="list" class="me-2 text-muted" style="width: 18px; height: 18px;" aria-hidden="true"></i> Ver Facturas
+                </a>
+
+                <a href="clientes.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="users" class="me-2" aria-hidden="true"></i> Clientes
+                </a>
+
+                <a href="productos.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="package" class="me-2" aria-hidden="true"></i> Productos
+                </a>
+
+                <a href="carga-masiva.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="upload-cloud" class="me-2" aria-hidden="true"></i> Carga Masiva
+                </a>
+
+            </div>
+
+            <div class="mt-auto p-3 bg-light rounded-4 border">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-circle" style="background-color: #0b4182;">AF</div>
+                    <div>
+                        <div class="fw-bold">Admin</div>
+                        <div class="text-muted small">Alejandro Flores</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;"" role="main">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold m-0 text-dark"><i data-lucide="users" class="me-2 text-primary" aria-hidden="true"></i>Directorio de Clientes</h2>
+                <p class="text-muted mt-1 mb-0">Administra a tus clientes y agencias de viaje asociados.</p>
+            </div>
+            <button class="btn btn-factu shadow-sm"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> Nuevo Cliente</button>
+        </div>
+        
+        <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
+            <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
+                <div class="input-group" style="max-width: 400px;">
+                    <span class="input-group-text bg-light border-0"><i data-lucide="search" class="text-muted" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control bg-light border-0 shadow-none" placeholder="Buscar por nombre, correo o RUC...">
+                </div>
+                <button class="btn btn-outline-secondary btn-sm"><i data-lucide="filter" class="me-1" style="width: 14px;" aria-hidden="true"></i> Filtros</button>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light text-muted">
+                        <tr>
+                            <th class="ps-4">Cliente</th>
+                            <th>Identificación (RUC/CC)</th>
+                            <th>Contacto</th>
+                            <th>Última Compra</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3" style="width:36px; height:36px; font-size:14px;">AF</div>
+                                    <div class="fw-bold text-dark">Alejandro Flores</div>
+                                </div>
+                            </td>
+                            <td>1201201201</td>
+                            <td class="text-muted small">0999999999<br>alejandro@email.com</td>
+                            <td><span class="badge bg-light text-dark border">Hace 2 días</span></td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light border-0 text-primary me-1" aria-label="Editar" title="Editar"><i data-lucide="edit-2" style="width:16px;" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-light border-0 text-danger" aria-label="Eliminar" title="Eliminar"><i data-lucide="trash-2" style="width:16px;" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3" style="width:36px; height:36px; font-size:14px;">MT</div>
+                                    <div class="fw-bold text-dark">María Torres</div>
+                                </div>
+                            </td>
+                            <td>1104845567</td>
+                            <td class="text-muted small">0988888888<br>maria@agencia.com</td>
+                            <td><span class="badge bg-light text-dark border">Hace 1 mes</span></td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light border-0 text-primary me-1" aria-label="Editar" title="Editar"><i data-lucide="edit-2" style="width:16px;" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-light border-0 text-danger" aria-label="Eliminar" title="Eliminar"><i data-lucide="trash-2" style="width:16px;" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center text-muted small">
+                Mostrando 2 de 24 clientes
+                <ul class="pagination pagination-sm m-0">
+                    <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Inicializar iconos de Lucide
+        lucide.createIcons();
+    </script>
+</body>
+</html>
