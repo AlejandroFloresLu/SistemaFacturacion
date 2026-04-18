@@ -47,18 +47,14 @@
 
             <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
 
-                <a href="index.html"
-                    class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded"
-                    style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
-                    <i data-lucide="pie-chart" class="me-2" aria-hidden="true"></i> Dashboard
-                </a>
-
                 <a href="factura.html"
                     class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded factura-nav-link"
                     style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
                     <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
                 </a>
-
+                <a href="facturas-lista.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="list" class="me-2" aria-hidden="true"></i> Ver Facturas
+                </a>
                 <a href="clientes.html"
                     class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded"
                     style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
@@ -91,26 +87,97 @@
         </div>
     </div>
 
-    <main class="main-content p-4 bg-light" style="min-height: 100vh;"" role="main">
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;" role="main">
+        <!-- Encabezado de Factura: Empresa y Datos -->
+        <div class="row mb-3 g-3">
+            <div class="col-md-7">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="avatar-circle" style="background-color: var(--primary-color); width: 64px; height: 64px; font-size: 24px; margin-right: 15px;">
+                            FT
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1" style="color: var(--text-dark);">Agencia de Viajes FACTU S.A.</h5>
+                            <p class="text-muted small mb-0"><i data-lucide="map-pin" style="width:14px; margin-right:4px;" aria-hidden="true"></i>Av. Siempre Viva 123 y Las Naciones</p>
+                            <p class="text-muted small mb-0"><i data-lucide="phone" style="width:14px; margin-right:4px;" aria-hidden="true"></i>+593 999 999 999 &nbsp; | &nbsp; RUC: 1792929292001</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card shadow-sm border-0 h-100 bg-primary bg-opacity-10" style="border-radius: var(--border-radius);">
+                    <div class="card-body text-end d-flex flex-column justify-content-center pt-2 pb-2">
+                        <div class="d-flex flex-column align-items-end mb-2">
+                            <div class="btn-group btn-group-sm mb-2 shadow-sm rounded">
+                                <input type="radio" class="btn-check" name="tipoComprobanteRadio" id="radioFactura" value="factura" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary px-3 fw-bold" for="radioFactura">FACTURA</label>
+                              
+                                <input type="radio" class="btn-check" name="tipoComprobanteRadio" id="radioNC" value="nc" autocomplete="off">
+                                <label class="btn btn-outline-primary px-3 fw-bold" for="radioNC">NOTA DE CRÉDITO</label>
+                            </div>
+                            <span class="fs-6 fw-bold text-dark" id="numeroComprobante">Nº 001-002-000000104</span>
+                        </div>
+                        
+                        <div id="contenedorVinculacionNC" class="d-none mb-1 mt-1">
+                            <div class="input-group input-group-sm">
+                                <input type="text" id="facturaVinculada" class="form-control border-1 border-primary shadow-none text-end" placeholder="* Fac. Origen..." title="Pega el código original (Atajo: Ctrl+V)">
+                                <button class="btn btn-primary px-2" type="button" title="Buscar Factura"><i data-lucide="search" style="width:14px;" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="text-muted small mt-1"><strong>Fecha de Emisión:</strong> <span id="fechaEmision"></span></div>
+                        <div class="text-muted small"><strong>Cajero:</strong> Alejandro Flores</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Top Panel: Client Identification -->
         <div class="row mb-3">
-            <div class="col-12">
+            <div class="col-lg-6 col-md-8">
                 <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
-                    <div class="card-body d-flex align-items-center justify-content-between p-3">
-                        <div class="d-flex align-items-center flex-grow-1 me-4">
-                            <div class="flex-grow-1 position-relative">
-                                <input type="text" class="form-control form-control-lg border-0 bg-light shadow-none"
-                                    id="clienteSearch" placeholder="Buscar cliente por Cédula, RUC o Nombre..."
-                                    autofocus>
-                            </div>
-                            <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 me-2">
-                                <i data-lucide="user-search" aria-hidden="true"></i>
+                    <div class="card-body p-3">
+                        <!-- Vista Búsqueda -->
+                        <div id="vistaBusquedaCliente" class="input-group">
+                            <span class="input-group-text bg-light border-0"><i data-lucide="user-search" class="text-muted" aria-hidden="true" style="width: 20px;"></i></span>
+                            <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-muted"
+                                id="clienteSearch" placeholder="Cédula (10) o RUC (13)..." autofocus title="Pega la cédula (Ctrl+V) y presiona Enter" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="13">
+                            
+                            <button class="btn btn-factu rounded-end px-3 border-0 d-flex align-items-center" id="btnBuscarClienteIcon" type="button" title="Buscar Cliente (Atajo: Enter)">
+                                <i data-lucide="search" style="width:16px;" aria-hidden="true"></i> <span class="d-none d-sm-inline ms-1 small fw-bold text-white">Buscar</span>
+                            </button>
+                            
+                            <div class="d-flex align-items-center ms-2 d-none d-sm-block">
+                                <span class="badge bg-secondary px-3 py-2" id="clienteBadge">Sin cliente</span>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-secondary px-3 py-2 fs-6" id="clienteBadge">Sin cliente</span>
-                            <button class="btn btn-outline-danger btn-sm px-3 ms-2 d-none" id="btnEscape" title="Cancelar factura" aria-label="Cancelar selección de cliente"><i data-lucide="x" aria-hidden="true"></i></button>
+
+                        <!-- Panel de Cliente No Encontrado -->
+                        <div id="panelClienteNoEncontrado" class="d-none alert alert-warning mb-0 border-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <i data-lucide="alert-triangle" class="me-2 text-warning" aria-hidden="true"></i> 
+                                <span class="text-dark">No se encontró el cliente <strong><span id="txtRucNoEncontrado"></span></strong>.</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-secondary bg-white" id="btnBuscarDeNuevo">Buscar de nuevo</button>
+                                <button class="btn btn-sm btn-factu border-0" id="btnCrearNuevoClienteDirecto">Crear nuevo</button>
+                            </div>
                         </div>
+
+                        <!-- Vista de Cliente Seleccionado -->
+                        <div id="vistaClienteSeleccionado" class="d-none d-flex align-items-center justify-content-between p-2 pb-0 pt-0">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-3" style="width:48px;height:48px;">
+                                    <i data-lucide="user" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-primary" id="nombreClienteSeleccionado">...</h6>
+                                    <div class="text-muted small"><strong>CI/RUC</strong> <span id="rucClienteSeleccionado">...</span> &nbsp; | &nbsp; <i data-lucide="mail" style="width:12px;" aria-hidden="true"></i> client@empresa.com</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm" id="btnEscape" title="Quitar cliente" aria-label="Quitar cliente"><i data-lucide="x" aria-hidden="true" class="me-1"></i> Cambiar</button>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -123,6 +190,16 @@
                 <!-- Invoice Details Table -->
                 <div class="card shadow-sm border-0 flex-grow-1"
                     style="border-radius: var(--border-radius); min-height: 250px;">
+                    <div class="card-header bg-white border-0 pt-3 pb-2 border-bottom">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i data-lucide="search" class="text-muted" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-muted" id="spotlightProduct" placeholder="Buscar producto o servicio..." title="Despliega y escoge producto" list="productosList">
+                            <datalist id="productosList"></datalist>
+                            <button class="btn btn-secondary border-0 px-3 d-flex align-items-center rounded-end" id="btnBuscarProductoIcon" type="button" title="Añadir a Factura (Atajo: Enter)">
+                                <i data-lucide="plus" style="width:16px;" aria-hidden="true"></i> <span class="d-none d-sm-inline ms-1 small fw-bold text-white">Añadir</span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="card-body p-0 overflow-y-auto" style="max-height: 350px;">
                         <table class="table table-hover mb-0">
                             <thead class="sticky-top bg-white">
@@ -167,27 +244,19 @@
                         </div>
                         <div class="col-md-6 p-4 bg-light text-end d-flex flex-column justify-content-center"
                             style="border-radius: 0 var(--border-radius) var(--border-radius) 0;">
-                            <div class="d-flex justify-content-between mb-1 text-muted"><span>Subtotal:</span> $<span
-                                    id="lblSubtotal">0.00</span></div>
-                            <div class="d-flex justify-content-between mb-2 text-muted"><span>IVA (15%):</span> $<span
-                                    id="lblIva">0.00</span></div>
-                            <div class="d-flex justify-content-between mb-3 h4 fw-bold text-dark"><span>Total:</span>
-                                $<span id="lblTotal">0.00</span></div>
+                            <div class="d-flex justify-content-between mb-1 text-muted"><span>Subtotal:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblSubtotal">0.00</span></span></div>
+                            <div class="d-flex justify-content-between mb-2 text-muted"><span>IVA (15%):</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblIva">0.00</span></span></div>
+                            <div class="d-flex justify-content-between mb-3 h4 fw-bold text-dark"><span>Total:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblTotal">0.00</span></span></div>
 
                             <hr class="my-2 text-muted">
                             <div class="d-flex justify-content-between mb-2 text-primary fw-bold"
-                                style="font-size: 1.1rem;"><span>Pagado:</span> $<span id="lblPagado">0.00</span></div>
+                                style="font-size: 1.1rem;"><span>Pagado:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblPagado">0.00</span></span></div>
                             <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo"
-                                style="font-size: 1.1rem; color: #dc3545;"><span>Saldo Restante:</span> $<span
-                                    id="lblSaldo">0.00</span></div>
+                                style="font-size: 1.1rem; color: #dc3545;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width: 80px; text-align: right;" id="lblSaldo">0.00</span></span></div>
 
                             <div class="d-flex gap-2 mt-auto">
-                                <button class="btn border flex-grow-1 fw-bold text-muted btn-draft bg-white"
-                                    title="Guardar como Borrador"><i data-lucide="archive" class="me-1" aria-hidden="true"></i>
-                                    Borrador</button>
-                                <button class="btn btn-factu flex-grow-1 fw-bold" id="btnPagar" disabled
-                                    title="Atajo: F12"><i data-lucide="check-circle" class="me-1" aria-hidden="true"></i> Aprobar
-                                    (F12)</button>
+                                <button class="btn btn-factu flex-grow-1 fw-bold py-3 fs-5" id="btnPagar" disabled
+                                    title="Atajo: F12" data-bs-toggle="modal" data-bs-target="#modalAprobarFactura" aria-label="Aprobar facturación"><i data-lucide="check-circle" class="me-1" aria-hidden="true"></i> Aprobar</button>
                             </div>
                         </div>
                     </div>
@@ -241,6 +310,42 @@
                                 data-bs-dismiss="modal">Cancelar</button>
                             <button type="button" class="btn btn-factu fw-bold px-4" id="btnGuardarCliente"><i
                                     data-lucide="save" class="me-2" style="width: 16px;"></i> Guardar y Usar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Aprobación Final -->
+            <div class="modal fade" id="modalAprobarFactura" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                        <div class="modal-header border-0 bg-light" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i data-lucide="check-circle" class="me-2 text-success" aria-hidden="true"></i> Confirmar Emisión</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4 text-center">
+                            <i data-lucide="file-check-2" style="width:64px;height:64px;" class="text-success opacity-75 mb-3" aria-hidden="true"></i>
+                            <h5 class="fw-bold text-dark mb-2">¿Estás seguro de emitir esta factura?</h5>
+                            <p class="text-muted mb-4">La factura se guardará definitivamente en el sistema tras esta acción.</p>
+                            
+                            <div class="bg-light rounded p-3 text-start mb-0">
+                                <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                                    <span class="text-muted small">Cliente:</span>
+                                    <span class="fw-bold" id="modalConfirmCliente">...</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small">Productos/Servicios:</span>
+                                    <span class="fw-bold" id="modalConfirmItems">0</span>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3 h4 fw-bold text-primary mb-0">
+                                    <span>TOTAL:</span>
+                                    <span>$<span id="modalConfirmTotal">0.00</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                            <button type="button" class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success fw-bold flex-grow-1 shadow-sm" id="btnConfirmarAprobacion"><i data-lucide="printer" class="me-2" style="width: 16px;"></i> Confirmar e Imprimir</button>
                         </div>
                     </div>
                 </div>

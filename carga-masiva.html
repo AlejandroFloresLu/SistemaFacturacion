@@ -43,16 +43,12 @@
 
             <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
                 
-                <a href="index.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
-                    <i data-lucide="pie-chart" class="me-2" aria-hidden="true"></i> Dashboard
-                </a>
-
-                <a href="factura.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-1 rounded factura-nav-link" style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
+                <a href="factura.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded factura-nav-link" style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
                     <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
                 </a>
 
-                <a href="facturas-lista.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded border" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s; font-size: 0.95rem; background-color: #f8fafc; margin-left: 10px;">
-                    <i data-lucide="list" class="me-2 text-muted" style="width: 18px; height: 18px;" aria-hidden="true"></i> Ver Facturas
+                <a href="facturas-lista.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
+                    <i data-lucide="list" class="me-2" aria-hidden="true"></i> Ver Facturas
                 </a>
 
                 <a href="clientes.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
@@ -87,56 +83,58 @@
                 <h2 class="fw-bold m-0 text-dark"><i data-lucide="upload-cloud" class="me-2 text-primary" aria-hidden="true"></i>Carga Masiva de Datos</h2>
                 <p class="text-muted mt-1 mb-0">Importar múltiples productos o clientes mediante hoja de cálculo .xlsx o .csv.</p>
             </div>
-            <button class="btn btn-outline-secondary bg-white shadow-sm"><i data-lucide="download" class="me-1" aria-hidden="true"></i> Descargar Plantilla</button>
-        </div>
-        
-        <div class="row">
-            <div class="col-lg-8">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 text-center mb-3">
+                <!-- Multimodal Tabs -->
+                <div class="btn-group shadow-sm bg-white rounded-5 p-1 mb-4" role="group">
+                    <input type="radio" class="btn-check" name="cargaTabs" id="tabProductos" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary border-0 rounded-pill px-4 py-2 fw-bold" for="tabProductos"><i data-lucide="package" style="width:18px;" class="me-1"></i> Productos</label>
+
+                    <input type="radio" class="btn-check" name="cargaTabs" id="tabClientes" autocomplete="off">
+                    <label class="btn btn-outline-primary border-0 rounded-pill px-4 py-2 fw-bold" for="tabClientes"><i data-lucide="users" style="width:18px;" class="me-1"></i> Clientes</label>
+
+                    <input type="radio" class="btn-check" name="cargaTabs" id="tabFacturas" autocomplete="off">
+                    <label class="btn btn-outline-primary border-0 rounded-pill px-4 py-2 fw-bold" for="tabFacturas"><i data-lucide="file-text" style="width:18px;" class="me-1"></i> Facturas</label>
+                </div>
+
+                <!-- Template Download Button middle prominent -->
+                <div class="mb-4">
+                    <button class="btn btn-light border shadow-sm px-4 py-2 rounded-pill fw-bold hover-grow text-primary"><i data-lucide="download-cloud" class="me-2" aria-hidden="true" style="width: 20px;"></i> Descargar Plantilla .XLSX</button>
+                </div>
+
                 <!-- Drag and Drop Area -->
-                <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
-                    <div class="card-body p-5">
+                <div class="card shadow-sm border-0 text-start" style="border-radius: var(--border-radius);">
+                    <div class="card-body p-4 p-md-5">
                         <div id="dropZone" class="border-2 rounded border-primary border-dashed p-5 text-center transition-all cursor-pointer" style="border-style: dashed; background-color: #f8fafc;"  onclick="document.getElementById('fileInput').click()" tabindex="0" role="button" aria-label="Área para subir archivo de carga masiva">
                             <input type="file" id="fileInput" class="d-none" accept=".csv, .xlsx">
-                            <i data-lucide="file-spreadsheet" style="width: 64px; height: 64px;" class="mb-3 text-primary opacity-75" aria-hidden="true"></i>
+                            <div class="mb-3 d-flex justify-content-center">
+                                <div class="bg-primary bg-opacity-10 rounded-circle text-primary d-flex align-items-center justify-content-center" style="width:80px; height:80px;">
+                                    <i data-lucide="upload-cloud" style="width: 40px; height: 40px;" aria-hidden="true"></i>
+                                </div>
+                            </div>
                             <h4 class="fw-bold text-dark">Arrastra tu archivo aquí</h4>
                             <p class="text-muted mb-0">O haz clic para explorar tus archivos</p>
-                            <p class="small text-muted mt-2 opacity-50">Soporta: XLSX, CSV (Max. 10MB)</p>
+                            <p class="small text-muted mt-2 opacity-50 fw-bold border bg-white px-2 py-1 rounded d-inline-block">Soporta: XLSX, CSV</p>
                         </div>
 
                         <!-- Progress Bar (Hidden by default) -->
                         <div id="uploadProgress" class="mt-4 d-none">
                             <div class="d-flex justify-content-between mb-1 small fw-bold">
-                                <span>Procesando archivo...</span>
+                                <span class="text-primary"><i data-lucide="loader" class="me-1 spinner-border spinner-border-sm" aria-hidden="true"></i> Procesando archivo...</span>
                                 <span id="progressText">0%</span>
                             </div>
-                            <div class="progress" style="height: 10px;">
+                            <div class="progress" style="height: 10px; border-radius: 10px">
                                 <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
                             </div>
                         </div>
 
                         <!-- Success Alert (Hidden by default) -->
-                        <div id="uploadSuccess" class="alert alert-success mt-4 d-none d-flex align-items-center">
+                        <div id="uploadSuccess" class="alert alert-success mt-4 d-none d-flex align-items-center rounded-3 border-0">
                             <i data-lucide="check-circle" class="me-2" aria-hidden="true"></i> 
                             <div>
-                                <strong>¡Carga Completada!</strong> Se añadieron 145 productos exitosamente.
+                                <strong>¡Carga Completada!</strong> El inventario ha sido actualizado.
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
-                    <div class="card-header bg-white border-0 pt-4 pb-0">
-                        <h6 class="fw-bold m-0"><i data-lucide="help-circle" class="me-2 text-muted" aria-hidden="true"></i> Instrucciones</h6>
-                    </div>
-                    <div class="card-body text-muted small">
-                        <ul class="list-group list-group-flush list-group-numbered">
-                            <li class="list-group-item bg-transparent px-0">Descarga la plantilla Excel del formato requerido.</li>
-                            <li class="list-group-item bg-transparent px-0">Llena los datos sin alterar el nombre de las columnas originales.</li>
-                            <li class="list-group-item bg-transparent px-0">Revisa que códigos y precios no contengan símbolos raros.</li>
-                            <li class="list-group-item bg-transparent px-0">Sube el archivo aquí.</li>
-                        </ul>
                     </div>
                 </div>
             </div>

@@ -293,3 +293,20 @@ body {
 .table.align-middle td, .table.align-middle th {
     vertical-align: middle;
 }
+
+/* Estado deshabilitado explícito para botones importantes de cobro */
+.btn-factu:disabled, .btn-factu[disabled] {
+    background-color: #e2e8f0 !important;
+    color: #94a3b8 !important;
+    border-color: #e2e8f0 !important;
+    opacity: 1 !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}
+
+/* Fix CSS hover button secondary contrast */
+.btn-outline-secondary:hover {
+    color: var(--primary-hover) !important;
+    background-color: #e2e8f0 !important;
+    border-color: #cbd5e1 !important;
+}
