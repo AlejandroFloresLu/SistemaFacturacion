@@ -337,14 +337,18 @@
                         <span class="badge me-2" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span>
                         <span class="fw-semibold">${p.desc}</span>
                     </td>
-                    <td class="text-end pe-4 py-3">
-                        <span class="text-muted me-3 fw-bold">$${p.price.toFixed(2)}</span>
-                        <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2 me-1" onclick="editarProducto('${p.id}')" title="Editar">
-                            <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="pedirEliminarProducto('${p.id}')" title="Eliminar">
-                            <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
-                        </button>
+                    <td class="text-end pe-4 py-3" style="min-width:130px;">
+                        <div class="d-flex flex-column align-items-end gap-1">
+                            <span class="fw-bold text-muted">$${p.price.toFixed(2)}</span>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2" onclick="editarProducto('${p.id}')" title="Editar" aria-label="Editar ${p.desc}">
+                                    <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="pedirEliminarProducto('${p.id}')" title="Eliminar" aria-label="Eliminar ${p.desc}">
+                                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                                </button>
+                            </div>
+                        </div>
                     </td>
                 </tr>`;
             }).join('');

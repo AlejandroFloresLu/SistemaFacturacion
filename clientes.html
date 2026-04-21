@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -127,6 +127,64 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal: Nuevo Cliente -->
+    <div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-labelledby="modalNuevoClienteLbl" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                    <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalNuevoClienteLbl">
+                        <i data-lucide="user-plus" class="me-2 text-primary" aria-hidden="true"></i> Alta de Cliente
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4 pt-0">
+                    <hr class="text-muted mt-0 mb-4 opacity-10">
+                    <form id="formNuevoClienteCli">
+                        <div class="row mb-3 g-2">
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold">Nombres</label>
+                                <input type="text" class="form-control shadow-none border-1" id="cliNuevoNombre"
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold">Apellidos</label>
+                                <input type="text" class="form-control shadow-none border-1" id="cliNuevoApellido"
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Cédula / RUC</label>
+                            <input type="text" class="form-control shadow-none border-1" id="cliNuevoRuc"
+                                inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="13" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Teléfono / WhatsApp</label>
+                            <div class="input-group">
+                                <select class="form-select shadow-none border-1" id="cliNuevoTelPais" style="max-width:130px;">
+                                    <option value="+593">🇪🇨 +593</option>
+                                    <option value="+57">🇨🇴 +57</option>
+                                </select>
+                                <input type="tel" class="form-control shadow-none border-1" id="cliNuevoTel"
+                                    inputmode="numeric" placeholder="999 999 9999"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                            <input type="email" class="form-control shadow-none border-1" id="cliNuevoEmail">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                    <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-factu fw-bold px-4" onclick="guardarNuevoCliente()">
+                        <i data-lucide="save" class="me-2" style="width:16px;"></i> Guardar y Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal: Editar Cliente -->
     <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
@@ -312,7 +370,47 @@
         lucide.createIcons();
     }
 
-    function abrirNuevoCliente() { mostrarToast('📋 Formulario de nuevo cliente — funcionalidad completa próximamente', 'info'); }
+    function abrirNuevoCliente() {
+        document.getElementById('cliNuevoNombre').value   = '';
+        document.getElementById('cliNuevoApellido').value = '';
+        document.getElementById('cliNuevoRuc').value      = '';
+        document.getElementById('cliNuevoTel').value      = '';
+        document.getElementById('cliNuevoEmail').value    = '';
+        new bootstrap.Modal(document.getElementById('modalNuevoCliente')).show();
+    }
+
+    function guardarNuevoCliente() {
+        const nom = document.getElementById('cliNuevoNombre').value.trim();
+        const ape = document.getElementById('cliNuevoApellido').value.trim();
+        const ruc = document.getElementById('cliNuevoRuc').value.trim();
+        const pais = document.getElementById('cliNuevoTelPais').value;
+        const telNum = document.getElementById('cliNuevoTel').value.trim();
+        const tel = telNum ? pais + ' ' + telNum : '';
+        const email = document.getElementById('cliNuevoEmail').value.trim();
+
+        if (!nom) { mostrarToast('⚠️ El nombre es obligatorio.', 'danger'); return; }
+        if (!ape) { mostrarToast('⚠️ El apellido es obligatorio.', 'danger'); return; }
+        if (!ruc || (ruc.length !== 10 && ruc.length !== 13)) {
+            mostrarToast('⚠️ La cédula debe tener 10 dígitos y el RUC 13.', 'danger'); return;
+        }
+        if (DB_CLIENTES.some(c => c.ruc === ruc)) {
+            mostrarToast('⚠️ Ya existe un cliente con esa cédula/RUC.', 'danger'); return;
+        }
+
+        const nuevo = {
+            id: Date.now(),
+            nombre: nom,
+            apellido: ape,
+            ruc,
+            tel,
+            email: email || '(sin correo)',
+            ultimaCompra: 'Nuevo'
+        };
+        DB_CLIENTES.push(nuevo);
+        bootstrap.Modal.getInstance(document.getElementById('modalNuevoCliente')).hide();
+        filtrarClientes();
+        mostrarToast('✅ Cliente "' + nom + ' ' + ape + '" agregado con éxito.', 'success');
+    }
 
     function editarCliente(idx) {
         const c = DB_CLIENTES[idx];

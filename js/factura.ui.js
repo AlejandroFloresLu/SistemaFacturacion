@@ -451,9 +451,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         ${line.desc}
                     </td>
                     <td class="text-center align-middle" style="width:100px;">
-                        <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="1" max="999999"
+                        <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="0" max="999999"
+                            inputmode="numeric"
                             onkeydown="if(['e','E','+','-','.'].includes(event.key)) event.preventDefault();"
-                            oninput="if(this.value.replace(/[^0-9]/g,'').length>6){this.value=this.value.slice(0,this.value.length-1);}"
+                            oninput="var v=parseInt(this.value);if(isNaN(v)||v<1)this.value='1';if(this.value.replace(/[^0-9]/g,'').length>6){this.value=this.value.slice(0,this.value.length-1);}"
                             onchange="updateQty('${line.id}', this.value)"
                             aria-label="Cantidad de ${line.desc}">
                     </td>
@@ -461,8 +462,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white border-end-0 text-muted px-2" aria-hidden="true">$</span>
                             <input type="number" class="form-control border-start-0 ps-0 text-end" value="${line.price.toFixed(2)}" min="0.01" max="99999999.99" step="0.01"
+                                inputmode="decimal"
                                 onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();"
-                                oninput="var p=parseFloat(this.value);if(!isNaN(p)&&p>99999999.99)this.value='99999999.99';"
+                                oninput="var p=parseFloat(this.value);if(!isNaN(p)&&p>99999999.99)this.value='99999999.99';if(!isNaN(p)&&p<0)this.value='0.01';"
                                 onchange="updatePrice('${line.id}', this.value)"
                                 aria-label="Precio unitario de ${line.desc}">
                         </div>
@@ -555,8 +557,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // =====================================================================
     // LIMPIAR FORMULARIO (utilidad interna)
+    // keepTipo=true: no resetea el selector de tipo (usar en NC cancelar)
     // =====================================================================
-    function limpiarFormulario() {
+    function limpiarFormulario(keepTipo = false) {
         invoiceLines  = [];
         payments      = [];
         clienteActual = null;
@@ -573,11 +576,17 @@ document.addEventListener("DOMContentLoaded", function() {
         renderLines();
         renderPayments();
 
-        // Tipo
-        tipoActual = 'factura';
-        document.getElementById('radioFactura').checked = true;
-        contenedorVinculacionNC.classList.add('d-none');
-        if (facturaVinculada) facturaVinculada.value = '';
+        if (!keepTipo) {
+            // Solo resetea a Factura si NO se está en modo NC
+            tipoActual = 'factura';
+            document.getElementById('radioFactura').checked = true;
+            contenedorVinculacionNC.classList.add('d-none');
+            if (facturaVinculada) facturaVinculada.value = '';
+            actualizarBotonesSegunTipo('factura');
+        } else {
+            // Mantiene el tipo (NC), pero limpia el campo de factura vinculada
+            if (facturaVinculada) facturaVinculada.value = '';
+        }
 
         clienteSearch.focus();
     }
@@ -625,12 +634,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     <div class="modal-dialog modal-dialog-centered modal-sm">
                         <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
                             <div class="modal-body p-4 text-center">
-                                <div style="font-size:2.5rem;">🗑️</div>
-                                <h5 class="fw-bold text-dark mb-1 mt-2" id="modalCancelarLbl">¿Descartar factura?</h5>
-                                <p class="text-muted small mb-3">Se perderán todos los datos del formulario actual.</p>
+                                <div style="font-size:2.5rem;">\u{1F5D1}\uFE0F</div>
+                                <h5 class="fw-bold text-dark mb-1 mt-2" id="modalCancelarLbl">\u00BFDescartar datos?</h5>
+                                <p class="text-muted small mb-3">Se limpiarán los datos del formulario actual.</p>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal" aria-label="Mantener factura">Cancelar</button>
-                                    <button class="btn btn-danger fw-bold flex-grow-1" id="btnConfirmarCancelar" aria-label="Confirmar descarte de factura">Sí, descartar</button>
+                                    <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal" aria-label="Mantener factura">Volver</button>
+                                    <button class="btn btn-danger fw-bold flex-grow-1" id="btnConfirmarCancelar" aria-label="Confirmar descarte">Sí, limpiar</button>
                                 </div>
                             </div>
                         </div>
@@ -640,8 +649,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('btnConfirmarCancelar').addEventListener('click', () => {
                     bootstrap.Modal.getInstance(document.getElementById('modalCancelarFactura')).hide();
                     clearActive();
-                    limpiarFormulario();
-                    mostrarToast('🗑️ Factura descartada', 'danger');
+                    // En modo NC: limpiar datos pero quedar en NC (keepTipo=true)
+                    const esNC = tipoActual === 'nc';
+                    modoNCActivo = false;
+                    limpiarFormulario(esNC);
+                    mostrarToast(esNC ? '\u{1F5D1}\uFE0F Nota de crédito cancelada' : '\u{1F5D1}\uFE0F Factura descartada', 'danger');
                 });
             }
             new bootstrap.Modal(document.getElementById('modalCancelarFactura')).show();

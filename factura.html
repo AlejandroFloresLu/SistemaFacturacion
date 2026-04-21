@@ -23,6 +23,9 @@
         .factu-empresa-nombre { font-size: .9rem !important; margin-bottom: 2px !important; }
         .factu-empresa-info   { font-size: .72rem !important; }
 
+        /* Ocultar avatar del cliente seleccionado en móvil */
+        #vistaClienteSeleccionado .avatar-circle { display: none !important; }
+
         /* Cabecera de comprobante */
         .factu-comprobante-num  { font-size: .85rem !important; }
         .factu-tipo-btn label   { font-size: .72rem !important; padding: .2rem .55rem !important; }
@@ -56,6 +59,13 @@
         /* Row de empresa-factura: una encima de otra, menos gap */
         .factu-header-row { --bs-gutter-y: .5rem; --bs-gutter-x: .5rem; }
         .factu-header-row .card-body { padding: .65rem .85rem !important; }
+
+        /* Toast en la parte SUPERIOR para no quedar tapado por el teclado virtual */
+        .factu-toast {
+            bottom: auto !important;
+            top: 1rem !important;
+            transform: translateX(-50%) !important;
+        }
     }
     </style>
 </head>
@@ -346,18 +356,22 @@
                             <hr class="text-muted mt-0 mb-4 opacity-10">
                             <form id="formNuevoCliente">
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Cédula / RUC Deteactada</label>
+                                    <label class="form-label text-muted small fw-bold">Cédula / RUC Detectada</label>
                                     <input type="text" class="form-control fw-bold bg-light" id="modalRuc" readonly>
                                 </div>
                                 <div class="row mb-3 g-2">
                                     <div class="col-6">
                                         <label class="form-label text-muted small fw-bold">Nombres</label>
                                         <input type="text" class="form-control shadow-none border-1" id="modalNombre"
+                                            autocomplete="given-name"
+                                            oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');"
                                             required>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label text-muted small fw-bold">Apellidos</label>
                                         <input type="text" class="form-control shadow-none border-1" id="modalApellido"
+                                            autocomplete="family-name"
+                                            oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');"
                                             required>
                                     </div>
                                 </div>
@@ -366,8 +380,16 @@
                                     <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Teléfono/WhatsApp</label>
-                                    <input type="text" class="form-control shadow-none border-1" id="modalTel">
+                                    <label class="form-label text-muted small fw-bold">Teléfono / WhatsApp</label>
+                                    <div class="input-group">
+                                        <select class="form-select shadow-none border-1" id="modalTelPais" style="max-width:130px;">
+                                            <option value="+593">🇪🇨 +593</option>
+                                            <option value="+57">🇨🇴 +57</option>
+                                        </select>
+                                        <input type="tel" class="form-control shadow-none border-1" id="modalTel"
+                                            inputmode="numeric" placeholder="999 999 9999"
+                                            oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+                                    </div>
                                 </div>
                             </form>
                         </div>
