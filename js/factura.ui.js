@@ -93,9 +93,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 { id: 'VUE-001', desc: 'Boleto aéreo nacional - Económica', price: 120.00, qty: 2, total: 240.00 },
                 { id: 'SEG-002', desc: 'Póliza asistencia viajero - Internacional', price: 85.00, qty: 1, total: 85.00 }
             ];
-            payments = [];
-            amountInput.disabled   = false;
-            btnAddPayment.disabled = false;
+            // 3. Cargar pagos de la factura original (en este caso, Efectivo $373.75)
+            payments = [
+                { method: 'efectivo', amount: 373.75 }
+            ];
             renderLines();
             renderPayments();
             modoNCActivo = true;
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
             saveActive();
             mostrarToast('✅ Factura FAC-000001 cargada. Revisa los datos y presiona Anular.', 'success');
         } else {
-            mostrarToast('🔍 No se encontró la factura "' + cod + '". Verifica el número.', 'warning');
+            mostrarToast('🔍 No se encontró la factura "' + cod + '". Verifica el número.', 'info');
         }
     }
     if (btnBuscarNC) {
@@ -133,14 +134,28 @@ document.addEventListener("DOMContentLoaded", function() {
         const btnPagarEl  = document.getElementById('btnPagar');
         const btnAnularEl = document.getElementById('btnAnularNC');
         const btnPausarEl = document.getElementById('btnPausarFactura');
+        const btnBuscarDeNuevoEl = document.getElementById('btnBuscarDeNuevo');
+        const btnEscapeEl = document.getElementById('btnEscape');
+        const paymentMethodEl = document.getElementById('paymentMethod');
+        
         if (tipo === 'nc') {
             if (btnPagarEl)  btnPagarEl.classList.add('d-none');
             if (btnPausarEl) btnPausarEl.classList.add('d-none');
             if (btnAnularEl) btnAnularEl.classList.remove('d-none');
+            if (btnBuscarDeNuevoEl) btnBuscarDeNuevoEl.disabled = true;
+            if (btnEscapeEl) btnEscapeEl.classList.add('d-none');
+            if (paymentMethodEl) paymentMethodEl.disabled = true;
+            if (amountInput) amountInput.disabled = true;
+            if (btnAddPayment) btnAddPayment.disabled = true;
         } else {
             if (btnPagarEl)  btnPagarEl.classList.remove('d-none');
             if (btnPausarEl) btnPausarEl.classList.remove('d-none');
             if (btnAnularEl) btnAnularEl.classList.add('d-none');
+            if (btnBuscarDeNuevoEl) btnBuscarDeNuevoEl.disabled = false;
+            if (btnEscapeEl) btnEscapeEl.classList.remove('d-none');
+            if (paymentMethodEl) paymentMethodEl.disabled = false;
+            if (amountInput) amountInput.disabled = false;
+            if (btnAddPayment && invoiceLines.length > 0) btnAddPayment.disabled = false;
         }
     }
 
@@ -392,6 +407,11 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     window.removeProduct = function(id) {
+        // En modo Nota de Crédito, no permitir eliminar productos
+        if (modoNCActivo) {
+            mostrarToast('⚠️ En Nota de Crédito no se pueden eliminar productos. Solo puedes cancelar o anular.', 'info');
+            return;
+        }
         invoiceLines = invoiceLines.filter(i => i.id !== id);
 
         // Al eliminar un producto, se borran todos los pagos para evitar saldos negativos
@@ -442,17 +462,19 @@ document.addEventListener("DOMContentLoaded", function() {
             invoiceItems.innerHTML = '';
             invoiceLines.forEach(line => {
                 const tr = document.createElement('tr');
+                const btnEliminarDisabled = modoNCActivo ? 'disabled' : '';
+                const titleEliminar = modoNCActivo ? 'No se puede eliminar en Nota de Crédito' : 'Quitar producto';
                 tr.innerHTML = `
                     <td class="fw-bold align-middle">
-                        <button class="btn btn-sm btn-light text-danger border-0 p-1 me-2" onclick="removeProduct('${line.id}')"
-                            title="Quitar producto" aria-label="Quitar ${line.desc}">
+                        <button class="btn btn-sm btn-light text-danger border-0 p-1 me-2" onclick="removeProduct('${line.id}')" ${btnEliminarDisabled}
+                            title="${titleEliminar}" aria-label="Quitar ${line.desc}">
                             <i data-lucide="trash-2" style="width:16px;height:16px;" aria-hidden="true"></i>
                         </button>
                         ${line.desc}
                     </td>
                     <td class="text-center align-middle" style="width:100px;">
                         <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="0" max="999999"
-                            inputmode="numeric"
+                            inputmode="numeric" ${modoNCActivo ? 'readonly' : ''}
                             onkeydown="if(['e','E','+','-','.'].includes(event.key)) event.preventDefault();"
                             oninput="var v=parseInt(this.value);if(isNaN(v)||v<1)this.value='1';if(this.value.replace(/[^0-9]/g,'').length>6){this.value=this.value.slice(0,this.value.length-1);}"
                             onchange="updateQty('${line.id}', this.value)"
@@ -462,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white border-end-0 text-muted px-2" aria-hidden="true">$</span>
                             <input type="number" class="form-control border-start-0 ps-0 text-end" value="${line.price.toFixed(2)}" min="0.01" max="99999999.99" step="0.01"
-                                inputmode="decimal"
+                                inputmode="decimal" ${modoNCActivo ? 'readonly' : ''}
                                 onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();"
                                 oninput="var p=parseFloat(this.value);if(!isNaN(p)&&p>99999999.99)this.value='99999999.99';if(!isNaN(p)&&p<0)this.value='0.01';"
                                 onchange="updatePrice('${line.id}', this.value)"
@@ -531,6 +553,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     window.removePayment = function(id) {
+        // En modo Nota de Crédito, no permitir eliminar pagos
+        if (modoNCActivo) {
+            mostrarToast('⚠️ En Nota de Crédito no se pueden modificar los pagos.', 'warning');
+            return;
+        }
         payments = payments.filter(p => p.id !== id);
         renderPayments();
         calculateTotals();
@@ -542,11 +569,12 @@ document.addEventListener("DOMContentLoaded", function() {
         payments.forEach(p => {
             const li = document.createElement('li');
             li.className = 'list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2';
+            const btnEliminarPagoDisabled = modoNCActivo ? 'disabled' : '';
             li.innerHTML = `
                 <span><i data-lucide="check-circle" class="text-success me-2" style="width:14px;height:14px;" aria-hidden="true"></i>${p.method}</span>
                 <span>
                     <span class="fw-bold me-3" aria-label="Monto $${p.amount.toFixed(2)}">$${p.amount.toFixed(2)}</span>
-                    <button class="btn btn-sm text-danger p-0 border-0" onclick="removePayment(${p.id})" aria-label="Quitar pago de ${p.method}">
+                    <button class="btn btn-sm text-danger p-0 border-0" onclick="removePayment(${p.id})" ${btnEliminarPagoDisabled} aria-label="Quitar pago de ${p.method}">
                         <i data-lucide="x" style="width:16px;height:16px;" aria-hidden="true"></i>
                     </button>
                 </span>`;

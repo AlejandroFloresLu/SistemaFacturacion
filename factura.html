@@ -60,11 +60,18 @@
         .factu-header-row { --bs-gutter-y: .5rem; --bs-gutter-x: .5rem; }
         .factu-header-row .card-body { padding: .65rem .85rem !important; }
 
-        /* Toast en la parte SUPERIOR para no quedar tapado por el teclado virtual */
+        /* Toast en móvil: debajo de la topbar, ancho completo, bien visible */
         .factu-toast {
             bottom: auto !important;
-            top: 1rem !important;
+            top: 64px !important;          /* debajo de la topbar sticky (~56px) */
+            right: auto !important;
+            left: 50% !important;
             transform: translateX(-50%) !important;
+            width: calc(100vw - 2rem) !important;
+            min-width: unset !important;
+            max-width: 480px !important;
+            font-size: .82rem !important;
+            border-radius: 10px !important;
         }
     }
     </style>
@@ -293,8 +300,11 @@
                             <div class="d-flex gap-2 mb-3">
                                 <select class="form-select w-50 shadow-none border-1 factu-select-pago" id="paymentMethod">
                                     <option value="efectivo">Efectivo 💵</option>
-                                    <option value="transferencia">Transferencia 🏦</option>
-                                    <option value="tarjeta">Tarjeta 💳</option>
+                                    <option value="transferencia_bancaria">Transferencia Bancaria 🏦</option>
+                                    <option value="tarjeta_credito">Tarjeta Crédito 💳</option>
+                                    <option value="tarjeta_debito">Tarjeta Débito 💳</option>
+                                    <option value="cheque">Cheque ✓</option>
+                                    <option value="deposito">Depósito 📱</option>
                                 </select>
                                 <div class="input-group">
                                     <span class="input-group-text border-1 bg-light">$</span>
