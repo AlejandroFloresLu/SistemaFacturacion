@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function() {
             ];
             // 3. Cargar pagos de la factura original (en este caso, Efectivo $373.75)
             payments = [
-                { method: 'efectivo', amount: 373.75 }
+                { id: Date.now(), method: 'Efectivo 💵', amount: 373.75 }
             ];
             renderLines();
             renderPayments();
@@ -137,22 +137,39 @@ document.addEventListener("DOMContentLoaded", function() {
         const btnBuscarDeNuevoEl = document.getElementById('btnBuscarDeNuevo');
         const btnEscapeEl = document.getElementById('btnEscape');
         const paymentMethodEl = document.getElementById('paymentMethod');
-        
+        const vistaBusquedaClienteEl = document.getElementById('vistaBusquedaCliente');
+        const panelClienteNoEncontradoEl = document.getElementById('panelClienteNoEncontrado');
+        const spotlightEl = document.getElementById('spotlightProduct');
+        const btnBuscarProductoIconEl = document.getElementById('btnBuscarProductoIcon');
+
         if (tipo === 'nc') {
+            // Botones principales
             if (btnPagarEl)  btnPagarEl.classList.add('d-none');
             if (btnPausarEl) btnPausarEl.classList.add('d-none');
             if (btnAnularEl) btnAnularEl.classList.remove('d-none');
+            // Cliente: ocultar búsqueda y opciones de reintento
             if (btnBuscarDeNuevoEl) btnBuscarDeNuevoEl.disabled = true;
             if (btnEscapeEl) btnEscapeEl.classList.add('d-none');
+            if (vistaBusquedaClienteEl) vistaBusquedaClienteEl.classList.add('d-none');
+            if (panelClienteNoEncontradoEl) panelClienteNoEncontradoEl.classList.add('d-none');
+            // Productos: ocultar búsqueda/añadir
+            if (spotlightEl) spotlightEl.classList.add('d-none');
+            if (btnBuscarProductoIconEl) btnBuscarProductoIconEl.classList.add('d-none');
+            // Pagos: deshabilitar edición
             if (paymentMethodEl) paymentMethodEl.disabled = true;
             if (amountInput) amountInput.disabled = true;
             if (btnAddPayment) btnAddPayment.disabled = true;
         } else {
+            // Restaurar comportamiento normal
             if (btnPagarEl)  btnPagarEl.classList.remove('d-none');
             if (btnPausarEl) btnPausarEl.classList.remove('d-none');
             if (btnAnularEl) btnAnularEl.classList.add('d-none');
             if (btnBuscarDeNuevoEl) btnBuscarDeNuevoEl.disabled = false;
             if (btnEscapeEl) btnEscapeEl.classList.remove('d-none');
+            if (vistaBusquedaClienteEl && !clienteActual) vistaBusquedaClienteEl.classList.remove('d-none');
+            if (panelClienteNoEncontradoEl) panelClienteNoEncontradoEl.classList.add('d-none');
+            if (spotlightEl) spotlightEl.classList.remove('d-none');
+            if (btnBuscarProductoIconEl) btnBuscarProductoIconEl.classList.remove('d-none');
             if (paymentMethodEl) paymentMethodEl.disabled = false;
             if (amountInput) amountInput.disabled = false;
             if (btnAddPayment && invoiceLines.length > 0) btnAddPayment.disabled = false;
@@ -204,6 +221,9 @@ document.addEventListener("DOMContentLoaded", function() {
         tipoActual    = saved.tipo       || 'factura';
         clienteActual = saved.cliente    || null;
 
+        // Mantener modo NC si el estado guardado indica NC
+        modoNCActivo = tipoActual === 'nc';
+
         if (clienteActual) {
             setCliente(clienteActual.nombre, clienteActual.ruc, false);
         }
@@ -211,10 +231,15 @@ document.addEventListener("DOMContentLoaded", function() {
             contenedorVinculacionNC.classList.remove('d-none');
             document.getElementById('radioNC').checked = true;
         }
+
+        // Asegurar que el estado de UI (botones, búsqueda, pagos) se aplique
+        actualizarBotonesSegunTipo(tipoActual);
+
         if (invoiceLines.length > 0) {
-            amountInput.disabled    = false;
-            btnAddPayment.disabled  = false;
+            amountInput.disabled    = modoNCActivo;
+            btnAddPayment.disabled  = modoNCActivo || false;
         }
+
         renderLines();
         renderPayments();
 
@@ -555,7 +580,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.removePayment = function(id) {
         // En modo Nota de Crédito, no permitir eliminar pagos
         if (modoNCActivo) {
-            mostrarToast('⚠️ En Nota de Crédito no se pueden modificar los pagos.', 'warning');
+            mostrarToast('⚠️ En Nota de Crédito no se pueden modificar los pagos.', 'info');
             return;
         }
         payments = payments.filter(p => p.id !== id);
@@ -815,18 +840,66 @@ document.addEventListener("DOMContentLoaded", function() {
                 mostrarToast('⚠️ Carga primero la factura original para anularla.', 'danger');
                 return;
             }
-            // Confirmación sencilla
-            if (!confirm('¿Confirmas la ANULACIÓN de la Nota de Crédito?\n\nEsta acción registrará la anulación en el sistema.')) return;
+            // Mostrar modal de confirmación (en lugar de confirm())
+            if (!document.getElementById('modalAnularNC')) {
+                const m = document.createElement('div');
+                m.innerHTML = `
+                <div class="modal fade" id="modalAnularNC" tabindex="-1" aria-labelledby="modalAnularNCLbl" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
+                            <div class="modal-header border-0 bg-light" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                                <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalAnularNCLbl">
+                                    <i data-lucide="ban" class="me-2 text-danger" aria-hidden="true"></i> Confirmar Anulación
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4 text-center">
+                                <i data-lucide="x-circle" style="width:64px;height:64px;" class="text-danger opacity-75 mb-3" aria-hidden="true"></i>
+                                <h5 class="fw-bold text-dark mb-2">¿Confirmas la ANULACIÓN de la Nota de Crédito?</h5>
+                                <p class="text-muted mb-4">Esta acción registrará la anulación en el sistema.</p>
 
-            modoNCActivo = false;
-            clearActive();
-            limpiarFormulario();
-            // Volver al modo Factura
-            document.getElementById('radioFactura').checked = true;
-            tipoActual = 'factura';
-            contenedorVinculacionNC.classList.add('d-none');
-            actualizarBotonesSegunTipo('factura');
-            mostrarToast('🚫 Nota de Crédito anulada correctamente.', 'success');
+                                <div class="bg-light rounded p-3 text-start mb-0">
+                                    <div class="d-flex justify-content-between mb-2"><span class="text-muted small">Cliente:</span> <span class="fw-bold" id="modalAnularCliente">-</span></div>
+                                    <div class="d-flex justify-content-between mb-2"><span class="text-muted small">Productos/Servicios:</span> <span class="fw-bold" id="modalAnularItems">0</span></div>
+                                    <div class="d-flex justify-content-between"><span class="text-muted small">TOTAL:</span> <span class="fw-bold text-primary" id="modalAnularTotal">$0.00</span></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0 pt-0 pb-3 px-4">
+                                <div class="d-flex gap-2 w-100">
+                                    <button class="btn btn-light fw-bold flex-fill" data-bs-dismiss="modal">Cancelar</button>
+                                    <button class="btn btn-danger fw-bold flex-fill" id="btnConfirmarAnularNC"><i data-lucide="ban" class="me-2"></i>Anular NC</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.appendChild(m.firstElementChild);
+                lucide.createIcons();
+
+                document.getElementById('btnConfirmarAnularNC').addEventListener('click', () => {
+                    bootstrap.Modal.getInstance(document.getElementById('modalAnularNC')).hide();
+
+                    modoNCActivo = false;
+                    clearActive();
+                    limpiarFormulario();
+                    // Volver al modo Factura
+                    document.getElementById('radioFactura').checked = true;
+                    tipoActual = 'factura';
+                    contenedorVinculacionNC.classList.add('d-none');
+                    actualizarBotonesSegunTipo('factura');
+                    mostrarToast('🚫 Nota de Crédito anulada correctamente.', 'success');
+                });
+            }
+
+            // Rellenar datos del modal antes de mostrar
+            const clienteTxt = clienteActual ? clienteActual.nombre : 'Consumidor Final (Defecto)';
+            const itemsCount = invoiceLines.reduce((a, c) => a + c.qty, 0);
+            const totalTxt = lblTotal ? lblTotal.innerText : '$0.00';
+            const mc = document.getElementById('modalAnularCliente'); if (mc) mc.innerText = clienteTxt;
+            const mi = document.getElementById('modalAnularItems'); if (mi) mi.innerText = itemsCount;
+            const mt = document.getElementById('modalAnularTotal'); if (mt) mt.innerText = totalTxt;
+
+            new bootstrap.Modal(document.getElementById('modalAnularNC')).show();
         });
     }
 
@@ -843,5 +916,16 @@ document.addEventListener("DOMContentLoaded", function() {
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 3800);
     }
+
+    // Re-aplicar bloqueos/ocultamientos cuando el usuario vuelve a la pestaña
+    window.addEventListener('focus', () => {
+        actualizarBotonesSegunTipo(tipoActual);
+    });
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') actualizarBotonesSegunTipo(tipoActual);
+    });
+    window.addEventListener('pageshow', () => {
+        actualizarBotonesSegunTipo(tipoActual);
+    });
 
 });
