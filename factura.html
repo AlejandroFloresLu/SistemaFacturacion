@@ -296,7 +296,7 @@
                 <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
                     <div class="row g-0">
                         <div class="col-md-6 border-end p-4 factu-pagos-col">
-                            <h6 class="text-uppercase text-muted fw-bold mb-3 small">Módulo de Pagos Multimétodo</h6>
+                            <h6 class="text-uppercase text-muted fw-bold mb-3 small">Pago</h6>
                             <div class="d-flex gap-2 mb-3">
                                 <select class="form-select w-50 shadow-none border-1 factu-select-pago" id="paymentMethod">
                                     <option value="efectivo">Efectivo 💵</option>
@@ -359,7 +359,7 @@
                         <div class="modal-header border-0 bg-white"
                             style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
                             <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i
-                                    data-lucide="user-plus" class="me-2 text-primary"></i> Alta Rápida de Cliente</h5>
+                                    data-lucide="user-plus" class="me-2 text-primary"></i>Cliente</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body p-4 pt-0">
@@ -386,20 +386,26 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Dirección Mínima</label>
+                                    <label class="form-label text-muted small fw-bold">Dirección</label>
                                     <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Teléfono / WhatsApp</label>
+                                    <label class="form-label text-muted small fw-bold">Teléfono</label>
+                                    <div class="                                    <label class="form-label text-muted small fw-bold">Teléfono</label>
                                     <div class="input-group">
                                         <select class="form-select shadow-none border-1" id="modalTelPais" style="max-width:130px;">
                                             <option value="+593">🇪🇨 +593</option>
                                             <option value="+57">🇨🇴 +57</option>
                                         </select>
                                         <input type="tel" class="form-control shadow-none border-1" id="modalTel"
-                                            inputmode="numeric" placeholder="999 999 9999"
-                                            oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+                                            inputmode="numeric" placeholder="999 999 9999" maxlength="10"
+                                            oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10);">
                                     </div>
+                                </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                                    <input type="email" class="form-control shadow-none border-1" id="editCliEmail">
                                 </div>
                             </form>
                         </div>

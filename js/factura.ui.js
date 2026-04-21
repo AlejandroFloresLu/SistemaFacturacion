@@ -457,7 +457,7 @@ document.addEventListener("DOMContentLoaded", function() {
         saveActive();
 
         if (pagosEliminados) {
-            mostrarToast('🗑️ Producto eliminado. Los pagos han sido reiniciados.', 'warning');
+            mostrarToast('🗑️ Producto eliminado. Los pagos han sido reiniciados.', 'info');
         }
     };
 
@@ -466,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isNaN(qty) || qty <= 0) return;
         if (qty > 1000000) {
             qty = 1000000;
-            mostrarToast('⚠️ La cantidad máxima permitida es 1,000,000.', 'warning');
+            mostrarToast('⚠️ La cantidad máxima permitida es 1,000,000.', 'info');
         }
         const exist = invoiceLines.find(i => i.id === id);
         if (exist) { exist.qty = qty; exist.total = exist.qty * exist.price; calculateTotals(); saveActive(); }
