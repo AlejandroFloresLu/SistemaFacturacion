@@ -187,43 +187,58 @@
     </div>
 
     <!-- Modal: Editar Cliente -->
-    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLbl" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
-                <div class="modal-header border-0" style="background: linear-gradient(135deg,#0b4182,#1d4ed8); border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                    <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
-                        <i data-lucide="edit-3" style="width:18px;height:18px;"></i> Editar Cliente
+                <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                    <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalEditarClienteLbl">
+                        <i data-lucide="edit-3" class="me-2 text-primary" aria-hidden="true"></i> Editar Cliente
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar modal de edición"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body p-4 pt-0">
+                    <hr class="text-muted mt-0 mb-4 opacity-10">
                     <input type="hidden" id="editCliIdx">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <label class="form-label text-muted small fw-bold">Nombre</label>
-                            <input type="text" class="form-control" id="editCliNombre">
+                    <form id="formEditarCliente">
+                        <div class="row mb-3 g-2">
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold">Nombres</label>
+                                <input type="text" class="form-control shadow-none border-1" id="editCliNombre"
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold">Apellidos</label>
+                                <input type="text" class="form-control shadow-none border-1" id="editCliApellido"
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label text-muted small fw-bold">Apellido</label>
-                            <input type="text" class="form-control" id="editCliApellido">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Cédula / RUC (Bloqueado)</label>
+                            <input type="text" class="form-control fw-bold bg-light" id="editCliRuc" readonly>
                         </div>
-                        <div class="col-12">
-                            <label class="form-label text-muted small fw-bold">RUC / Cédula</label>
-                            <input type="text" class="form-control bg-light" id="editCliRuc" readonly>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Teléfono / WhatsApp</label>
+                            <div class="input-group">
+                                <select class="form-select shadow-none border-1" id="editCliTelPais" style="max-width:130px;">
+                                    <option value="+593">🇪🇨 +593</option>
+                                    <option value="+57">🇨🇴 +57</option>
+                                </select>
+                                <input type="tel" class="form-control shadow-none border-1" id="editCliTel"
+                                    inputmode="numeric" placeholder="999 999 9999"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label text-muted small fw-bold">Teléfono</label>
-                            <input type="text" class="form-control" id="editCliTel">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                            <input type="email" class="form-control shadow-none border-1" id="editCliEmail">
                         </div>
-                        <div class="col-6">
-                            <label class="form-label text-muted small fw-bold">Correo</label>
-                            <input type="text" class="form-control" id="editCliEmail">
-                        </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="modal-footer border-0 pb-4">
+                <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
                     <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-factu fw-bold px-4" onclick="guardarEdicionCliente()"><i data-lucide="save" style="width:15px;" class="me-1"></i> Guardar Cambios</button>
+                    <button type="button" class="btn btn-factu fw-bold px-4" onclick="guardarEdicionCliente()">
+                        <i data-lucide="save" class="me-2" style="width:16px;"></i> Guardar Cambios
+                    </button>
                 </div>
             </div>
         </div>
@@ -418,17 +433,43 @@
         document.getElementById('editCliNombre').value  = c.nombre;
         document.getElementById('editCliApellido').value= c.apellido;
         document.getElementById('editCliRuc').value     = c.ruc;
-        document.getElementById('editCliTel').value     = c.tel;
         document.getElementById('editCliEmail').value   = c.email;
+
+        // Lógica para separar el prefijo del país del teléfono
+        let telFull = c.tel || '';
+        let pais = '+593';
+        let num = telFull;
+
+        if (telFull.startsWith('+')) {
+            const parts = telFull.split(' ');
+            if (parts.length > 1) {
+                pais = parts[0];
+                num = parts.slice(1).join(' ');
+            }
+        }
+        document.getElementById('editCliTelPais').value = pais;
+        document.getElementById('editCliTel').value = num;
+
         new bootstrap.Modal(document.getElementById('modalEditarCliente')).show();
     }
 
     function guardarEdicionCliente() {
         const idx = +document.getElementById('editCliIdx').value;
-        DB_CLIENTES[idx].nombre   = document.getElementById('editCliNombre').value.trim() || DB_CLIENTES[idx].nombre;
-        DB_CLIENTES[idx].apellido = document.getElementById('editCliApellido').value.trim() || DB_CLIENTES[idx].apellido;
-        DB_CLIENTES[idx].tel      = document.getElementById('editCliTel').value.trim();
-        DB_CLIENTES[idx].email    = document.getElementById('editCliEmail').value.trim();
+        const nom = document.getElementById('editCliNombre').value.trim();
+        const ape = document.getElementById('editCliApellido').value.trim();
+        const pais = document.getElementById('editCliTelPais').value;
+        const telNum = document.getElementById('editCliTel').value.trim();
+        const tel = telNum ? pais + ' ' + telNum : '';
+        const email = document.getElementById('editCliEmail').value.trim();
+
+        if (!nom) { mostrarToast('⚠️ El nombre es obligatorio.', 'danger'); return; }
+        if (!ape) { mostrarToast('⚠️ El apellido es obligatorio.', 'danger'); return; }
+
+        DB_CLIENTES[idx].nombre   = nom;
+        DB_CLIENTES[idx].apellido = ape;
+        DB_CLIENTES[idx].tel      = tel;
+        DB_CLIENTES[idx].email    = email;
+
         bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente')).hide();
         filtrarClientes();
         mostrarToast('✅ Cliente editado con éxito', 'success');
