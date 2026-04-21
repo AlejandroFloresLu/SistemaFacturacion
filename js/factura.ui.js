@@ -178,25 +178,37 @@ document.addEventListener("DOMContentLoaded", function() {
     // =====================================================================
     function procesarBusquedaCliente() {
         const val = clienteSearch.value.trim();
-        if (!val) return;
-        if (!/^\d+$/.test(val) || (val.length !== 10 && val.length !== 13)) {
-            txtRucNoEncontrado.innerText = val === '' ? 'Vacío' : val + ' (Debe tener 10 o 13 números)';
-            vistaBusquedaCliente.classList.add('d-none');
-            panelClienteNoEncontrado.classList.remove('d-none');
+
+        // 1. Campo vacío
+        if (!val) {
+            mostrarToast('⚠️ Tienes que llenar los datos.', 'danger');
+            clienteSearch.focus();
             return;
         }
+
+        // 2. Formato incorrecto: no es numérico, o no tiene 10 ni 13 dígitos
+        if (!/^\d+$/.test(val) || (val.length !== 10 && val.length !== 13)) {
+            mostrarToast('❌ Debes ingresar de 10 a 13 dígitos.', 'danger');
+            clienteSearch.select();
+            return;
+        }
+
+        // 3. Cédula de 10 dígitos: validar dígito verificador (excepto consumidor final)
         if (val.length === 10 && val !== '9999999999') {
             if (!validarCedulaEcuatoriana(val)) {
-                txtRucNoEncontrado.innerText = val + ' (Cédula Inválida)';
-                vistaBusquedaCliente.classList.add('d-none');
-                panelClienteNoEncontrado.classList.remove('d-none');
+                mostrarToast('❌ La cédula ingresada no es válida. Verifica los dígitos e intenta de nuevo.', 'danger');
+                clienteSearch.select();
                 return;
             }
         }
-        if (val === '9999999999')    { setCliente('Consumidor Final', '9999999999'); }
-        else if (val === '1201201201')   { setCliente('Alejandro Flores', '1201201201'); }
+
+        // 4. Buscar en la base de datos
+        if (val === '9999999999')         { setCliente('Consumidor Final', '9999999999'); }
+        else if (val === '1201201201')    { setCliente('Alejandro Flores', '1201201201'); }
         else if (val === '1792929292001') { setCliente('Empresa Ficticia S.A.', '1792929292001'); }
         else {
+            // Cliente no encontrado
+            mostrarToast('No se encontró el cliente.', 'warning');
             txtRucNoEncontrado.innerText = val;
             vistaBusquedaCliente.classList.add('d-none');
             panelClienteNoEncontrado.classList.remove('d-none');
@@ -313,12 +325,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.removeProduct = function(id) {
         invoiceLines = invoiceLines.filter(i => i.id !== id);
+
+        // Al eliminar un producto, se borran todos los pagos para evitar saldos negativos
+        const pagosEliminados = payments.length > 0;
+        payments = [];
+        renderPayments();
+
         if (invoiceLines.length === 0) {
             amountInput.disabled   = true;
             btnAddPayment.disabled = true;
         }
         renderLines();
         saveActive();
+
+        if (pagosEliminados) {
+            mostrarToast('🗑️ Producto eliminado. Los pagos han sido reiniciados.', 'warning');
+        }
     };
 
     window.updateQty = function(id, qtyStr) {

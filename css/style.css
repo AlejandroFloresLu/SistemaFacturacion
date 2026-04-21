@@ -409,6 +409,21 @@ body {
 [data-theme="dark"] .p-3.bg-light.rounded-4.border   { background-color: #162032 !important; }
 
 /* ==========================================================================
+   OPERABILIDAD — Foco visible (WCAG 2.1.1)
+   Garantiza que el usuario de teclado sepa siempre dónde está.
+   ========================================================================== */
+*:focus-visible {
+    outline: 3px solid var(--primary-color) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 5px rgba(11, 65, 130, 0.2) !important;
+}
+
+[data-theme="dark"] *:focus-visible {
+    outline: 3px solid #60a5fa !important;
+    box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.2) !important;
+}
+
+/* ==========================================================================
    ALTO CONTRASTE
    ========================================================================== */
 [data-a11y="high-contrast"] body                { background: #fff !important; color: #000 !important; }
@@ -417,7 +432,7 @@ body {
 [data-a11y="high-contrast"] .sidebar            { background: #fff !important; border: 2px solid #000 !important; }
 [data-a11y="high-contrast"] .btn-factu          { background-color: #000080 !important; color: #fff !important; border: 2px solid #000 !important; }
 [data-a11y="high-contrast"] .badge              { border: 2px solid currentColor !important; }
-[data-a11y="high-contrast"] *:focus-visible     { outline: 4px solid #000 !important; }
+[data-a11y="high-contrast"] *:focus-visible     { outline: 4px solid #000 !important; outline-offset: 4px !important; }
 
 /* ==========================================================================
    TAMAÑO DE FUENTE — solo en pantallas medianas y mayores
