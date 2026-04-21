@@ -344,15 +344,24 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     window.updateQty = function(id, qtyStr) {
-        const qty = parseInt(qtyStr, 10);
+        let qty = parseInt(qtyStr, 10);
         if (isNaN(qty) || qty <= 0) return;
+        if (qty > 1000000) {
+            qty = 1000000;
+            mostrarToast('⚠️ La cantidad máxima permitida es 1,000,000.', 'warning');
+        }
         const exist = invoiceLines.find(i => i.id === id);
         if (exist) { exist.qty = qty; exist.total = exist.qty * exist.price; calculateTotals(); saveActive(); }
     };
 
     window.updatePrice = function(id, priceStr) {
-        const price = parseFloat(priceStr);
+        let price = parseFloat(priceStr);
         if (isNaN(price) || price <= 0) return;
+        if (price > 10000000) {
+            price = 10000000;
+            mostrarToast('⚠️ El precio máximo permitido es $10,000,000.00.', 'warning');
+        }
+        price = Math.round(price * 100) / 100;  // máx 2 decimales
         const exist = invoiceLines.find(i => i.id === id);
         if (exist) { exist.price = price; exist.total = exist.qty * exist.price; calculateTotals(); saveActive(); }
     };
@@ -374,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         ${line.desc}
                     </td>
                     <td class="text-center align-middle" style="width:100px;">
-                        <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="1"
+                        <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="1" max="1000000"
                             onkeydown="if(['e','E','+','-','.'].includes(event.key)) event.preventDefault();"
                             onchange="updateQty('${line.id}', this.value)"
                             aria-label="Cantidad de ${line.desc}">
@@ -382,7 +391,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td class="text-end align-middle px-3" style="width:130px;">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white border-end-0 text-muted px-2" aria-hidden="true">$</span>
-                            <input type="number" class="form-control border-start-0 ps-0 text-end" value="${line.price.toFixed(2)}" min="0.01" step="0.01"
+                            <input type="number" class="form-control border-start-0 ps-0 text-end" value="${line.price.toFixed(2)}" min="0.01" max="10000000" step="0.01"
                                 onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();"
                                 onchange="updatePrice('${line.id}', this.value)"
                                 aria-label="Precio unitario de ${line.desc}">
