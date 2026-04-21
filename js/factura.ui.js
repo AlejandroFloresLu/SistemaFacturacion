@@ -54,15 +54,66 @@ document.addEventListener("DOMContentLoaded", function() {
                 tipoActual = e.target.value;
                 if (tipoActual === 'nc') {
                     contenedorVinculacionNC.classList.remove('d-none');
+                    // Modo NC: ocultar Aprobar, mostrar solo Anular
+                    actualizarBotonesSegunTipo('nc');
                 } else {
                     contenedorVinculacionNC.classList.add('d-none');
                     facturaVinculada.value = '';
+                    // Modo Factura: mostrar Aprobar, ocultar Anular
+                    actualizarBotonesSegunTipo('factura');
+                    // Limpiar estado NC si había productos cargados
+                    if (modoNCActivo) {
+                        modoNCActivo = false;
+                        limpiarFormulario();
+                    }
                 }
                 if (invoiceLines.length > 0) calculateTotals();
             }
         });
     });
     if (facturaVinculada) facturaVinculada.addEventListener('input', calculateTotals);
+
+    // Botón buscar factura vinculada (Nota de Crédito)
+    const btnBuscarNC = contenedorVinculacionNC ? contenedorVinculacionNC.querySelector('button') : null;
+    function procesarBusquedaNC() {
+        if (!facturaVinculada) return;
+        const cod = facturaVinculada.value.trim().toUpperCase();
+        if (!cod) {
+            mostrarToast('⚠️ Ingresa el número de la factura original.', 'danger');
+            facturaVinculada.focus();
+            return;
+        }
+
+        // Simulación: FAC-000001 → carga datos demo
+        if (cod === 'FAC-000001') {
+            // 1. Cargar cliente
+            setCliente('Patricia Lugmaña', '1715678114');
+            // 2. Cargar productos de la factura original
+            invoiceLines = [
+                { id: 'VUE-001', desc: 'Boleto aéreo nacional - Económica', price: 120.00, qty: 2, total: 240.00 },
+                { id: 'SEG-002', desc: 'Póliza asistencia viajero - Internacional', price: 85.00, qty: 1, total: 85.00 }
+            ];
+            payments = [];
+            amountInput.disabled   = false;
+            btnAddPayment.disabled = false;
+            renderLines();
+            renderPayments();
+            modoNCActivo = true;
+            actualizarBotonesSegunTipo('nc');
+            saveActive();
+            mostrarToast('✅ Factura FAC-000001 cargada. Revisa los datos y presiona Anular.', 'success');
+        } else {
+            mostrarToast('🔍 No se encontró la factura "' + cod + '". Verifica el número.', 'warning');
+        }
+    }
+    if (btnBuscarNC) {
+        btnBuscarNC.addEventListener('click', procesarBusquedaNC);
+    }
+    if (facturaVinculada) {
+        facturaVinculada.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); procesarBusquedaNC(); }
+        });
+    }
 
     // =====================================================================
     // ESTADO GLOBAL
@@ -71,10 +122,27 @@ document.addEventListener("DOMContentLoaded", function() {
     const LS_ACTIVE  = 'factu_active_invoice';
     const LS_PAUSED  = 'factu_paused_invoices';
 
-    let invoiceLines = [];
-    let payments     = [];
+    let invoiceLines  = [];
+    let payments      = [];
     let clienteActual = null;   // { nombre, ruc }
-    let pausedList   = [];
+    let pausedList    = [];
+    let modoNCActivo  = false;  // true cuando se cargó una NC desde FAC-XXXXXX
+
+    // ── Helper: alternar botones Aprobar ↔ Anular según tipo ──
+    function actualizarBotonesSegunTipo(tipo) {
+        const btnPagarEl  = document.getElementById('btnPagar');
+        const btnAnularEl = document.getElementById('btnAnularNC');
+        const btnPausarEl = document.getElementById('btnPausarFactura');
+        if (tipo === 'nc') {
+            if (btnPagarEl)  btnPagarEl.classList.add('d-none');
+            if (btnPausarEl) btnPausarEl.classList.add('d-none');
+            if (btnAnularEl) btnAnularEl.classList.remove('d-none');
+        } else {
+            if (btnPagarEl)  btnPagarEl.classList.remove('d-none');
+            if (btnPausarEl) btnPausarEl.classList.remove('d-none');
+            if (btnAnularEl) btnAnularEl.classList.add('d-none');
+        }
+    }
 
     // =====================================================================
     // localStorage HELPERS
@@ -205,10 +273,10 @@ document.addEventListener("DOMContentLoaded", function() {
         // 4. Buscar en la base de datos
         if (val === '9999999999')         { setCliente('Consumidor Final', '9999999999'); }
         else if (val === '1201201201')    { setCliente('Alejandro Flores', '1201201201'); }
+        else if (val === '1715678114')    { setCliente('Patricia Lugmaña', '1715678114'); }
         else if (val === '1792929292001') { setCliente('Empresa Ficticia S.A.', '1792929292001'); }
         else {
             // Cliente no encontrado
-            mostrarToast('No se encontró el cliente.', 'warning');
             txtRucNoEncontrado.innerText = val;
             vistaBusquedaCliente.classList.add('d-none');
             panelClienteNoEncontrado.classList.remove('d-none');
@@ -383,16 +451,18 @@ document.addEventListener("DOMContentLoaded", function() {
                         ${line.desc}
                     </td>
                     <td class="text-center align-middle" style="width:100px;">
-                        <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="1" max="1000000"
+                        <input type="number" class="form-control form-control-sm text-center" value="${line.qty}" min="1" max="999999"
                             onkeydown="if(['e','E','+','-','.'].includes(event.key)) event.preventDefault();"
+                            oninput="if(this.value.replace(/[^0-9]/g,'').length>6){this.value=this.value.slice(0,this.value.length-1);}"
                             onchange="updateQty('${line.id}', this.value)"
                             aria-label="Cantidad de ${line.desc}">
                     </td>
                     <td class="text-end align-middle px-3" style="width:130px;">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white border-end-0 text-muted px-2" aria-hidden="true">$</span>
-                            <input type="number" class="form-control border-start-0 ps-0 text-end" value="${line.price.toFixed(2)}" min="0.01" max="10000000" step="0.01"
+                            <input type="number" class="form-control border-start-0 ps-0 text-end" value="${line.price.toFixed(2)}" min="0.01" max="99999999.99" step="0.01"
                                 onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();"
+                                oninput="var p=parseFloat(this.value);if(!isNaN(p)&&p>99999999.99)this.value='99999999.99';"
                                 onchange="updatePrice('${line.id}', this.value)"
                                 aria-label="Precio unitario de ${line.desc}">
                         </div>
@@ -694,6 +764,32 @@ document.addEventListener("DOMContentLoaded", function() {
         mostrarToast('✅ ¡Factura emitida correctamente! Enviada a impresión.', 'success');
         setTimeout(() => window.print(), 600);
     });
+
+    // =====================================================================
+    // ANULAR NOTA DE CRÉDITO
+    // =====================================================================
+    const btnAnularNC = document.getElementById('btnAnularNC');
+    if (btnAnularNC) {
+        btnAnularNC.addEventListener('click', () => {
+            if (invoiceLines.length === 0) {
+                mostrarToast('⚠️ Carga primero la factura original para anularla.', 'danger');
+                return;
+            }
+            // Confirmación sencilla
+            if (!confirm('¿Confirmas la ANULACIÓN de la Nota de Crédito?\n\nEsta acción registrará la anulación en el sistema.')) return;
+
+            modoNCActivo = false;
+            clearActive();
+            limpiarFormulario();
+            // Volver al modo Factura
+            document.getElementById('radioFactura').checked = true;
+            tipoActual = 'factura';
+            contenedorVinculacionNC.classList.add('d-none');
+            actualizarBotonesSegunTipo('factura');
+            mostrarToast('🚫 Nota de Crédito anulada correctamente.', 'success');
+        });
+    }
+
 
     // =====================================================================
     // TOAST HELPER

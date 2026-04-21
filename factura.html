@@ -305,20 +305,24 @@
                             <div class="d-flex justify-content-between mb-2 text-primary fw-bold" style="font-size:1.1rem;"><span>Pagado:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblPagado">0.00</span></span></div>
                             <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo" style="font-size:1.1rem;color:#dc3545;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblSaldo">0.00</span></span></div>
                             <div class="d-flex gap-2 mt-auto flex-wrap">
-                                <!-- Pausar: guarda en espera y limpia pantalla -->
-                                
                                 <!-- Cancelar: descarta sin guardar -->
                                 <button class="btn btn-outline-danger fw-bold py-2 flex-fill" id="btnCancelarFactura"
                                     aria-label="Cancelar y descartar factura actual" title="Descartar factura">
                                     <i data-lucide="x-circle" class="me-1" style="width:18px;" aria-hidden="true"></i>
                                     <span class="d-none d-sm-inline">Cancelar</span>
                                 </button>
-                                <!-- Aprobar: emite definitivamente -->
+                                <!-- Aprobar: emite definitivamente (solo en modo Factura) -->
                                 <button class="btn btn-factu fw-bold py-2 flex-grow-1 fs-6" id="btnPagar" disabled
                                     title="Atajo: F12" data-bs-toggle="modal" data-bs-target="#modalAprobarFactura"
                                     aria-label="Aprobar y emitir factura">
                                     <i data-lucide="check-circle" class="me-1" aria-hidden="true"></i>
                                     <span>Aprobar</span>
+                                </button>
+                                <!-- Anular NC: solo visible en modo Nota de Crédito -->
+                                <button class="btn btn-danger fw-bold py-2 flex-grow-1 fs-6 d-none" id="btnAnularNC"
+                                    aria-label="Anular nota de crédito">
+                                    <i data-lucide="ban" class="me-1" aria-hidden="true"></i>
+                                    <span>Anular NC</span>
                                 </button>
                             </div>
                         </div>
