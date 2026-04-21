@@ -53,19 +53,24 @@ document.addEventListener("DOMContentLoaded", function() {
             if (e.target.checked) {
                 tipoActual = e.target.value;
                 if (tipoActual === 'nc') {
+                    // Al cambiar manualmente a Nota de Crédito: limpiar datos actuales
                     contenedorVinculacionNC.classList.remove('d-none');
-                    // Modo NC: ocultar Aprobar, mostrar solo Anular
+                    // Limpiar cliente/productos/pagos, pero mantener el tipo NC
+                    limpiarFormulario(true);
+                    clearActive();
+                    modoNCActivo = false; // NC mode activo sólo después de cargar factura vinculada
+                    // Modo NC: ocultar Aprobar, mostrar solo Anular y ocultar búsquedas
                     actualizarBotonesSegunTipo('nc');
                 } else {
+                    // Al cambiar a Factura: limpiar todo y restablecer a factura
                     contenedorVinculacionNC.classList.add('d-none');
                     facturaVinculada.value = '';
+                    // Limpiar datos (cliente, productos, pagos) y forzar modo factura
+                    modoNCActivo = false;
+                    limpiarFormulario(false);
+                    clearActive();
                     // Modo Factura: mostrar Aprobar, ocultar Anular
                     actualizarBotonesSegunTipo('factura');
-                    // Limpiar estado NC si había productos cargados
-                    if (modoNCActivo) {
-                        modoNCActivo = false;
-                        limpiarFormulario();
-                    }
                 }
                 if (invoiceLines.length > 0) calculateTotals();
             }
@@ -784,6 +789,8 @@ document.addEventListener("DOMContentLoaded", function() {
             vistaClienteSeleccionado.classList.add('d-none');
             vistaBusquedaCliente.classList.remove('d-none');
         }
+        // Restaurar UI según tipo guardado
+        modoNCActivo = tipoActual === 'nc';
         if (tipoActual === 'nc') {
             contenedorVinculacionNC.classList.remove('d-none');
             document.getElementById('radioNC').checked = true;
@@ -791,9 +798,11 @@ document.addEventListener("DOMContentLoaded", function() {
             contenedorVinculacionNC.classList.add('d-none');
             document.getElementById('radioFactura').checked = true;
         }
+        // Reaplicar bloqueos/visibilidad según el tipo
+        actualizarBotonesSegunTipo(tipoActual);
         if (invoiceLines.length > 0) {
-            amountInput.disabled   = false;
-            btnAddPayment.disabled = false;
+            amountInput.disabled   = modoNCActivo;
+            btnAddPayment.disabled = modoNCActivo ? true : false;
         }
         renderLines();
         renderPayments();
