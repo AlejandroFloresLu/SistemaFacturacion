@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -134,7 +134,7 @@
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                 <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
                     <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalNuevoClienteLbl">
-                        <i data-lucide="user-plus" class="me-2 text-primary" aria-hidden="true"></i> Alta de Cliente
+                        <i data-lucide="user-plus" class="me-2 text-primary" aria-hidden="true"></i>Nuevo Cliente
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
@@ -159,14 +159,18 @@
                                 inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="13" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Teléfono / WhatsApp</label>
+                                    <label class="form-label text-muted small fw-bold">Dirección</label>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Teléfono</label>
                             <div class="input-group">
                                 <select class="form-select shadow-none border-1" id="cliNuevoTelPais" style="max-width:130px;">
                                     <option value="+593">🇪🇨 +593</option>
                                     <option value="+57">🇨🇴 +57</option>
                                 </select>
                                 <input type="tel" class="form-control shadow-none border-1" id="cliNuevoTel"
-                                    inputmode="numeric" placeholder="999 999 9999"
+                                    inputmode="numeric" placeholder="999 999 9999" maxlength="10"
                                     oninput="this.value=this.value.replace(/[^0-9]/g,'');">
                             </div>
                         </div>
@@ -217,14 +221,18 @@
                             <input type="text" class="form-control fw-bold bg-light" id="editCliRuc" readonly>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Teléfono / WhatsApp</label>
+                                    <label class="form-label text-muted small fw-bold">Dirección</label>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
+                                </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Teléfono</label>
                             <div class="input-group">
                                 <select class="form-select shadow-none border-1" id="editCliTelPais" style="max-width:130px;">
                                     <option value="+593">🇪🇨 +593</option>
                                     <option value="+57">🇨🇴 +57</option>
                                 </select>
                                 <input type="tel" class="form-control shadow-none border-1" id="editCliTel"
-                                    inputmode="numeric" placeholder="999 999 9999"
+                                    inputmode="numeric" placeholder="999 999 9999" maxlength="10"
                                     oninput="this.value=this.value.replace(/[^0-9]/g,'');">
                             </div>
                         </div>
