@@ -79,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (facturaVinculada) facturaVinculada.addEventListener('input', calculateTotals);
 
     // Botón buscar factura vinculada (Nota de Crédito)
+    // Demo de facturas vinculadas — via FacturaModel (con caché)
+    // Los datos se obtienen bajo demanda en procesarBusquedaNC()
+
     const btnBuscarNC = contenedorVinculacionNC ? contenedorVinculacionNC.querySelector('button') : null;
     function procesarBusquedaNC() {
         if (!facturaVinculada) return;
@@ -89,28 +92,22 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        // Simulación: FAC-000001 → carga datos demo
-        if (cod === 'FAC-000001') {
-            // 1. Cargar cliente
-            setCliente('Patricia Lugmaña', '1715678114');
-            // 2. Cargar productos de la factura original
-            invoiceLines = [
-                { id: 'VUE-001', desc: 'Boleto aéreo nacional - Económica', price: 120.00, qty: 2, total: 240.00 },
-                { id: 'SEG-002', desc: 'Póliza asistencia viajero - Internacional', price: 85.00, qty: 1, total: 85.00 }
-            ];
-            // 3. Cargar pagos de la factura original (en este caso, Efectivo $373.75)
-            payments = [
-                { id: Date.now(), method: 'Efectivo 💵', amount: 373.75 }
-            ];
-            renderLines();
-            renderPayments();
-            modoNCActivo = true;
-            actualizarBotonesSegunTipo('nc');
-            saveActive();
-            mostrarToast('✅ Factura FAC-000001 cargada. Revisa los datos y presiona Anular.', 'success');
-        } else {
-            mostrarToast('🔍 No se encontró la factura "' + cod + '". Verifica el número.', 'info');
-        }
+        // Buscar via FacturaModel (usa caché interno)
+        FacturaModel.getDemo(cod).then(demo => {
+            if (demo) {
+                setCliente(demo.cliente.nombre, demo.cliente.ruc);
+                invoiceLines = demo.lineas.map(l => ({ ...l }));
+                payments = demo.pagos.map(p => ({ id: Date.now() + Math.random(), method: p.method, amount: p.amount }));
+                renderLines();
+                renderPayments();
+                modoNCActivo = true;
+                actualizarBotonesSegunTipo('nc');
+                saveActive();
+                mostrarToast('✅ Factura ' + cod + ' cargada. Revisa los datos y presiona Anular.', 'success');
+            } else {
+                mostrarToast('🔍 No se encontró la factura "' + cod + '". Verifica el número.', 'info');
+            }
+        });
     }
     if (btnBuscarNC) {
         btnBuscarNC.addEventListener('click', procesarBusquedaNC);
@@ -287,8 +284,12 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // =====================================================================
-    // BÚSQUEDA Y CREACIÓN DE CLIENTES
+    // BÚSQL. Y CREACIÓN DE CLIENTES
     // =====================================================================
+    // DB de clientes — via ClienteModel (con caché)
+    let DB_CLIENTES_FAC = [];
+    ClienteModel.getAll().then(data => { DB_CLIENTES_FAC = data; });
+
     function procesarBusquedaCliente() {
         const val = clienteSearch.value.trim();
 
@@ -315,12 +316,17 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
-        // 4. Buscar en la base de datos
-        if (val === '9999999999')         { setCliente('Consumidor Final', '9999999999'); }
-        else if (val === '1201201201')    { setCliente('Alejandro Flores', '1201201201'); }
-        else if (val === '1715678114')    { setCliente('Patricia Lugmaña', '1715678114'); }
-        else if (val === '1792929292001') { setCliente('Empresa Ficticia S.A.', '1792929292001'); }
-        else {
+        // 4. Consumidor final
+        if (val === '9999999999') {
+            setCliente('Consumidor Final', '9999999999');
+            return;
+        }
+
+        // 5. Buscar en DB cargada desde JSON
+        const encontrado = DB_CLIENTES_FAC.find(c => c.ruc === val);
+        if (encontrado) {
+            setCliente(`${encontrado.nombre} ${encontrado.apellido}`, encontrado.ruc);
+        } else {
             // Cliente no encontrado
             txtRucNoEncontrado.innerText = val;
             vistaBusquedaCliente.classList.add('d-none');
@@ -375,34 +381,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // =====================================================================
-    // PRODUCTOS
+    // PRODUCTOS — cargados desde data/productos.json
     // =====================================================================
-    const DB_PRODUCTS = [
-        { id: 'VUE-001', desc: 'Boleto aéreo nacional - Económica', price: 120.00 },
-        { id: 'VUE-002', desc: 'Boleto aéreo nacional - Ejecutiva', price: 250.00 },
-        { id: 'VUE-003', desc: 'Boleto aéreo internacional - Económica', price: 800.00 },
-        { id: 'VUE-004', desc: 'Boleto aéreo internacional - Ejecutiva', price: 1500.00 },
-        { id: 'ALO-001', desc: 'Estancia en hotel nacional - Estándar', price: 60.00 },
-        { id: 'ALO-005', desc: 'Resort todo incluido - Nacional', price: 200.00 },
-        { id: 'TRS-001', desc: 'Alquiler de vehículo - Económica', price: 40.00 },
-        { id: 'TRS-004', desc: 'Traslado privado (Aeropuerto - Hotel)', price: 30.00 },
-        { id: 'PAQ-001', desc: 'Paquete turístico nacional - Estándar', price: 350.00 },
-        { id: 'PAQ-006', desc: 'Paquete vacacional - Luna de Miel', price: 1200.00 },
-        { id: 'CRU-003', desc: 'Cabina de crucero - Balcón / Suite', price: 2500.00 },
-        { id: 'SEG-002', desc: 'Póliza asistencia viajero - Internacional', price: 85.00 },
-        { id: 'ACT-002', desc: 'Excursión guiada día completo', price: 75.00 },
-        { id: 'ADM-002', desc: 'Cargo emisión de boleto (Fee agencia)', price: 25.00 }
-    ];
+    let DB_PRODUCTS = [];
 
-    const datalistProductos = document.getElementById('productosList');
-    if (datalistProductos) {
-        DB_PRODUCTS.forEach(p => {
-            const opt = document.createElement('option');
-            opt.value = p.desc;
-            opt.textContent = p.id + ' - $' + p.price.toFixed(2);
-            datalistProductos.appendChild(opt);
+    function cargarProductos() {
+        ProductoModel.getAll().then(data => {
+            DB_PRODUCTS = data;
+            const datalistProductos = document.getElementById('productosList');
+            if (datalistProductos) {
+                datalistProductos.innerHTML = '';
+                DB_PRODUCTS.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.desc;
+                    opt.textContent = p.id + ' - $' + p.price.toFixed(2);
+                    datalistProductos.appendChild(opt);
+                });
+            }
         });
     }
+    cargarProductos();
 
     function procesarBusquedaProducto() {
         const term = spotlightInput.value.toLowerCase().trim();

@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FACTU - Ver Facturas</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css"> 
-    
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth-guard.js"></script>
 </head>
 <body>
 
     <div class="d-lg-none page-header-topbar p-3 sticky-top">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menú">
+                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menÃº">
                     <i data-lucide="menu" aria-hidden="true"></i>
                 </button>
                 <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
             </div>
-            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="ConfiguraciÃ³n">
                 <i data-lucide="settings-2" style="width:18px;height:18px;" aria-hidden="true"></i>
             </button>
         </div>
@@ -33,7 +32,7 @@
                 <i data-lucide="calculator" aria-hidden="true"></i>
             </div>
             <span class="h4 mb-0 fw-bold">FACTU</span>
-            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar menú"></button>
+            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar menÃº"></button>
         </div>
 
         <div class="offcanvas-body d-flex flex-column p-3 overflow-y-auto">
@@ -44,7 +43,7 @@
                 <hr class="mx-3 my-3">
             </div>
 
-            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
+            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="MenÃº principal">
                 
                 <a href="factura.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded factura-nav-link" style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
                     <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
@@ -68,9 +67,9 @@
 
             </div>
 
-            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="ConfiguraciÃ³n">
                 <i data-lucide="settings-2" class="me-2" style="width:16px;height:16px;" aria-hidden="true"></i>
-                <span class="small fw-medium">Configuración</span>
+                <span class="small fw-medium">ConfiguraciÃ³n</span>
             </button>
             <div class="mt-auto p-3 bg-light rounded-4 border">
                 <div class="d-flex align-items-center gap-3">
@@ -142,9 +141,9 @@
             <div class="card-footer border-top p-3 d-flex justify-content-between align-items-center">
                 <span class="text-muted small" id="facturaContador">Mostrando 0 de 0 registros</span>
                 <div class="d-flex gap-1">
-                    <button class="btn btn-sm btn-light border" id="btnPrev" onclick="cambiarPagina(-1)" aria-label="Anterior">‹</button>
+                    <button class="btn btn-sm btn-light border" id="btnPrev" onclick="cambiarPagina(-1)" aria-label="Anterior">â€¹</button>
                     <span class="btn btn-sm btn-factu disabled px-3" id="paginaNum">1</span>
-                    <button class="btn btn-sm btn-light border" id="btnNext" onclick="cambiarPagina(1)" aria-label="Siguiente">›</button>
+                    <button class="btn btn-sm btn-light border" id="btnNext" onclick="cambiarPagina(1)" aria-label="Siguiente">â€º</button>
                 </div>
             </div>
         </div>
@@ -164,19 +163,19 @@
                     <div class="bg-danger bg-opacity-10 border border-danger border-opacity-25 rounded-3 p-3 mb-3">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted small">No. Factura</span>
-                            <span class="fw-bold text-danger" id="detNumFactura">–</span>
+                            <span class="fw-bold text-danger" id="detNumFactura">â€“</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted small">Cliente</span>
-                            <span class="fw-bold" id="detCliente">–</span>
+                            <span class="fw-bold" id="detCliente">â€“</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted small">Fecha</span>
-                            <span class="fw-bold" id="detFecha">–</span>
+                            <span class="fw-bold" id="detFecha">â€“</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted small">Total (Anulado)</span>
-                            <span class="fw-bold text-decoration-line-through text-muted" id="detTotal">–</span>
+                            <span class="fw-bold text-decoration-line-through text-muted" id="detTotal">â€“</span>
                         </div>
                     </div>
                     <p class="text-muted small mb-0 text-center"><i data-lucide="info" style="width:14px;margin-right:4px;display:inline-block;"></i>Esta factura fue anulada y no tiene efecto fiscal.</p>
@@ -189,11 +188,11 @@
     </div>
 
 
-        <!-- ⚙️ Panel Accesibilidad SIMPLIFICADO -->
+        <!-- âš™ï¸ Panel Accesibilidad SIMPLIFICADO -->
     <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="panelAccesibilidad" aria-labelledby="panelAccesibilidadLabel" style="width:300px;max-width:100vw;">
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="panelAccesibilidadLabel">
-                <i data-lucide="settings-2" class="text-primary" style="width:20px;height:20px;"></i> Personalización
+                <i data-lucide="settings-2" class="text-primary" style="width:20px;height:20px;"></i> PersonalizaciÃ³n
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
@@ -211,8 +210,8 @@
                 </div>
             </div>
 
-            <!-- TAMAÑO TEXTO -->
-            <p class="a11y-label">Tamaño de texto</p>
+            <!-- TAMAÃ‘O TEXTO -->
+            <p class="a11y-label">TamaÃ±o de texto</p>
             <div class="a11y-grid-3 mb-4">
                 <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')">
                     <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
@@ -224,7 +223,7 @@
                 </div>
                 <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')">
                     <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
-                    <div style="font-size:.72rem;" class="mt-1">Máximo</div>
+                    <div style="font-size:.72rem;" class="mt-1">MÃ¡ximo</div>
                 </div>
             </div>
 
@@ -250,117 +249,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
-    <script>
-    lucide.createIcons();
-
-    // ── Dataset de Facturas ──────────────────────────────────────────────────
-    const DB_FACTURAS = [
-        { id:'FAC-000115', fecha:'2026-08-22', fechaDisplay:'22 Ago 2026<br>10:05', cliente:'Carlos Mendoza',   estado:'aprobado', total:380.00  },
-        { id:'FAC-000112', fecha:'2026-08-20', fechaDisplay:'20 Ago 2026<br>09:30', cliente:'Laura Suárez',     estado:'aprobado', total:210.50  },
-        { id:'FAC-000108', fecha:'2026-08-18', fechaDisplay:'18 Ago 2026<br>14:00', cliente:'Pedro Alvarado',   estado:'anulado',  total:890.00  },
-        { id:'FAC-000105', fecha:'2026-08-17', fechaDisplay:'17 Ago 2026<br>11:25', cliente:'Ana Rodríguez',    estado:'aprobado', total:560.00  },
-        { id:'FAC-000102', fecha:'2026-08-15', fechaDisplay:'15 Ago 2026<br>14:30', cliente:'María Torres',     estado:'aprobado', total:145.00  },
-        { id:'FAC-000099', fecha:'2026-08-10', fechaDisplay:'10 Ago 2026<br>09:12', cliente:'Alejandro Flores', estado:'anulado',  total:450.00  },
-        { id:'FAC-000095', fecha:'2026-08-08', fechaDisplay:'08 Ago 2026<br>08:50', cliente:'Jorge Castro',     estado:'aprobado', total:1200.00 },
-        { id:'FAC-000090', fecha:'2026-08-05', fechaDisplay:'05 Ago 2026<br>16:20', cliente:'Diana Mora',       estado:'anulado',  total:320.00  },
-        { id:'FAC-000088', fecha:'2026-08-01', fechaDisplay:'01 Ago 2026<br>13:45', cliente:'Luis Pacheco',     estado:'aprobado', total:75.00   },
-    ];
-
-    let paginaActual = 1;
-    const POR_PAGINA = 5;
-    let filtradas = [...DB_FACTURAS];
-
-    function filtrarFacturas() {
-        const desde  = document.getElementById('filtroDesde').value;
-        const hasta  = document.getElementById('filtroHasta').value;
-        const estado = document.getElementById('filtroEstado').value.toLowerCase();
-        const texto  = document.getElementById('filtroTexto').value.toLowerCase().trim();
-
-        filtradas = DB_FACTURAS.filter(f => {
-            const okEstado = !estado || f.estado === estado;
-            const okTexto  = !texto  || f.id.toLowerCase().includes(texto) || f.cliente.toLowerCase().includes(texto);
-            const okDesde  = !desde  || f.fecha >= desde;
-            const okHasta  = !hasta  || f.fecha <= hasta;
-            return okEstado && okTexto && okDesde && okHasta;
-        });
-        paginaActual = 1;
-        renderTabla();
-    }
-
-    function cambiarPagina(dir) {
-        const totalPags = Math.ceil(filtradas.length / POR_PAGINA);
-        paginaActual = Math.max(1, Math.min(paginaActual + dir, totalPags));
-        renderTabla();
-    }
-
-    function renderTabla() {
-        const tbody = document.getElementById('facturasTbody');
-        const inicio = (paginaActual - 1) * POR_PAGINA;
-        const pagina = filtradas.slice(inicio, inicio + POR_PAGINA);
-        const totalPags = Math.ceil(filtradas.length / POR_PAGINA) || 1;
-
-        document.getElementById('facturaContador').textContent =
-            `Mostrando ${filtradas.length} de ${DB_FACTURAS.length} registros`;
-        document.getElementById('paginaNum').textContent = `${paginaActual} / ${totalPags}`;
-        document.getElementById('btnPrev').disabled = paginaActual <= 1;
-        document.getElementById('btnNext').disabled = paginaActual >= totalPags;
-
-        if (!pagina.length) {
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-5">
-                <i data-lucide="search-x" style="width:40px;height:40px;opacity:.4;" class="mb-2"></i><br>No hay facturas con esos filtros</td></tr>`;
-            lucide.createIcons();
-            return;
-        }
-
-        tbody.innerHTML = pagina.map(f => {
-            const esAprobado = f.estado === 'aprobado';
-            const badge = esAprobado
-                ? `<span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">Aprobado</span>`
-                : `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i data-lucide="x-circle" style="width:12px;margin-right:3px;display:inline-block;"></i>Anulado</span>`;
-            const totalHTML = esAprobado
-                ? `<span class="fw-bold text-dark">$ ${f.total.toFixed(2)}</span>`
-                : `<span class="fw-bold text-muted text-decoration-line-through">$ ${f.total.toFixed(2)}</span>`;
-            const accion = esAprobado
-                ? `<button class="btn btn-sm btn-primary" title="Imprimir PDF" onclick="imprimirFactura('${f.id}')"><i data-lucide="printer" style="width:15px;"></i></button>`
-                : `<button class="btn btn-sm btn-outline-danger" title="Ver Detalle Anulado" onclick="verAnulado('${f.id}')"><i data-lucide="eye" style="width:15px;"></i></button>`;
-            return `
-            <tr>
-                <td class="ps-4 fw-bold ${esAprobado?'text-primary':'text-danger'}">${f.id}</td>
-                <td class="d-none d-md-table-cell text-muted small">${f.fechaDisplay}</td>
-                <td class="d-none d-sm-table-cell fw-bold">${f.cliente}</td>
-                <td>${badge}</td>
-                <td class="text-end">${totalHTML}</td>
-                <td class="text-end pe-4">${accion}</td>
-            </tr>`;
-        }).join('');
-        lucide.createIcons();
-    }
-
-    function imprimirFactura(id) {
-        mostrarToast(`🖨️ Enviando a imprimir: ${id}`, 'info');
-        setTimeout(() => window.print(), 400);
-    }
-
-    function verAnulado(id) {
-        const f = DB_FACTURAS.find(x => x.id === id);
-        if (!f) return;
-        document.getElementById('detNumFactura').textContent = f.id;
-        document.getElementById('detCliente').textContent    = f.cliente;
-        document.getElementById('detFecha').textContent      = f.fecha;
-        document.getElementById('detTotal').textContent      = '$ ' + f.total.toFixed(2);
-        new bootstrap.Modal(document.getElementById('modalDetalleAnulado')).show();
-    }
-
-    function mostrarToast(msg, tipo = 'success') {
-        const t = document.createElement('div');
-        t.className = `factu-toast ${tipo}`;
-        t.innerHTML = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 3500);
-    }
-
-    // Render inicial
-    filtrarFacturas();
-    </script>
+    <script src="js/models/FacturaModel.js"></script>
+    <script src="js/components.js"></script>
+    <script>Components.render('facturas-lista.html');</script>
+    <script src="js/controllers/facturasListaController.js"></script>
 </body>
 </html>
+

@@ -1,0 +1,16 @@
+[
+  { "id": "VUE-001", "desc": "Boleto aéreo nacional - Económica",           "price": 120.00  },
+  { "id": "VUE-002", "desc": "Boleto aéreo nacional - Ejecutiva",            "price": 250.00  },
+  { "id": "VUE-003", "desc": "Boleto aéreo internacional - Económica",       "price": 800.00  },
+  { "id": "VUE-004", "desc": "Boleto aéreo internacional - Ejecutiva",       "price": 1500.00 },
+  { "id": "ALO-001", "desc": "Estancia en hotel nacional - Estándar",        "price": 60.00   },
+  { "id": "ALO-005", "desc": "Resort todo incluido - Nacional",              "price": 200.00  },
+  { "id": "TRA-001", "desc": "Alquiler de vehículo - Económica",            "price": 40.00   },
+  { "id": "TRA-004", "desc": "Traslado privado (Aeropuerto - Hotel)",        "price": 30.00   },
+  { "id": "PAQ-001", "desc": "Paquete turístico nacional - Estándar",       "price": 350.00  },
+  { "id": "PAQ-006", "desc": "Paquete vacacional - Luna de Miel",           "price": 1200.00 },
+  { "id": "CRU-003", "desc": "Cabina de crucero - Balcón / Suite",          "price": 2500.00 },
+  { "id": "SEG-002", "desc": "Póliza asistencia viajero - Internacional",   "price": 85.00   },
+  { "id": "TOU-002", "desc": "Excursión guiada día completo",               "price": 75.00   },
+  { "id": "ADM-002", "desc": "Cargo emisión de boleto (Fee agencia)",        "price": 25.00   }
+]

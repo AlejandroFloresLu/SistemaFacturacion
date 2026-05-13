@@ -1,86 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FACTU - Clientes</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css"> 
-    
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth-guard.js"></script>
 </head>
 <body>
-
-    <div class="d-lg-none page-header-topbar p-3 sticky-top">
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menú">
-                    <i data-lucide="menu" aria-hidden="true"></i>
-                </button>
-                <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
-            </div>
-            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuracion"><i data-lucide="settings-2" style="width:18px;height:18px;" aria-hidden="true"></i></button>
-        </div>
-    </div>
-
-    <div class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebarMenu">
-        
-        <div class="p-4 border-bottom d-flex align-items-center gap-3">
-            <div class="text-white p-2 rounded-3" style="background-color: #0b4182;">
-                <i data-lucide="calculator" aria-hidden="true"></i>
-            </div>
-            <span class="h4 mb-0 fw-bold">FACTU</span>
-            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar menú"></button>
-        </div>
-
-        <div class="offcanvas-body d-flex flex-column p-3 overflow-y-auto">
-            
-            <div id="section-favoritos" class="mb-4 d-none">
-                <p class="text-uppercase text-muted fw-bold mb-2 px-3 small" style="letter-spacing: 1px;">Favoritos</p>
-                <div id="favoritos-list" class="nav flex-column gap-1"></div>
-                <hr class="mx-3 my-3">
-            </div>
-
-            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
-                
-                <a href="factura.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded factura-nav-link" style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
-                    <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
-                </a>
-
-                <a href="facturas-lista.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
-                    <i data-lucide="list" class="me-2" aria-hidden="true"></i> Ver Facturas
-                </a>
-
-                <a href="clientes.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
-                    <i data-lucide="users" class="me-2" aria-hidden="true"></i> Clientes
-                </a>
-
-                <a href="productos.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
-                    <i data-lucide="package" class="me-2" aria-hidden="true"></i> Productos
-                </a>
-
-                <a href="carga-masiva.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded" style="color: var(--text-muted); font-weight: 500; transition: all 0.2s;">
-                    <i data-lucide="upload-cloud" class="me-2" aria-hidden="true"></i> Carga Masiva
-                </a>
-
-            </div>
-
-            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
-                <i data-lucide="settings-2" class="me-2" style="width:16px;height:16px;" aria-hidden="true"></i>
-                <span class="small fw-medium">Configuración</span>
-            </button>
-            <div class="mt-auto p-3 bg-light rounded-4 border">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="avatar-circle" style="background-color: #0b4182;">AF</div>
-                    <div>
-                        <div class="fw-bold">Admin</div>
-                        <div class="text-muted small">Alejandro Flores</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="topbar-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
 
     <main class="main-content p-4 bg-light" style="min-height: 100vh;" role="main">
         <div class="page-header-wrap">
@@ -322,191 +253,20 @@
                 </div>
             </div>
 
-            <hr class="my-3">            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()" aria-label="Restablecer configuracion de accesibilidad">
+            <hr class="my-3">
+            <button class="btn btn-outline-secondary w-100 btn-sm" onclick="A11y.reset()" aria-label="Restablecer configuración">
                 <i data-lucide="rotate-ccw" style="width:14px;height:14px;" aria-hidden="true"></i> Restablecer
             </button>
         </div>
     </div>
 
+    <div id="a11y-placeholder"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
-    <script>
-    lucide.createIcons();
-
-    // ── Dataset Clientes ─────────────────────────────────────────────────────
-    let DB_CLIENTES = [
-        { id:1, nombre:'Alejandro', apellido:'Flores',   ruc:'1201201201', tel:'0999999999', email:'alejandro@email.com',  ultimaCompra:'Hace 2 días'  },
-        { id:2, nombre:'María',     apellido:'Torres',   ruc:'1104845567', tel:'0988888888', email:'maria@agencia.com',    ultimaCompra:'Hace 1 mes'   },
-        { id:3, nombre:'Carlos',    apellido:'Mendoza',  ruc:'0912345678', tel:'0977777777', email:'carlos@tour.com',      ultimaCompra:'Hace 3 días'  },
-        { id:4, nombre:'Laura',     apellido:'Suárez',   ruc:'1755432100', tel:'0966666666', email:'laura@viajes.ec',      ultimaCompra:'Hace 1 semana'},
-        { id:5, nombre:'Pedro',     apellido:'Alvarado', ruc:'0800112233', tel:'0955555555', email:'pedro@empresa.com',    ultimaCompra:'Hace 2 meses' },
-        { id:6, nombre:'Ana',       apellido:'Rodríguez',ruc:'1300223344', tel:'0944444444', email:'ana@hoteles.ec',       ultimaCompra:'Hace 5 días'  },
-    ];
-
-    let cliPaginaActual = 1, CLI_POR_PAGINA = 5, cliFiltrados = [...DB_CLIENTES], elimIdx = null;
-
-    function filtrarClientes() {
-        const q = (document.getElementById('clienteSearch').value||'').toLowerCase();
-        cliFiltrados = DB_CLIENTES.filter(c =>
-            (c.nombre+' '+c.apellido).toLowerCase().includes(q) ||
-            c.ruc.includes(q) || c.email.toLowerCase().includes(q));
-        cliPaginaActual = 1; renderClientes();
-    }
-
-    function cliPagina(dir) {
-        const tot = Math.ceil(cliFiltrados.length / CLI_POR_PAGINA);
-        cliPaginaActual = Math.max(1, Math.min(cliPaginaActual + dir, tot));
-        renderClientes();
-    }
-
-    function renderClientes() {
-        const tbody  = document.getElementById('clientesTbody');
-        const inicio = (cliPaginaActual-1)*CLI_POR_PAGINA;
-        const pag    = cliFiltrados.slice(inicio, inicio+CLI_POR_PAGINA);
-        const tot    = Math.ceil(cliFiltrados.length/CLI_POR_PAGINA)||1;
-        document.getElementById('clientesContador').textContent = `Mostrando ${cliFiltrados.length} de ${DB_CLIENTES.length} clientes`;
-        document.getElementById('cliPaginaNum').textContent = `${cliPaginaActual} / ${tot}`;
-        document.getElementById('cliPrev').disabled = cliPaginaActual<=1;
-        document.getElementById('cliNext').disabled = cliPaginaActual>=tot;
-
-        if (!pag.length) {
-            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5">Sin resultados</td></tr>`;
-            return;
-        }
-        tbody.innerHTML = pag.map((c,i) => {
-            const initials = (c.nombre[0]||'')+(c.apellido[0]||'');
-            const idx = DB_CLIENTES.indexOf(c);
-            return `<tr>
-              <td class="ps-4"><div class="d-flex align-items-center">
-                <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-3" style="width:36px;height:36px;font-size:14px;">${initials}</div>
-                <div class="fw-bold">${c.nombre} ${c.apellido}</div>
-              </div></td>
-              <td class="d-none d-md-table-cell">${c.ruc}</td>
-              <td class="d-none d-lg-table-cell text-muted small">${c.tel}<br>${c.email}</td>
-              <td class="d-none d-md-table-cell"><span class="badge bg-light text-dark border">${c.ultimaCompra}</span></td>
-              <td class="text-end pe-4">
-                <button class="btn btn-sm btn-light border-0 text-primary me-1" title="Editar" onclick="editarCliente(${idx})"><i data-lucide="edit-2" style="width:15px;"></i></button>
-                <button class="btn btn-sm btn-light border-0 text-danger" title="Eliminar" onclick="pedirEliminarCliente(${idx})"><i data-lucide="trash-2" style="width:15px;"></i></button>
-              </td>
-            </tr>`;
-        }).join('');
-        lucide.createIcons();
-    }
-
-    function abrirNuevoCliente() {
-        document.getElementById('cliNuevoNombre').value   = '';
-        document.getElementById('cliNuevoApellido').value = '';
-        document.getElementById('cliNuevoRuc').value      = '';
-        document.getElementById('cliNuevoTel').value      = '';
-        document.getElementById('cliNuevoEmail').value    = '';
-        new bootstrap.Modal(document.getElementById('modalNuevoCliente')).show();
-    }
-
-    function guardarNuevoCliente() {
-        const nom = document.getElementById('cliNuevoNombre').value.trim();
-        const ape = document.getElementById('cliNuevoApellido').value.trim();
-        const ruc = document.getElementById('cliNuevoRuc').value.trim();
-        const pais = document.getElementById('cliNuevoTelPais').value;
-        const telNum = document.getElementById('cliNuevoTel').value.trim();
-        const tel = telNum ? pais + ' ' + telNum : '';
-        const email = document.getElementById('cliNuevoEmail').value.trim();
-
-        if (!nom) { mostrarToast('⚠️ El nombre es obligatorio.', 'danger'); return; }
-        if (!ape) { mostrarToast('⚠️ El apellido es obligatorio.', 'danger'); return; }
-        if (!ruc || (ruc.length !== 10 && ruc.length !== 13)) {
-            mostrarToast('⚠️ La cédula debe tener 10 dígitos y el RUC 13.', 'danger'); return;
-        }
-        if (DB_CLIENTES.some(c => c.ruc === ruc)) {
-            mostrarToast('⚠️ Ya existe un cliente con esa cédula/RUC.', 'danger'); return;
-        }
-
-        const nuevo = {
-            id: Date.now(),
-            nombre: nom,
-            apellido: ape,
-            ruc,
-            tel,
-            email: email || '(sin correo)',
-            ultimaCompra: 'Nuevo'
-        };
-        DB_CLIENTES.push(nuevo);
-        bootstrap.Modal.getInstance(document.getElementById('modalNuevoCliente')).hide();
-        filtrarClientes();
-        mostrarToast('✅ Cliente "' + nom + ' ' + ape + '" agregado con éxito.', 'success');
-    }
-
-    function editarCliente(idx) {
-        const c = DB_CLIENTES[idx];
-        document.getElementById('editCliIdx').value    = idx;
-        document.getElementById('editCliNombre').value  = c.nombre;
-        document.getElementById('editCliApellido').value= c.apellido;
-        document.getElementById('editCliRuc').value     = c.ruc;
-        document.getElementById('editCliEmail').value   = c.email;
-
-        // Lógica para separar el prefijo del país del teléfono
-        let telFull = c.tel || '';
-        let pais = '+593';
-        let num = telFull;
-
-        if (telFull.startsWith('+')) {
-            const parts = telFull.split(' ');
-            if (parts.length > 1) {
-                pais = parts[0];
-                num = parts.slice(1).join(' ');
-            }
-        }
-        document.getElementById('editCliTelPais').value = pais;
-        document.getElementById('editCliTel').value = num;
-
-        new bootstrap.Modal(document.getElementById('modalEditarCliente')).show();
-    }
-
-    function guardarEdicionCliente() {
-        const idx = +document.getElementById('editCliIdx').value;
-        const nom = document.getElementById('editCliNombre').value.trim();
-        const ape = document.getElementById('editCliApellido').value.trim();
-        const pais = document.getElementById('editCliTelPais').value;
-        const telNum = document.getElementById('editCliTel').value.trim();
-        const tel = telNum ? pais + ' ' + telNum : '';
-        const email = document.getElementById('editCliEmail').value.trim();
-
-        if (!nom) { mostrarToast('⚠️ El nombre es obligatorio.', 'danger'); return; }
-        if (!ape) { mostrarToast('⚠️ El apellido es obligatorio.', 'danger'); return; }
-
-        DB_CLIENTES[idx].nombre   = nom;
-        DB_CLIENTES[idx].apellido = ape;
-        DB_CLIENTES[idx].tel      = tel;
-        DB_CLIENTES[idx].email    = email;
-
-        bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente')).hide();
-        filtrarClientes();
-        mostrarToast('✅ Cliente editado con éxito', 'success');
-    }
-
-    function pedirEliminarCliente(idx) {
-        elimIdx = idx;
-        document.getElementById('elimCliNombre').textContent = DB_CLIENTES[idx].nombre+' '+DB_CLIENTES[idx].apellido;
-        new bootstrap.Modal(document.getElementById('modalEliminarCliente')).show();
-    }
-
-    function confirmarEliminarCliente() {
-        if (elimIdx === null) return;
-        const nombre = DB_CLIENTES[elimIdx].nombre;
-        DB_CLIENTES.splice(elimIdx, 1);
-        elimIdx = null;
-        bootstrap.Modal.getInstance(document.getElementById('modalEliminarCliente')).hide();
-        filtrarClientes();
-        mostrarToast(`🗑️ Cliente "${nombre}" eliminado`, 'danger');
-    }
-
-    function mostrarToast(msg, tipo='success') {
-        const t = document.createElement('div');
-        t.className = `factu-toast ${tipo}`; t.innerHTML = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 3500);
-    }
-
-    filtrarClientes();
-    </script>
+    <script src="js/models/ClienteModel.js"></script>
+    <script src="js/components.js"></script>
+    <script>Components.render('clientes.html');</script>
+    <script src="js/controllers/clientesController.js"></script>
 </body>
 </html>

@@ -1,26 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FACTU - Productos</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css"> 
-    
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth-guard.js"></script>
 </head>
 <body>
 
     <div class="d-lg-none page-header-topbar p-3 sticky-top">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menú">
+                <button class="btn btn-light border me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Abrir menÃº">
                     <i data-lucide="menu" aria-hidden="true"></i>
                 </button>
                 <span class="h5 mb-0 fw-bold" style="color: #0b4182;">FACTU</span>
             </div>
-            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="ConfiguraciÃ³n">
                 <i data-lucide="settings-2" style="width:18px;height:18px;" aria-hidden="true"></i>
             </button>
         </div>
@@ -33,7 +32,7 @@
                 <i data-lucide="calculator" aria-hidden="true"></i>
             </div>
             <span class="h4 mb-0 fw-bold">FACTU</span>
-            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar menú"></button>
+            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar menÃº"></button>
         </div>
 
         <div class="offcanvas-body d-flex flex-column p-3 overflow-y-auto">
@@ -44,7 +43,7 @@
                 <hr class="mx-3 my-3">
             </div>
 
-            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
+            <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="MenÃº principal">
                 
                 <a href="factura.html" class="nav-link-custom text-decoration-none d-flex align-items-center px-3 py-2 mb-2 rounded factura-nav-link" style="color: var(--primary-color); font-weight: 600; background-color: #eef2ff; transition: all 0.2s; border: 1px solid #c7d2fe;">
                     <i data-lucide="zap" class="me-2 text-primary" aria-hidden="true"></i> Nueva Factura
@@ -68,9 +67,9 @@
 
             </div>
 
-            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+            <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="ConfiguraciÃ³n">
                 <i data-lucide="settings-2" class="me-2" style="width:16px;height:16px;" aria-hidden="true"></i>
-                <span class="small fw-medium">Configuración</span>
+                <span class="small fw-medium">ConfiguraciÃ³n</span>
             </button>
             <div class="mt-auto p-3 bg-light rounded-4 border">
                 <div class="d-flex align-items-center gap-3">
@@ -88,12 +87,12 @@
         <div class="page-header-wrap">
             <div>
                 <h2 class="page-title"><i data-lucide="package" class="me-2 text-primary" aria-hidden="true"></i>Inventario Comercial</h2>
-                <p class="page-subtitle text-muted">Gestión de boletos, tours y paquetes turísticos.</p>
+                <p class="page-subtitle text-muted">GestiÃ³n de boletos, tours y paquetes turÃ­sticos.</p>
             </div>
             <div class="page-actions">
                 <select class="form-select shadow-sm" id="filtroCategoria" onchange="window.filtrarProductos(this.value)">
-                    <option value="ALL">Todos (Categoría)</option>
-                    <option value="VUE">Boletos Aéreos (VUE)</option>
+                    <option value="ALL">Todos (CategorÃ­a)</option>
+                    <option value="VUE">Boletos AÃ©reos (VUE)</option>
                     <option value="ALO">Alojamiento (ALO)</option>
                     <option value="TRA">Traslados (TRA)</option>
                     <option value="TOU">Tours (TOU)</option>
@@ -102,7 +101,7 @@
                     <option value="SEG">Seguros (SEG)</option>
                     <option value="ADM">Cargos (ADM)</option>
                 </select>
-                <button class="btn btn-factu shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto" aria-label="Añadir un nuevo producto al inventario"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> Añadir Producto</button>
+                <button class="btn btn-factu shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto" aria-label="AÃ±adir un nuevo producto al inventario"><i data-lucide="plus" class="me-1" aria-hidden="true"></i> AÃ±adir Producto</button>
             </div>
         </div>
         
@@ -111,7 +110,7 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-light text-muted">
                         <tr>
-                            <th class="ps-4">Código / Producto</th>
+                            <th class="ps-4">CÃ³digo / Producto</th>
                             <th class="text-end pe-4">Acciones</th>
                         </tr>
                     </thead>
@@ -123,7 +122,7 @@
         </div>
     </main>
 
-    <!-- Modal: Añadir Producto -->
+    <!-- Modal: AÃ±adir Producto -->
     <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLabel" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -135,9 +134,9 @@
                 </div>
                 <div class="modal-body pt-3">
                     <div class="mb-3">
-                        <label for="nuevoProdCategoria" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Categoría</label>
+                        <label for="nuevoProdCategoria" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">CategorÃ­a</label>
                         <select class="form-select" id="nuevoProdCategoria">
-                            <option value="VUE">Boletos Aéreos (VUE)</option>
+                            <option value="VUE">Boletos AÃ©reos (VUE)</option>
                             <option value="ALO">Alojamiento (ALO)</option>
                             <option value="TRA">Traslados (TRA)</option>
                             <option value="TOU">Tours (TOU)</option>
@@ -148,13 +147,13 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="nuevoProdCodigo" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Código</label>
+                        <label for="nuevoProdCodigo" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">CÃ³digo</label>
                         <input type="text" class="form-control" id="nuevoProdCodigo" placeholder="Ej: VUE-010" maxlength="10">
-                        <div class="form-text">Se generará automáticamente si lo dejas vacío.</div>
+                        <div class="form-text">Se generarÃ¡ automÃ¡ticamente si lo dejas vacÃ­o.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="nuevoProdDesc" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Descripción</label>
-                        <input type="text" class="form-control" id="nuevoProdDesc" placeholder="Ej: Boleto aéreo nacional – Business Class">
+                        <label for="nuevoProdDesc" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">DescripciÃ³n</label>
+                        <input type="text" class="form-control" id="nuevoProdDesc" placeholder="Ej: Boleto aÃ©reo nacional â€“ Business Class">
                     </div>
                     <div class="mb-1">
                         <label for="nuevoProdPrecio" class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Precio Unitario ($)</label>
@@ -188,11 +187,11 @@
                 <div class="modal-body p-4">
                     <input type="hidden" id="editProdId">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Código</label>
+                        <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">CÃ³digo</label>
                         <input type="text" class="form-control bg-light" id="editProdCodigo" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">Descripción</label>
+                        <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.5px">DescripciÃ³n</label>
                         <input type="text" class="form-control" id="editProdDesc">
                     </div>
                     <div class="mb-1">
@@ -219,23 +218,23 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                 <div class="modal-body p-4 text-center">
-                    <div class="mb-3" style="font-size:2.5rem;">🗑️</div>
-                    <h5 class="fw-bold text-dark mb-1">¿Eliminar producto?</h5>
-                    <p class="text-muted small mb-3">Se eliminará permanentemente el producto <strong id="elimProdNombre"></strong>.</p>
+                    <div class="mb-3" style="font-size:2.5rem;">ðŸ—‘ï¸</div>
+                    <h5 class="fw-bold text-dark mb-1">Â¿Eliminar producto?</h5>
+                    <p class="text-muted small mb-3">Se eliminarÃ¡ permanentemente el producto <strong id="elimProdNombre"></strong>.</p>
                     <div class="d-flex gap-2">
                         <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-danger fw-bold flex-grow-1" onclick="confirmarEliminarProducto()">Sí, eliminar</button>
+                        <button class="btn btn-danger fw-bold flex-grow-1" onclick="confirmarEliminarProducto()">SÃ­, eliminar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-        <!-- ⚙️ Panel Accesibilidad SIMPLIFICADO -->
+        <!-- âš™ï¸ Panel Accesibilidad SIMPLIFICADO -->
     <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="panelAccesibilidad" aria-labelledby="panelAccesibilidadLabel" style="width:300px;max-width:100vw;">
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="panelAccesibilidadLabel">
-                <i data-lucide="settings-2" class="text-primary" style="width:20px;height:20px;"></i> Personalización
+                <i data-lucide="settings-2" class="text-primary" style="width:20px;height:20px;"></i> PersonalizaciÃ³n
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
@@ -253,8 +252,8 @@
                 </div>
             </div>
 
-            <!-- TAMAÑO TEXTO -->
-            <p class="a11y-label">Tamaño de texto</p>
+            <!-- TAMAÃ‘O TEXTO -->
+            <p class="a11y-label">TamaÃ±o de texto</p>
             <div class="a11y-grid-3 mb-4">
                 <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')">
                     <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
@@ -266,7 +265,7 @@
                 </div>
                 <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')">
                     <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
-                    <div style="font-size:.72rem;" class="mt-1">Máximo</div>
+                    <div style="font-size:.72rem;" class="mt-1">MÃ¡ximo</div>
                 </div>
             </div>
 
@@ -292,149 +291,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
-
-    <script>
-    // ── Inventario compartido (misma fuente que factura.ui.js) ──
-    const DB_PRODUCTS = [
-        { id: 'VUE-001', desc: 'Boleto aéreo nacional - Económica',           price: 120.00 },
-        { id: 'VUE-002', desc: 'Boleto aéreo nacional - Ejecutiva',            price: 250.00 },
-        { id: 'VUE-003', desc: 'Boleto aéreo internacional - Económica',       price: 800.00 },
-        { id: 'VUE-004', desc: 'Boleto aéreo internacional - Ejecutiva',       price: 1500.00 },
-        { id: 'ALO-001', desc: 'Estancia en hotel nacional - Estándar',        price: 60.00 },
-        { id: 'ALO-005', desc: 'Resort todo incluido - Nacional',              price: 200.00 },
-        { id: 'TRA-001', desc: 'Alquiler de vehículo - Económica',            price: 40.00 },
-        { id: 'TRA-004', desc: 'Traslado privado (Aeropuerto - Hotel)',        price: 30.00 },
-        { id: 'PAQ-001', desc: 'Paquete turístico nacional - Estándar',       price: 350.00 },
-        { id: 'PAQ-006', desc: 'Paquete vacacional - Luna de Miel',           price: 1200.00 },
-        { id: 'CRU-003', desc: 'Cabina de crucero - Balcón / Suite',          price: 2500.00 },
-        { id: 'SEG-002', desc: 'Póliza asistencia viajero - Internacional',   price: 85.00 },
-        { id: 'TOU-002', desc: 'Excursión guiada día completo',               price: 75.00 },
-        { id: 'ADM-002', desc: 'Cargo emisión de boleto (Fee agencia)',        price: 25.00 }
-    ];
-
-    // Contadores por categoría para autogenerar códigos
-    const catCounters = {};
-
-    // ── Renderizado de tabla ──
-    window.filtrarProductos = function(cat) {
-        const lista = cat === 'ALL' ? DB_PRODUCTS : DB_PRODUCTS.filter(p => p.id.startsWith(cat));
-        const tbody = document.getElementById('productosBody');
-
-        if (lista.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-5">
-                <i data-lucide="inbox" style="width:48px;height:48px;" class="mb-2 opacity-50"></i><br>Sin productos en esta categoría.</td></tr>`;
-        } else {
-            tbody.innerHTML = lista.map(p => {
-                const prefix = p.id.split('-')[0];
-                const badgeColor = {
-                    VUE:'#0b4182', ALO:'#15803d', TRA:'#92400e',
-                    PAQ:'#6d28d9', CRU:'#0e7490', SEG:'#b45309',
-                    TOU:'#065f46', ADM:'#991b1b'
-                }[prefix] || '#374151';
-                     return `
-                <tr>
-                    <td class="ps-4 py-3">
-                        <span class="badge me-2" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span>
-                        <span class="fw-semibold">${p.desc}</span>
-                    </td>
-                    <td class="text-end pe-4 py-3" style="min-width:130px;">
-                        <div class="d-flex flex-column align-items-end gap-1">
-                            <span class="fw-bold text-muted">$${p.price.toFixed(2)}</span>
-                            <div class="d-flex gap-1">
-                                <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2" onclick="editarProducto('${p.id}')" title="Editar" aria-label="Editar ${p.desc}">
-                                    <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="pedirEliminarProducto('${p.id}')" title="Eliminar" aria-label="Eliminar ${p.desc}">
-                                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>`;
-            }).join('');
-        }
-        lucide.createIcons();
-    };
-
-    // ── Editar producto ──
-    let _elimProdId = null;
-    window.editarProducto = function(id) {
-        const p = DB_PRODUCTS.find(x => x.id === id);
-        if (!p) return;
-        document.getElementById('editProdId').value     = id;
-        document.getElementById('editProdCodigo').value = p.id;
-        document.getElementById('editProdDesc').value   = p.desc;
-        document.getElementById('editProdPrecio').value = p.price.toFixed(2);
-        new bootstrap.Modal(document.getElementById('modalEditarProducto')).show();
-    };
-    window.guardarEdicionProducto = function() {
-        const id    = document.getElementById('editProdId').value;
-        const desc  = document.getElementById('editProdDesc').value.trim();
-        const price = parseFloat(document.getElementById('editProdPrecio').value);
-        if (!desc) { mostrarToast('La descripción no puede estar vacía', 'danger'); return; }
-        if (isNaN(price) || price <= 0) { mostrarToast('Precio inválido', 'danger'); return; }
-        const p = DB_PRODUCTS.find(x => x.id === id);
-        if (p) { p.desc = desc; p.price = price; }
-        bootstrap.Modal.getInstance(document.getElementById('modalEditarProducto')).hide();
-        filtrarProductos(document.getElementById('filtroCategoria').value);
-        mostrarToast('✅ Producto editado con éxito', 'success');
-    };
-
-    // ── Eliminar producto (modal custom) ──
-    window.pedirEliminarProducto = function(id) {
-        _elimProdId = id;
-        const p = DB_PRODUCTS.find(x => x.id === id);
-        document.getElementById('elimProdNombre').textContent = p ? `${p.id} — ${p.desc}` : id;
-        new bootstrap.Modal(document.getElementById('modalEliminarProducto')).show();
-    };
-    window.confirmarEliminarProducto = function() {
-        if (!_elimProdId) return;
-        const idx = DB_PRODUCTS.findIndex(p => p.id === _elimProdId);
-        if (idx !== -1) DB_PRODUCTS.splice(idx, 1);
-        const id = _elimProdId; _elimProdId = null;
-        bootstrap.Modal.getInstance(document.getElementById('modalEliminarProducto')).hide();
-        filtrarProductos(document.getElementById('filtroCategoria').value);
-        mostrarToast(`🗑️ Producto "${id}" eliminado`, 'danger');
-    };
-
-    // ── Guardar nuevo producto desde modal ──
-    document.getElementById('btnGuardarProducto').addEventListener('click', () => {
-        const cat  = document.getElementById('nuevoProdCategoria').value;
-        const desc = document.getElementById('nuevoProdDesc').value.trim();
-        const price = parseFloat(document.getElementById('nuevoProdPrecio').value);
-        let   codigo = document.getElementById('nuevoProdCodigo').value.trim().toUpperCase();
-
-        if (!desc) { mostrarToast('La descripción es obligatoria', 'danger'); return; }
-        if (isNaN(price) || price <= 0) { mostrarToast('El precio debe ser mayor a 0', 'danger'); return; }
-
-        if (!codigo) {
-            catCounters[cat] = (catCounters[cat] || DB_PRODUCTS.filter(p => p.id.startsWith(cat)).length) + 1;
-            codigo = `${cat}-${String(catCounters[cat]).padStart(3, '0')}`;
-        }
-        if (DB_PRODUCTS.some(p => p.id === codigo)) {
-            mostrarToast(`El código ${codigo} ya existe`, 'danger'); return;
-        }
-
-        DB_PRODUCTS.push({ id: codigo, desc, price });
-        bootstrap.Modal.getInstance(document.getElementById('modalNuevoProducto')).hide();
-        document.getElementById('nuevoProdCodigo').value = '';
-        document.getElementById('nuevoProdDesc').value   = '';
-        document.getElementById('nuevoProdPrecio').value = '';
-        document.getElementById('filtroCategoria').value = cat;
-        filtrarProductos(cat);
-        mostrarToast('✅ Producto añadido con éxito', 'success');
-    });
-
-    function mostrarToast(msg, tipo='success') {
-        const t = document.createElement('div');
-        t.className = `factu-toast ${tipo}`; t.innerHTML = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 3500);
-    }
-
-    // ── Render inicial ──
-    lucide.createIcons();
-    filtrarProductos('ALL');
-    </script>
+    <script src="js/models/ProductoModel.js"></script>
+    <script src="js/components.js"></script>
+    <script>Components.render('productos.html');</script>
+    <script src="js/controllers/productosController.js"></script>
 </body>
 </html>

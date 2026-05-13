@@ -1,0 +1,12 @@
+{
+  "FAC-000001": {
+    "cliente": { "nombre": "Patricia Lugmaña", "ruc": "1715678114" },
+    "lineas": [
+      { "id": "VUE-001", "desc": "Boleto aéreo nacional - Económica",         "price": 120.00, "qty": 2, "total": 240.00 },
+      { "id": "SEG-002", "desc": "Póliza asistencia viajero - Internacional",  "price":  85.00, "qty": 1, "total":  85.00 }
+    ],
+    "pagos": [
+      { "method": "Efectivo 💵", "amount": 373.75 }
+    ]
+  }
+}

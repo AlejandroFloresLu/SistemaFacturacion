@@ -1,0 +1,8 @@
+[
+  { "id": 1, "nombre": "Alejandro", "apellido": "Flores",    "ruc": "1201201201", "tel": "0999999999", "email": "alejandro@email.com",  "ultimaCompra": "Hace 2 días"   },
+  { "id": 2, "nombre": "María",     "apellido": "Torres",    "ruc": "1104845567", "tel": "0988888888", "email": "maria@agencia.com",    "ultimaCompra": "Hace 1 mes"    },
+  { "id": 3, "nombre": "Carlos",    "apellido": "Mendoza",   "ruc": "0912345678", "tel": "0977777777", "email": "carlos@tour.com",      "ultimaCompra": "Hace 3 días"   },
+  { "id": 4, "nombre": "Laura",     "apellido": "Suárez",    "ruc": "1755432100", "tel": "0966666666", "email": "laura@viajes.ec",      "ultimaCompra": "Hace 1 semana" },
+  { "id": 5, "nombre": "Pedro",     "apellido": "Alvarado",  "ruc": "0800112233", "tel": "0955555555", "email": "pedro@empresa.com",    "ultimaCompra": "Hace 2 meses"  },
+  { "id": 6, "nombre": "Ana",       "apellido": "Rodríguez", "ruc": "1300223344", "tel": "0944444444", "email": "ana@hoteles.ec",       "ultimaCompra": "Hace 5 días"   }
+]

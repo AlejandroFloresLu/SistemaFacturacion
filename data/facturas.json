@@ -1,0 +1,11 @@
+[
+  { "id": "FAC-000115", "fecha": "2026-08-22", "fechaDisplay": "22 Ago 2026<br>10:05", "cliente": "Carlos Mendoza",   "estado": "aprobado", "total": 380.00  },
+  { "id": "FAC-000112", "fecha": "2026-08-20", "fechaDisplay": "20 Ago 2026<br>09:30", "cliente": "Laura Suárez",     "estado": "aprobado", "total": 210.50  },
+  { "id": "FAC-000108", "fecha": "2026-08-18", "fechaDisplay": "18 Ago 2026<br>14:00", "cliente": "Pedro Alvarado",   "estado": "anulado",  "total": 890.00  },
+  { "id": "FAC-000105", "fecha": "2026-08-17", "fechaDisplay": "17 Ago 2026<br>11:25", "cliente": "Ana Rodríguez",    "estado": "aprobado", "total": 560.00  },
+  { "id": "FAC-000102", "fecha": "2026-08-15", "fechaDisplay": "15 Ago 2026<br>14:30", "cliente": "María Torres",     "estado": "aprobado", "total": 145.00  },
+  { "id": "FAC-000099", "fecha": "2026-08-10", "fechaDisplay": "10 Ago 2026<br>09:12", "cliente": "Alejandro Flores", "estado": "anulado",  "total": 450.00  },
+  { "id": "FAC-000095", "fecha": "2026-08-08", "fechaDisplay": "08 Ago 2026<br>08:50", "cliente": "Jorge Castro",     "estado": "aprobado", "total": 1200.00 },
+  { "id": "FAC-000090", "fecha": "2026-08-05", "fechaDisplay": "05 Ago 2026<br>16:20", "cliente": "Diana Mora",       "estado": "anulado",  "total": 320.00  },
+  { "id": "FAC-000088", "fecha": "2026-08-01", "fechaDisplay": "01 Ago 2026<br>13:45", "cliente": "Luis Pacheco",     "estado": "aprobado", "total": 75.00   }
+]
