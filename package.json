@@ -1,1 +1,34 @@
-{}
+{
+  "name": "sistemafacturacion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate_pages.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node server/db/seed_admin.js",
+    "test:factura": "node test-factura-flow.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlejandroFloresLu/SistemaFacturacion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AlejandroFloresLu/SistemaFacturacion/issues"
+  },
+  "homepage": "https://github.com/AlejandroFloresLu/SistemaFacturacion#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "csv-parse": "^6.2.1",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "pg": "^8.20.0"
+  }
+}

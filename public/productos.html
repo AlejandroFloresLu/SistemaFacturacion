@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTU - Productos</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth-guard.js"></script>
+</head>
+<body>
+
+    <div id="topbar-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+    <div id="a11y-placeholder"></div>
+
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold m-0 text-dark"><i data-lucide="package" class="me-2 text-primary"></i>Inventario Comercial</h2>
+                <p class="text-muted mt-1 mb-0">Gestión de boletos, tours y paquetes turísticos.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <select id="filtroCategoria" class="form-select shadow-sm" style="width: auto;" onchange="filtrarProductos()">
+                    <option value="ALL">Todos (Categoría)</option>
+                    <option value="TOU">Tours</option>
+                    <option value="VUE">Boletos Aéreos</option>
+                    <option value="SEG">Seguros</option>
+                </select>
+                <button class="btn btn-factu shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto"><i data-lucide="plus" class="me-1"></i> Añadir Producto</button>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light text-muted">
+                        <tr>
+                            <th class="ps-4">Código / Producto</th>
+                            <th class="text-end pe-4">Precio / Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productosBody">
+                        <!-- El JS llenará esto -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Modal Nuevo Producto -->
+        <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                    <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i data-lucide="package-plus" class="me-2 text-primary"></i>Nuevo Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4 pt-0">
+                        <hr class="text-muted mt-0 mb-4 opacity-10">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Categoría</label>
+                            <select id="nuevoProdCategoria" class="form-select">
+                                <option value="TOU">Tour (TOU)</option>
+                                <option value="VUE">Boleto Aéreo (VUE)</option>
+                                <option value="SEG">Seguro (SEG)</option>
+                                <option value="PAQ">Paquete (PAQ)</option>
+                                <option value="ALO">Alojamiento (ALO)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Código (Opcional - Autogenerado)</label>
+                            <input type="text" class="form-control" id="nuevoProdCodigo" placeholder="Ej: TOU-001">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Descripción / Nombre</label>
+                            <input type="text" class="form-control" id="nuevoProdDesc" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="nuevoProdPrecio" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                        <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-factu fw-bold px-4" id="btnGuardarProducto"><i data-lucide="save" class="me-2" style="width: 16px;"></i> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Editar Producto -->
+        <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                    <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i data-lucide="edit" class="me-2 text-primary"></i>Editar Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4 pt-0">
+                        <hr class="text-muted mt-0 mb-4 opacity-10">
+                        <input type="hidden" id="editProdId">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Código</label>
+                            <input type="text" class="form-control bg-light" id="editProdCodigo" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Descripción / Nombre</label>
+                            <input type="text" class="form-control" id="editProdDesc" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="editProdPrecio" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                        <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary fw-bold px-4" onclick="guardarEdicionProducto()"><i data-lucide="save" class="me-2" style="width: 16px;"></i> Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Eliminar Producto -->
+        <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 shadow text-center p-4">
+                    <i data-lucide="alert-triangle" class="text-danger mx-auto mb-3" style="width: 48px; height: 48px;"></i>
+                    <h5 class="fw-bold mb-3">¿Eliminar producto?</h5>
+                    <p class="text-muted small mb-4">Se eliminará "<span id="elimProdNombre" class="fw-bold"></span>".</p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-light w-50" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-danger w-50" onclick="confirmarEliminarProducto()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/components.js"></script>
+    <script>Components.render('productos.html');</script>
+    <script src="js/models/productoModel.js"></script>
+    <script src="js/controllers/productosController.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

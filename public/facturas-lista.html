@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTU - Ver Facturas</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth-guard.js"></script>
+</head>
+<body>
+
+    <div id="topbar-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+    <div id="a11y-placeholder"></div>
+
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold m-0 text-dark"><i data-lucide="list" class="me-2 text-primary"></i>Historial de Facturas</h2>
+                <p class="text-muted mt-1 mb-0">Consulta, imprime y revisa los estados de facturas emitidas.</p>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
+            <div class="card-header bg-white border-0 pt-4 pb-3">
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-1 text-muted"><i data-lucide="calendar" style="width:16px;"></i></span>
+                            <input type="date" id="filtroDesde" class="form-control" title="Desde" onchange="filtrarFacturas()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-1 text-muted"><i data-lucide="calendar" style="width:16px;"></i></span>
+                            <input type="date" id="filtroHasta" class="form-control" title="Hasta" onchange="filtrarFacturas()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filtroEstado" class="form-select text-muted" onchange="filtrarFacturas()">
+                            <option value="">Estado: Todos</option>
+                            <option value="aprobado">Aprobados</option>
+                            <option value="anulado">Anulados</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="filtroTexto" class="form-control" placeholder="# Factura o Cliente" oninput="filtrarFacturas()">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light text-muted">
+                        <tr>
+                            <th class="ps-4">No. Factura</th>
+                            <th class="d-none d-md-table-cell">Fecha</th>
+                            <th class="d-none d-sm-table-cell">Cliente</th>
+                            <th>Estado</th>
+                            <th class="text-end">Total</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="facturasTbody">
+                        <!-- El JS llenará esto -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center text-muted small">
+                <span id="facturaContador">Mostrando 0 registros</span>
+                <div class="d-flex align-items-center gap-2">
+                    <button id="btnPrev" class="btn btn-sm btn-outline-secondary" onclick="cambiarPagina(-1)">Anterior</button>
+                    <span id="paginaNum" class="fw-bold">1 / 1</span>
+                    <button id="btnNext" class="btn btn-sm btn-outline-secondary" onclick="cambiarPagina(1)">Siguiente</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Detalle Anulado (y para confirmar anulación) -->
+        <div class="modal fade" id="modalDetalleAnulado" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
+                    <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                        <h5 class="modal-title fw-bold text-dark"><i data-lucide="info" class="me-2 text-primary"></i>Detalle de Factura</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4 pt-0">
+                        <hr class="text-muted mt-0 mb-4 opacity-10">
+                        <div class="bg-light rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">No. Factura:</span>
+                                <span class="fw-bold text-primary" id="detNumFactura">...</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">Cliente:</span>
+                                <span class="fw-bold" id="detCliente">...</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">Fecha:</span>
+                                <span class="fw-bold" id="detFecha">...</span>
+                            </div>
+                            <div class="d-flex justify-content-between border-top pt-2 mt-2">
+                                <span class="text-muted small fw-bold">Total:</span>
+                                <span class="fw-bold" id="detTotal">...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                        <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cerrar</button>
+                        <!-- El botón btnConfirmarAnulacion será inyectado por JS si es necesario -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/components.js"></script>
+    <script>Components.render('facturas-lista.html');</script>
+    <!-- Incluir librerias para imprimir PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/printFactura.js"></script>
+    <script src="js/models/facturaModel.js"></script>
+    <script src="js/controllers/facturasListaController.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
