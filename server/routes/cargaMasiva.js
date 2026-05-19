@@ -30,8 +30,6 @@ function handleMulter(req, res, next) {
 }
 
 // ── Rutas de carga masiva ─────────────────────────────────────────────────────
-router.post('/clientes',  handleMulter, ctrl.uploadClientes);
-router.post('/productos', handleMulter, ctrl.uploadProductos);
-router.post('/facturas',  handleMulter, ctrl.uploadFacturas);
+router.post('/', handleMulter, ctrl.uploadFile);
 
 module.exports = router;

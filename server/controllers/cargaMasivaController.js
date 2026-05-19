@@ -374,4 +374,12 @@ async function uploadFacturas(req, res) {
     }
 }
 
-module.exports = { uploadClientes, uploadProductos, uploadFacturas };
+async function uploadFile(req, res) {
+    const entidad = req.body.entidad;
+    if (entidad === 'clientes') return uploadClientes(req, res);
+    if (entidad === 'productos') return uploadProductos(req, res);
+    if (entidad === 'facturas') return uploadFacturas(req, res);
+    return res.status(400).json({ error: 'Entidad desconocida o no especificada.' });
+}
+
+module.exports = { uploadFile };
