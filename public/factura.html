@@ -281,51 +281,45 @@
             <div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
-                        <div class="modal-header border-0 bg-white"
-                            style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i
-                                    data-lucide="user-plus" class="me-2 text-primary"></i>Cliente</h5>
+                        <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
+                                <i data-lucide="user-plus" class="me-2 text-primary"></i>Crear Nuevo Cliente
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body p-4 pt-0">
                             <hr class="text-muted mt-0 mb-4 opacity-10">
                             <form id="formNuevoCliente">
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Cédula / RUC Detectada</label>
+                                    <label class="form-label text-muted small fw-bold">Cédula / RUC</label>
                                     <input type="text" class="form-control fw-bold bg-light" id="modalRuc" readonly>
                                 </div>
-                                <div class="row mb-3 g-2">
-                                    <div class="col-6">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
                                         <label class="form-label text-muted small fw-bold">Nombres</label>
-                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre"
-                                            autocomplete="given-name"
-                                            oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');"
-                                            required>
+                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre" required>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-md-6">
                                         <label class="form-label text-muted small fw-bold">Apellidos</label>
-                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido"
-                                            autocomplete="family-name"
-                                            oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');"
-                                            required>
+                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-muted small fw-bold">Dirección</label>
                                     <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
                                 </div>
-                                <div class="mb-3">                                  
-                                    <label class="form-label text-muted small fw-bold">Teléfono</label>
-                                    <div class="input-group">
-                                        <select class="form-select shadow-none border-1" id="modalTelPais" style="max-width:130px;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-5">
+                                        <label class="form-label text-muted small fw-bold">País</label>
+                                        <select class="form-select shadow-none border-1" id="modalTelPais">
                                             <option value="+593">🇪🇨 +593</option>
                                             <option value="+57">🇨🇴 +57</option>
                                         </select>
-                                        <input type="tel" class="form-control shadow-none border-1" id="modalTel"
-                                            inputmode="numeric" placeholder="999 999 9999" maxlength="10"
-                                            oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10);">
                                     </div>
-                                </div>
+                                    <div class="col-md-7">
+                                        <label class="form-label text-muted small fw-bold">Teléfono</label>
+                                        <input type="tel" class="form-control shadow-none border-1" id="modalTel" placeholder="999 999 9999" maxlength="10">
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
@@ -333,12 +327,11 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white"
-                            style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
-                            <button type="button" class="btn btn-light fw-bold"
-                                data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-factu fw-bold px-4" id="btnGuardarCliente"><i
-                                    data-lucide="save" class="me-2" style="width: 16px;"></i> Guardar y Usar</button>
+                        <div class="modal-footer border-0 pb-4 px-4 pt-0 bg-white" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                            <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-factu fw-bold px-4" id="btnGuardarCliente">
+                                <i data-lucide="save" class="me-2" style="width: 16px;"></i> Guardar y Usar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -416,6 +409,9 @@
     <script src="js/main.js"></script>
     <script src="js/components.js"></script>
     <script>Components.render('factura.html');</script>
+    <script src="js/models/clienteModel.js"></script>
+    <script src="js/models/facturaModel.js"></script>
+    <script src="js/models/productoModel.js"></script>
     <script src="js/factura.ui.js"></script>
     <script>lucide.createIcons();</script>
 </body>

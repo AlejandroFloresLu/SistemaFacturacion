@@ -333,8 +333,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // 5. Buscar en la API
         try {
-            const encontrado = await ClienteModel.findByRuc(val);
-            if (encontrado) {
+            const res = await fetch(`/api/clientes/buscar?ruc=${encodeURIComponent(val)}`);
+            if (res.ok) {
+                const encontrado = await res.json();
                 _clienteIdBD = encontrado.id;
                 setCliente(`${encontrado.nombre} ${encontrado.apellido}`, encontrado.ruc);
             } else {
@@ -635,14 +636,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const metodo   = methodSelect.options[methodSelect.selectedIndex].text;
         const v        = parseFloat(amountInput.value);
 
-        // Validación 1: monto positivo
+        // Validación 2: monto positivo
         if (isNaN(v) || v <= 0) {
-            mostrarToast('⚠️ El monto a pagar debe ser mayor a 0.', 'danger');
+            mostrarToast('⚠️ La cantidad ingresada debe ser estrictamente mayor a 0.', 'danger');
             amountInput.focus();
             return;
         }
 
-        // Validación 2: método de pago duplicado
+        // Validación 1: método de pago duplicado
         if (payments.find(p => p.idMetodo === idMetodo)) {
             mostrarToast(`⚠️ Ya existe un pago con "${metodo.trim()}". Elimínalo primero si quieres modificarlo.`, 'danger');
             return;
@@ -652,7 +653,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const totalActual = invoiceLines.reduce((a, c) => a + c.total, 0) * (1 + IVA_RATE);
         const saldoActual = totalActual - getPagado();
         if (v > saldoActual + 0.001) {
-            mostrarToast(`⚠️ El monto ($${v.toFixed(2)}) supera el saldo restante ($${saldoActual.toFixed(2)}).`, 'danger');
+            mostrarToast(`⚠️ El valor ingresado ($${v.toFixed(2)}) NO puede ser mayor al saldo FALTANTE por pagar ($${saldoActual.toFixed(2)}).`, 'danger');
             amountInput.focus();
             return;
         }
