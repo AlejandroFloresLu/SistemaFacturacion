@@ -4,7 +4,7 @@
  */
 const ProductoModel = (function () {
     'use strict';
-    const BASE = '/api/productos';
+    const BASE = `${API_URL}/api/productos`;
     let _cache = null;
 
     async function getAll() {
