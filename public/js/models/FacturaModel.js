@@ -1,6 +1,7 @@
 /**
  * FacturaModel.js — Modelo de Facturas
  * Conecta con la API REST /api/facturas (PostgreSQL).
+ * Todas las peticiones incluyen el header Authorization: Bearer <token>.
  */
 const FacturaModel = (function () {
     'use strict';
@@ -9,14 +10,16 @@ const FacturaModel = (function () {
 
     async function getAll() {
         if (_cache) return _cache;
-        const r = await fetch(BASE);
+        const r = await fetch(BASE, { headers: authHeaders() });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         _cache = await r.json();
         return _cache;
     }
 
     async function getById(id) {
-        const r = await fetch(`${BASE}/${encodeURIComponent(id)}`);
+        const r = await fetch(`${BASE}/${encodeURIComponent(id)}`, {
+            headers: authHeaders(),
+        });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return await r.json();
     }
@@ -42,7 +45,7 @@ const FacturaModel = (function () {
     async function create(payload) {
         const r = await fetch(BASE, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body:    JSON.stringify(payload),
         });
         const body = await r.json();
@@ -53,7 +56,10 @@ const FacturaModel = (function () {
 
     /** Anular factura por id (código o numérico) */
     async function anular(id) {
-        const r = await fetch(`${BASE}/${encodeURIComponent(id)}/anular`, { method: 'PUT' });
+        const r = await fetch(`${BASE}/${encodeURIComponent(id)}/anular`, {
+            method:  'PUT',
+            headers: authHeaders(),
+        });
         const body = await r.json();
         if (!r.ok) throw new Error(body.error || 'Error al anular la factura');
         clearCache();
@@ -62,7 +68,7 @@ const FacturaModel = (function () {
 
     /** Obtener el siguiente código de factura disponible */
     async function siguienteCodigo() {
-        const r = await fetch(`${BASE}/ultimo-codigo`);
+        const r = await fetch(`${BASE}/ultimo-codigo`, { headers: authHeaders() });
         if (!r.ok) return 'FAC-000001';
         const data = await r.json();
         return data.codigo || 'FAC-000001';

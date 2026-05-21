@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const response = await fetch(`${API_URL}/api/carga`, {
                 method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('factu_token') || '') },
                 body: formData
             });
 

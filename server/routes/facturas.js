@@ -1,6 +1,10 @@
-const express = require('express');
-const router  = express.Router();
-const ctrl    = require('../controllers/facturasController');
+const express      = require('express');
+const router       = express.Router();
+const ctrl         = require('../controllers/facturasController');
+const verifyToken  = require('../middleware/verifyToken');
+
+// Todas las rutas de facturas requieren autenticación
+router.use(verifyToken);
 
 router.get('/ultimo-codigo', ctrl.ultimoCodigo);
 router.get('/',              ctrl.getAll);

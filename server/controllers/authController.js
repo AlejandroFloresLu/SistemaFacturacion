@@ -1,14 +1,16 @@
 /**
  * authController.js — Lógica de autenticación
  * Valida usuario/contraseña contra la tabla `usuarios` en PostgreSQL.
+ * Firma y devuelve un JWT en el login exitoso.
  */
 const pool    = require('../config/db');
 const bcrypt  = require('bcryptjs');
+const jwt     = require('jsonwebtoken');
 
 /**
  * POST /api/auth/login
  * Body: { username, password }
- * Responde con { ok, user } o error 401.
+ * Responde con { ok, token, user } o error 401/403.
  */
 async function login(req, res) {
     const { username, password } = req.body;
@@ -41,9 +43,17 @@ async function login(req, res) {
             return res.status(401).json({ ok: false, message: 'Usuario o contraseña incorrectos.' });
         }
 
-        // Respuesta exitosa (sin JWT por ahora, compatible con sessionStorage)
+        // Firmar JWT con datos mínimos del usuario (expira en 8 horas)
+        const payload = {
+            id:       user.id_usuario,
+            username: user.username,
+            rol:      user.nombre_rol,
+        };
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' });
+
         return res.json({
             ok: true,
+            token,
             user: {
                 id:       user.id_usuario,
                 username: user.username,

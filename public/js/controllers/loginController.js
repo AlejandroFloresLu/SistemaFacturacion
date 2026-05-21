@@ -38,8 +38,8 @@ async function validarLogin(event) {
         const data = await response.json();
 
         if (response.ok && data.ok) {
-            // Guardar datos de sesión
-            sessionStorage.setItem('factu_token',    'active');
+            // Guardar JWT real en sessionStorage (auth-guard lo sigue leyendo igual)
+            sessionStorage.setItem('factu_token',    data.token);
             sessionStorage.setItem('factu_user',     data.user.username);
             sessionStorage.setItem('factu_initials', data.user.username.substring(0, 2).toUpperCase());
             sessionStorage.setItem('factu_rol',      data.user.rol);

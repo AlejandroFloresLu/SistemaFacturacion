@@ -1,6 +1,10 @@
-const express = require('express');
-const router  = express.Router();
-const ctrl    = require('../controllers/clientesController');
+const express      = require('express');
+const router       = express.Router();
+const ctrl         = require('../controllers/clientesController');
+const verifyToken  = require('../middleware/verifyToken');
+
+// Todas las rutas de clientes requieren autenticación
+router.use(verifyToken);
 
 router.get   ('/',         ctrl.getAll);
 router.get   ('/buscar',   ctrl.buscarPorRuc);
