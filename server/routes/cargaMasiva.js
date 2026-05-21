@@ -1,7 +1,8 @@
-const express = require('express');
-const multer  = require('multer');
-const router  = express.Router();
-const ctrl    = require('../controllers/cargaMasivaController');
+const express      = require('express');
+const multer       = require('multer');
+const router       = express.Router();
+const ctrl         = require('../controllers/cargaMasivaController');
+const verifyToken  = require('../middleware/verifyToken');
 
 // Aceptar CSV únicamente (XLSX requeriría xlsx como dep; se recomienda convertir en frontend)
 const upload = multer({
@@ -29,7 +30,7 @@ function handleMulter(req, res, next) {
     });
 }
 
-// ── Rutas de carga masiva ─────────────────────────────────────────────────────
-router.post('/', handleMulter, ctrl.uploadFile);
+// ── Rutas de carga masiva (autenticación requerida) ───────────────────────────
+router.post('/', verifyToken, handleMulter, ctrl.uploadFile);
 
 module.exports = router;

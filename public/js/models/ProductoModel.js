@@ -1,6 +1,7 @@
 /**
  * ProductoModel.js — Modelo de Productos
  * Conecta con la API REST /api/productos (PostgreSQL).
+ * Todas las peticiones incluyen el header Authorization: Bearer <token>.
  */
 const ProductoModel = (function () {
     'use strict';
@@ -9,7 +10,7 @@ const ProductoModel = (function () {
 
     async function getAll() {
         if (_cache) return _cache;
-        const r = await fetch(BASE);
+        const r = await fetch(BASE, { headers: authHeaders() });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         _cache = await r.json();
         return _cache;
@@ -21,7 +22,9 @@ const ProductoModel = (function () {
     }
 
     async function findByTerm(term) {
-        const r = await fetch(`${BASE}/buscar?term=${encodeURIComponent(term)}`);
+        const r = await fetch(`${BASE}/buscar?term=${encodeURIComponent(term)}`, {
+            headers: authHeaders(),
+        });
         if (!r.ok) return [];
         const data = await r.json();
         // Devuelve el primer resultado (compatible con código existente)
@@ -29,7 +32,9 @@ const ProductoModel = (function () {
     }
 
     async function findAllByTerm(term) {
-        const r = await fetch(`${BASE}/buscar?term=${encodeURIComponent(term)}`);
+        const r = await fetch(`${BASE}/buscar?term=${encodeURIComponent(term)}`, {
+            headers: authHeaders(),
+        });
         if (!r.ok) return [];
         return await r.json();
     }
@@ -38,7 +43,7 @@ const ProductoModel = (function () {
         // data: { codigo, descripcion, precio }
         const r = await fetch(BASE, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body:    JSON.stringify(data),
         });
         const body = await r.json();
@@ -51,7 +56,7 @@ const ProductoModel = (function () {
         // id = codigo, data: { descripcion, precio }
         const r = await fetch(`${BASE}/${encodeURIComponent(id)}`, {
             method:  'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body:    JSON.stringify(data),
         });
         const body = await r.json();
@@ -61,7 +66,10 @@ const ProductoModel = (function () {
     }
 
     async function remove(id) {
-        const r = await fetch(`${BASE}/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        const r = await fetch(`${BASE}/${encodeURIComponent(id)}`, {
+            method:  'DELETE',
+            headers: authHeaders(),
+        });
         const body = await r.json();
         if (!r.ok) throw new Error(body.error || 'Error al eliminar producto');
         clearCache();

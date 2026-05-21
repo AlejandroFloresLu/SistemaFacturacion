@@ -1,6 +1,7 @@
 /**
  * ClienteModel.js — Modelo de Clientes
  * Conecta con la API REST /api/clientes (PostgreSQL).
+ * Todas las peticiones incluyen el header Authorization: Bearer <token>.
  */
 const ClienteModel = (function () {
     'use strict';
@@ -9,14 +10,16 @@ const ClienteModel = (function () {
 
     async function getAll() {
         if (_cache) return _cache;
-        const r = await fetch(BASE);
+        const r = await fetch(BASE, { headers: authHeaders() });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         _cache = await r.json();
         return _cache;
     }
 
     async function findByRuc(ruc) {
-        const r = await fetch(`${BASE}/buscar?ruc=${encodeURIComponent(ruc)}`);
+        const r = await fetch(`${BASE}/buscar?ruc=${encodeURIComponent(ruc)}`, {
+            headers: authHeaders(),
+        });
         if (r.status === 404) return null;
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return await r.json();
@@ -26,7 +29,7 @@ const ClienteModel = (function () {
         // data: { ruc, nombre, apellido, tel, email }
         const r = await fetch(BASE, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body:    JSON.stringify(data),
         });
         const body = await r.json();
@@ -39,7 +42,7 @@ const ClienteModel = (function () {
         // data: { nombre, apellido, tel, email }
         const r = await fetch(`${BASE}/${id}`, {
             method:  'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body:    JSON.stringify(data),
         });
         const body = await r.json();
@@ -49,7 +52,10 @@ const ClienteModel = (function () {
     }
 
     async function remove(id) {
-        const r = await fetch(`${BASE}/${id}`, { method: 'DELETE' });
+        const r = await fetch(`${BASE}/${id}`, {
+            method:  'DELETE',
+            headers: authHeaders(),
+        });
         const body = await r.json();
         if (!r.ok) throw new Error(body.error || 'Error al eliminar cliente');
         clearCache();
