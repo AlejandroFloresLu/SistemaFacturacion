@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             errorZone.classList.add('d-none');
             successZone.classList.add('d-none');
 
-            const response = await fetch('/api/carga', {
+            const response = await fetch(`${API_URL}/api/carga`, {
                 method: 'POST',
                 body: formData
             });

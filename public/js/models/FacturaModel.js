@@ -4,7 +4,7 @@
  */
 const FacturaModel = (function () {
     'use strict';
-    const BASE = '/api/facturas';
+    const BASE = `${API_URL}/api/facturas`;
     let _cache = null;
 
     async function getAll() {

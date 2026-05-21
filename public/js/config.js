@@ -1,2 +1,2 @@
-export const API_URL = 'https://sistemafacturacion.onrender.com/api';
-window.API_URL = API_URL;
+/** URL base del backend Render (sin /api al final) */
+var API_URL = 'https://sistemafacturacion.onrender.com';

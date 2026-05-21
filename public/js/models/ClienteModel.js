@@ -4,7 +4,7 @@
  */
 const ClienteModel = (function () {
     'use strict';
-    const BASE = '/api/clientes';
+    const BASE = `${API_URL}/api/clientes`;
     let _cache = null;
 
     async function getAll() {

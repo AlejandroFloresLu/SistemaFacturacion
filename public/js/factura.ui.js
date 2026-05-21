@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // 5. Buscar en la API
         try {
-            const res = await fetch(`/api/clientes/buscar?ruc=${encodeURIComponent(val)}`);
+            const res = await fetch(`${API_URL}/api/clientes/buscar?ruc=${encodeURIComponent(val)}`);
             if (res.ok) {
                 const encontrado = await res.json();
                 _clienteIdBD = encontrado.id;
@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Carga dinámica de métodos de pago desde la BD
     async function cargarMetodosPago() {
         try {
-            const res  = await fetch('/api/metodos-pago');
+            const res  = await fetch(`${API_URL}/api/metodos-pago`);
             const data = await res.json();
             methodSelect.innerHTML = '';
             const EMOJIS = { 'Efectivo': '💵', 'Tarjeta de Crédito': '💳', 'Tarjeta de Débito': '💳',
