@@ -493,6 +493,17 @@ document.addEventListener("DOMContentLoaded", function() {
         btnAddPayment.disabled = false;
         renderLines();
         saveActive();
+
+        // Feedback visual verde en botón Añadir por 1.5 s
+        const btnAdd = document.getElementById('btnBuscarProductoIcon');
+        if (btnAdd) {
+            btnAdd.classList.remove('btn-secondary');
+            btnAdd.classList.add('btn-success');
+            setTimeout(() => {
+                btnAdd.classList.remove('btn-success');
+                btnAdd.classList.add('btn-secondary');
+            }, 1500);
+        }
     };
 
     window.removeProduct = function(id) {
@@ -617,13 +628,17 @@ document.addEventListener("DOMContentLoaded", function() {
             vinculacionOk = false;
         }
 
-        if (saldo <= 0 && invoiceLines.length > 0 && vinculacionOk) {
+        // BUG FIX: también requiere cliente válido para habilitar Aprobar
+        const clienteOk = clienteActual !== null;
+
+        if (saldo <= 0 && invoiceLines.length > 0 && vinculacionOk && clienteOk) {
             lblSaldo.textContent = '0.00';
             containerSaldo.style.color = '#15803d';
             btnPagar.disabled = false;
         } else {
             lblSaldo.textContent = saldo > 0 ? saldo.toFixed(2) : '0.00';
-            containerSaldo.style.color = '#dc3545';
+            // Ámbar para saldo pendiente (no rojo — rojo se reserva para errores críticos)
+            containerSaldo.style.color = saldo > 0 ? '#d97706' : '#6b7280';
             btnPagar.disabled = true;
         }
     }
@@ -774,12 +789,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     <div class="modal-dialog modal-dialog-centered modal-sm">
                         <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
                             <div class="modal-body p-4 text-center">
-                                <div style="font-size:2.5rem;">\u{1F5D1}\uFE0F</div>
-                                <h5 class="fw-bold text-dark mb-1 mt-2" id="modalCancelarLbl">\u00BFDescartar datos?</h5>
+                                <div style="font-size:2.5rem;">🗑️</div>
+                                <h5 class="fw-bold text-dark mb-1 mt-2" id="modalCancelarLbl">¿Descartar datos?</h5>
                                 <p class="text-muted small mb-3">Se limpiarán los datos del formulario actual.</p>
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal" aria-label="Mantener factura">Volver</button>
-                                    <button class="btn btn-danger fw-bold flex-grow-1" id="btnConfirmarCancelar" aria-label="Confirmar descarte">Sí, limpiar</button>
+                                    <button class="btn btn-primary fw-bold flex-grow-1" id="btnConfirmarCancelar" aria-label="Confirmar descarte">Sí, limpiar</button>
                                 </div>
                             </div>
                         </div>
@@ -789,11 +804,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('btnConfirmarCancelar').addEventListener('click', () => {
                     bootstrap.Modal.getInstance(document.getElementById('modalCancelarFactura')).hide();
                     clearActive();
-                    // En modo NC: limpiar datos pero quedar en NC (keepTipo=true)
                     const esNC = tipoActual === 'nc';
                     modoNCActivo = false;
                     limpiarFormulario(esNC);
-                    mostrarToast(esNC ? '\u{1F5D1}\uFE0F Nota de crédito cancelada' : '\u{1F5D1}\uFE0F Factura descartada', 'danger');
+                    mostrarToast(esNC ? '🗑️ Nota de crédito cancelada' : '🗑️ Factura descartada', 'info');
                 });
             }
             new bootstrap.Modal(document.getElementById('modalCancelarFactura')).show();
@@ -1002,14 +1016,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
                             <div class="modal-header border-0 bg-light" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
                                 <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalAnularNCLbl">
-                                    <i data-lucide="ban" class="me-2 text-danger" aria-hidden="true"></i> Confirmar Anulación
+                                    <i data-lucide="file-minus" class="me-2 text-primary" aria-hidden="true"></i> Confirmar Nota de Crédito
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body p-4 text-center">
-                                <i data-lucide="x-circle" style="width:64px;height:64px;" class="text-danger opacity-75 mb-3" aria-hidden="true"></i>
-                                <h5 class="fw-bold text-dark mb-2">¿Confirmas la ANULACIÓN de la Nota de Crédito?</h5>
-                                <p class="text-muted mb-4">Esta acción registrará la anulación en el sistema.</p>
+                                <i data-lucide="file-minus" style="width:64px;height:64px;" class="text-primary opacity-75 mb-3" aria-hidden="true"></i>
+                                <h5 class="fw-bold text-dark mb-2">¿Confirmas generar la Nota de Crédito?</h5>
+                                <p class="text-muted mb-4">Se anulará la factura original y se registrará la nota de crédito en el sistema.</p>
 
                                 <div class="bg-light rounded p-3 text-start mb-0">
                                     <div class="d-flex justify-content-between mb-2"><span class="text-muted small">Cliente:</span> <span class="fw-bold" id="modalAnularCliente">-</span></div>
@@ -1020,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <div class="modal-footer border-0 pt-0 pb-3 px-4">
                                 <div class="d-flex gap-2 w-100">
                                     <button class="btn btn-light fw-bold flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                                    <button class="btn btn-danger fw-bold flex-fill" id="btnConfirmarAnularNC"><i data-lucide="ban" class="me-2"></i>Anular NC</button>
+                                    <button class="btn btn-primary fw-bold flex-fill" id="btnConfirmarAnularNC"><i data-lucide="file-minus" class="me-2"></i>Generar Nota de Crédito</button>
                                 </div>
                             </div>
                         </div>
@@ -1029,18 +1043,33 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.body.appendChild(m.firstElementChild);
                 lucide.createIcons();
 
-                document.getElementById('btnConfirmarAnularNC').addEventListener('click', () => {
-                    bootstrap.Modal.getInstance(document.getElementById('modalAnularNC')).hide();
+                document.getElementById('btnConfirmarAnularNC').addEventListener('click', async () => {
+                    const btnNC = document.getElementById('btnConfirmarAnularNC');
+                    btnNC.disabled = true;
+                    btnNC.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
 
-                    modoNCActivo = false;
-                    clearActive();
-                    limpiarFormulario();
-                    // Volver al modo Factura
-                    document.getElementById('radioFactura').checked = true;
-                    tipoActual = 'factura';
-                    contenedorVinculacionNC.classList.add('d-none');
-                    actualizarBotonesSegunTipo('factura');
-                    mostrarToast('🚫 Nota de Crédito anulada correctamente.', 'success');
+                    // Obtener el código de la factura original a anular
+                    const codigoOriginal = facturaVinculada ? facturaVinculada.value.trim().toUpperCase() : null;
+                    try {
+                        if (codigoOriginal) {
+                            await FacturaModel.anular(codigoOriginal);
+                        }
+                        bootstrap.Modal.getInstance(document.getElementById('modalAnularNC')).hide();
+                        modoNCActivo = false;
+                        clearActive();
+                        limpiarFormulario();
+                        // Volver al modo Factura
+                        document.getElementById('radioFactura').checked = true;
+                        tipoActual = 'factura';
+                        contenedorVinculacionNC.classList.add('d-none');
+                        actualizarBotonesSegunTipo('factura');
+                        mostrarToast(`✅ Nota de Crédito generada. Factura ${codigoOriginal} anulada en el sistema.`, 'success');
+                    } catch (err) {
+                        mostrarToast(`⚠️ ${err.message || 'Error al procesar la nota de crédito.'}`, 'danger');
+                        btnNC.disabled = false;
+                        btnNC.innerHTML = '<i data-lucide="file-minus" class="me-2"></i>Generar Nota de Crédito';
+                        lucide.createIcons();
+                    }
                 });
             }
 

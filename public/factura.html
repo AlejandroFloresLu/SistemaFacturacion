@@ -221,7 +221,7 @@
                 <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
                     <div class="row g-0">
                         <div class="col-md-6 border-end p-4 factu-pagos-col">
-                            <h6 class="text-uppercase text-muted fw-bold mb-3 small">Pago</h6>
+                            <h6 class="text-uppercase text-muted fw-bold mb-3 small">Métodos de Pago <span class="text-primary fw-normal text-lowercase">(puedes añadir varios)</span></h6>
                             <div class="d-flex gap-2 mb-3">
                                 <select class="form-select w-50 shadow-none border-1 factu-select-pago" id="paymentMethod">
                                     <option value="efectivo">Efectivo 💵</option>
@@ -248,10 +248,10 @@
                             <div class="d-flex justify-content-between mb-3 h4 fw-bold text-dark"><span>Total:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblTotal">0.00</span></span></div>
                             <hr class="my-2 text-muted">
                             <div class="d-flex justify-content-between mb-2 text-primary fw-bold" style="font-size:1.1rem;"><span>Pagado:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblPagado">0.00</span></span></div>
-                            <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo" style="font-size:1.1rem;color:#dc3545;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblSaldo">0.00</span></span></div>
+                            <div class="d-flex justify-content-between mb-3 fw-bold" id="containerSaldo" style="font-size:1.1rem;color:#d97706;"><span>Saldo Restante:</span> <span class="d-flex"><span class="me-2">$</span><span style="width:80px;text-align:right;" id="lblSaldo">0.00</span></span></div>
                             <div class="d-flex gap-2 mt-auto flex-wrap">
                                 <!-- Cancelar: descarta sin guardar -->
-                                <button class="btn btn-outline-danger fw-bold py-2 flex-fill" id="btnCancelarFactura"
+                                <button class="btn btn-outline-secondary fw-bold py-2 flex-fill" id="btnCancelarFactura"
                                     aria-label="Cancelar y descartar factura actual" title="Descartar factura">
                                     <i data-lucide="x-circle" class="me-1" style="width:18px;" aria-hidden="true"></i>
                                     <span class="d-none d-sm-inline">Cancelar</span>
@@ -263,11 +263,11 @@
                                     <i data-lucide="check-circle" class="me-1" aria-hidden="true"></i>
                                     <span>Aprobar</span>
                                 </button>
-                                <!-- Anular NC: solo visible en modo Nota de Crédito -->
-                                <button class="btn btn-danger fw-bold py-2 flex-grow-1 fs-6 d-none" id="btnAnularNC"
-                                    aria-label="Anular nota de crédito">
-                                    <i data-lucide="ban" class="me-1" aria-hidden="true"></i>
-                                    <span>Anular NC</span>
+                                <!-- Generar NC: solo visible en modo Nota de Crédito -->
+                                <button class="btn btn-primary fw-bold py-2 flex-grow-1 fs-6 d-none" id="btnAnularNC"
+                                    aria-label="Generar nota de crédito">
+                                    <i data-lucide="file-minus" class="me-1" aria-hidden="true"></i>
+                                    <span>Generar Nota de Crédito</span>
                                 </button>
                             </div>
                         </div>
