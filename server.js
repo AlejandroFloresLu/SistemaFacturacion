@@ -1,4 +1,6 @@
+'use strict';
 require('dotenv').config();
+
 const express = require('express');
 const cors    = require('cors');
 const path    = require('path');
@@ -6,37 +8,37 @@ const path    = require('path');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// ── Middleware ──────────────────────────────────────────────────────────────
+// ── Middleware global ────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Frontend estático ───────────────────────────────────────────────────────
+// ── Archivos estáticos del frontend ─────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── Rutas API ───────────────────────────────────────────────────────────────
-app.use('/api/auth',          require('./server/routes/auth'));
-app.use('/api/clientes',      require('./server/routes/clientes'));
-app.use('/api/productos',     require('./server/routes/productos'));
-app.use('/api/facturas',      require('./server/routes/facturas'));
-app.use('/api/carga',         require('./server/routes/cargaMasiva'));
-app.use('/api/metodos-pago',  require('./server/routes/metodosPago'));
+// ── API — todas las rutas se registran en server/routes/index.js ─────────────
+app.use('/api', require('./server/routes'));
 
-// ── Health check ────────────────────────────────────────────────────────────
+// ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
-    res.json({ status: 'OK', message: 'FACTU API funcionando correctamente' });
+    res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// ── Fallback SPA ────────────────────────────────────────────────────────────
+// ── Fallback SPA (rutas no-API devuelven index.html) ────────────────────────
 app.get('/{*path}', (req, res) => {
     if (req.path.startsWith('/api/')) {
-        return res.status(404).json({ error: 'Ruta de API no encontrada' });
+        return res.status(404).json({ error: 'Ruta de API no encontrada.' });
     }
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ── Iniciar servidor ────────────────────────────────────────────────────────
+// ── Manejador global de errores no capturados ────────────────────────────────
+app.use((err, _req, res, _next) => {
+    console.error('[server] Error no capturado:', err);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+});
+
+// ── Iniciar servidor ─────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-    console.log(`🚀 FACTU Server corriendo en http://localhost:${PORT}`);
-    console.log(`📦 API disponible en http://localhost:${PORT}/api/health`);
+    console.log(`🚀 FACTU corriendo en http://localhost:${PORT}`);
 });
