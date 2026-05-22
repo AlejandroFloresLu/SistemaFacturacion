@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const esAprobado = f.estado === 'aprobado';
             const badge  = esAprobado
                 ? `<span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">Aprobado</span>`
-                : `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i data-lucide="x-circle" style="width:12px;margin-right:3px;display:inline-block;"></i>Anulado</span>`;
+                : `<span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">Anulado</span>`;
             const totalHTML = esAprobado
                 ? `<span class="fw-bold text-dark">$ ${f.total.toFixed(2)}</span>`
                 : `<span class="fw-bold text-muted text-decoration-line-through">$ ${f.total.toFixed(2)}</span>`;
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                    </div>`
                 : `<button class="btn btn-sm btn-outline-secondary" title="Ver Detalle Anulado" onclick="verAnulado('${f.id}')"><i data-lucide="eye" style="width:15px;"></i></button>`;
             return `<tr>
-                <td class="ps-4 fw-bold ${esAprobado ? 'text-primary' : 'text-danger'}">${f.id}</td>
+                <td class="ps-4 fw-bold ${esAprobado ? 'text-primary' : 'text-muted'}">${f.id}</td>
                 <td class="d-none d-md-table-cell text-muted small">${f.fechaDisplay}</td>
                 <td class="d-none d-sm-table-cell fw-bold">${f.cliente}</td>
                 <td>${badge}</td>
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!btnAnular) {
             btnAnular = document.createElement('button');
             btnAnular.id = 'btnConfirmarAnulacion';
-            btnAnular.className = 'btn btn-danger fw-bold';
+            btnAnular.className = 'btn btn-primary fw-bold';
             btnAnular.textContent = 'Sí, anular';
             btnAnular.onclick = confirmarAnulacion;
             document.querySelector('#modalDetalleAnulado .modal-footer')?.appendChild(btnAnular);
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             await FacturaModel.anular(id);
             await recargarFacturas();
-            mostrarToast(`🚫 Factura ${id} anulada`, 'danger');
+            mostrarToast(`✓ Factura ${id} anulada`, 'info');
         } catch (err) {
             mostrarToast(`⚠️ ${err.message}`, 'danger');
         }
