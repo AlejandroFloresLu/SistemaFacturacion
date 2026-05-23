@@ -736,6 +736,8 @@ document.addEventListener("DOMContentLoaded", function() {
         renderPayments();
         calculateTotals();
         saveActive();
+        // BUG FIX: Actualizar la reactividad del botón al eliminar un pago
+        actualizarColorMonto();
     };
 
     function renderPayments() {
@@ -755,8 +757,8 @@ document.addEventListener("DOMContentLoaded", function() {
             div.innerHTML = `
                 <div class="card-body p-2 px-3 d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px;height:28px;">
-                            <i data-lucide="check" class="text-primary" style="width:14px;height:14px;" aria-hidden="true"></i>
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px;height:28px;background-color:rgba(11, 65, 130, 0.1);">
+                            <i data-lucide="check" style="color:#0b4182;width:14px;height:14px;" aria-hidden="true"></i>
                         </div>
                         <div class="fw-bold text-dark" style="font-size:0.85rem;">${p.method}</div>
                     </div>
