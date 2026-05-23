@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!desc) { mostrarToast('La descripción es obligatoria','danger'); return; }
         if (isNaN(price)||price<=0) { mostrarToast('El precio debe ser mayor a 0','danger'); return; }
 
-        // Encontrar el último número para esta categoría
+        // Encontrar el último número visible para esta categoría
         const productosCat = DB_PRODUCTS.filter(p => p.id.startsWith(cat));
         let maxNum = 0;
         productosCat.forEach(p => {
@@ -147,11 +147,36 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
         
-        const nuevoNum = maxNum + 1;
-        const codigo = `${cat}-${String(nuevoNum).padStart(3, '0')}`;
+        let nuevoNum = maxNum + 1;
+        let codigo = `${cat}-${String(nuevoNum).padStart(3, '0')}`;
+        let success = false;
+
+        btnGuardar.disabled = true;
+        btnGuardar.innerHTML = 'Guardando...';
 
         try {
-            await ProductoModel.create({ codigo, descripcion: desc, precio: price });
+            // Reintento automático por si el código choca con un producto inactivo (soft-delete)
+            for (let i = 0; i < 15; i++) {
+                try {
+                    await ProductoModel.create({ codigo, descripcion: desc, precio: price });
+                    success = true;
+                    break; // Salió bien, rompemos el ciclo
+                } catch (err) {
+                    if (err.message.includes('Ya existe') || err.message.includes('código')) {
+                        // El código ya existe en la BD (probablemente inactivo). Probamos el siguiente.
+                        nuevoNum++;
+                        codigo = `${cat}-${String(nuevoNum).padStart(3, '0')}`;
+                    } else {
+                        // Otro error (conexión, etc), lo lanzamos para que lo atrape el catch externo
+                        throw err; 
+                    }
+                }
+            }
+
+            if (!success) {
+                throw new Error('No se pudo generar un código único automáticamente. Intenta de nuevo.');
+            }
+
             bootstrap.Modal.getInstance(document.getElementById('modalNuevoProducto')).hide();
             ['nuevoProdDesc','nuevoProdPrecio'].forEach(id=>{ document.getElementById(id).value=''; });
             document.getElementById('filtroCategoria').value = cat;
@@ -159,6 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
             mostrarToast('✅ Producto añadido con éxito','success');
         } catch (err) {
             mostrarToast(`⚠️ ${err.message}`, 'danger');
+        } finally {
+            btnGuardar.disabled = false;
+            btnGuardar.innerHTML = '<i data-lucide="save" class="me-2" style="width: 16px;"></i> Guardar';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
     });
 
