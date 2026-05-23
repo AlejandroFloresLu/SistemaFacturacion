@@ -107,30 +107,21 @@ const Components = (function () {
                         <div style="font-size:.82rem;" class="mt-1">Oscuro</div>
                     </div>
                 </div>
-                <p class="a11y-label">Tamaño de texto</p>
-                <div class="a11y-grid-3 mb-4">
-                    <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')" role="button" tabindex="0">
-                        <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
-                        <div style="font-size:.72rem;" class="mt-1">Normal</div>
-                    </div>
-                    <div class="a11y-card" id="a11yFont_large" onclick="A11y.setFont('large')" role="button" tabindex="0">
-                        <span style="font-size:1.4rem;font-weight:700;line-height:1;">A</span>
-                        <div style="font-size:.72rem;" class="mt-1">Grande</div>
-                    </div>
-                    <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')" role="button" tabindex="0">
-                        <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
-                        <div style="font-size:.72rem;" class="mt-1">Máximo</div>
-                    </div>
-                </div>
-                <p class="a11y-label">Contraste</p>
-                <div class="a11y-grid-2 mb-4">
-                    <div class="a11y-card" id="a11yContrast_normal" onclick="A11y.setContrast('normal')" role="button" tabindex="0" aria-label="Contraste normal">
-                        <i data-lucide="circle-half-stroke" style="width:20px;height:20px;" aria-hidden="true"></i>
-                        <div style="font-size:.8rem;" class="mt-1">Normal</div>
-                    </div>
-                    <div class="a11y-card" id="a11yContrast_high-contrast" onclick="A11y.setContrast('high-contrast')" role="button" tabindex="0" aria-label="Alto contraste">
-                        <i data-lucide="contrast" style="width:20px;height:20px;" aria-hidden="true"></i>
-                        <div style="font-size:.8rem;" class="mt-1">Alto</div>
+                <div class="d-none d-md-block">
+                    <p class="a11y-label">Tamaño de texto</p>
+                    <div class="a11y-grid-3 mb-4">
+                        <div class="a11y-card" id="a11yFont_normal" onclick="A11y.setFont('normal')" role="button" tabindex="0">
+                            <span style="font-size:1rem;font-weight:700;line-height:1;">A</span>
+                            <div style="font-size:.72rem;" class="mt-1">Normal</div>
+                        </div>
+                        <div class="a11y-card" id="a11yFont_large" onclick="A11y.setFont('large')" role="button" tabindex="0">
+                            <span style="font-size:1.4rem;font-weight:700;line-height:1;">A</span>
+                            <div style="font-size:.72rem;" class="mt-1">Grande</div>
+                        </div>
+                        <div class="a11y-card" id="a11yFont_xlarge" onclick="A11y.setFont('xlarge')" role="button" tabindex="0">
+                            <span style="font-size:1.8rem;font-weight:700;line-height:1;">A</span>
+                            <div style="font-size:.72rem;" class="mt-1">Máximo</div>
+                        </div>
                     </div>
                 </div>
                 <hr class="my-3">
