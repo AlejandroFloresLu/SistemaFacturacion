@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let invoiceLines  = [];
     let payments      = [];
     let clienteActual = null;   // { nombre, ruc }
+    let _clienteIdBD  = null;   // ID de la BD (para FacturaModel.create)
     let pausedList    = [];
     let modoNCActivo  = false;  // true cuando se cargó una NC desde FAC-XXXXXX
 
@@ -196,6 +197,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function saveActive() {
         const estado = {
             cliente:    clienteActual,
+            clienteId:  _clienteIdBD,
             lines:      invoiceLines,
             payments:   payments,
             tipo:       tipoActual,
@@ -234,6 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
         payments      = saved.payments   || [];
         tipoActual    = saved.tipo       || 'factura';
         clienteActual = saved.cliente    || null;
+        _clienteIdBD  = saved.clienteId  || null;
 
         // Mantener modo NC si el estado guardado indica NC
         modoNCActivo = tipoActual === 'nc';
@@ -252,10 +255,12 @@ document.addEventListener("DOMContentLoaded", function() {
         if (invoiceLines.length > 0) {
             amountInput.disabled    = modoNCActivo;
             btnAddPayment.disabled  = modoNCActivo || false;
+            calculateTotals();
         }
 
         renderLines();
         renderPayments();
+        validatePayments();
 
         mostrarToast('📋 Factura restaurada desde donde la dejaste', 'info');
     }
@@ -298,8 +303,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // =====================================================================
     // BÚSQL. Y CREACIÓN DE CLIENTES
     // =====================================================================
-    // clienteId de BD para persistir la factura
-    let _clienteIdBD = null;
 
     async function procesarBusquedaCliente() {
         const val = clienteSearch.value.trim();
@@ -1014,6 +1017,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     referencia: p.referencia || null,
                 }))
             };
+
+            console.log('Payload enviando a FacturaModel.create():', JSON.stringify(payload, null, 2));
 
             await FacturaModel.create(payload);
 
