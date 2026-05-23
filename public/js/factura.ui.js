@@ -1040,7 +1040,7 @@ document.addEventListener("DOMContentLoaded", function() {
             await FacturaModel.create(payload);
 
             bootstrap.Modal.getInstance(document.getElementById('modalAprobarFactura')).hide();
-            mostrarToast(`✅ Factura ${codigoFactura} emitida y guardada en la base de datos.`, 'success');
+            mostrarToast(`✅ Factura guardada con éxito.`, 'success');
 
             // ── Abrir vista previa con datos reales de la BD ──────────────────
             // Se espera un tick para que el modal de aprobación termine de ocultarse
@@ -1050,13 +1050,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 try {
                     facturaParaMostrar = await FacturaModel.getById(codigoFactura);
                 } catch {
-                    mostrarToast('⚠️ Factura guardada, pero no se pudo cargar la vista previa.', 'warning');
+                    mostrarToast('⚠️ Factura guardada con éxito, pero la vista previa no está disponible.', 'warning');
                     // Aunque falle la preview, hacemos limpieza igual
                     clearActive();
                     limpiarFormulario();
                     return;
                 }
 
+                console.log('Intentando abrir modal de impresión...', facturaParaMostrar);
                 _abrirImpresionFactura(facturaParaMostrar);
 
                 // ── Limpiar SOLO cuando el usuario cierre la vista previa ──────
@@ -1074,7 +1075,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }, 350);
         } catch (err) {
-            mostrarToast(`⚠️ ${err.message || 'Error al guardar la factura.'}`, 'danger');
+            mostrarToast(`⚠️ Ocurrió un problema al guardar, intenta de nuevo.`, 'danger');
         } finally {
             btnConfirmar.disabled = false;
             btnConfirmar.innerHTML = '<i data-lucide="check" class="me-2" style="width:16px;"></i> Aprobar y Ver Factura';
