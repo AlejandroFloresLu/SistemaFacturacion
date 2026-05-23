@@ -6,29 +6,59 @@ document.addEventListener('DOMContentLoaded', function () {
     let DB_PRODUCTS = [];
     const catCounters = {};
     let _elimProdId = null;
+    let prodPaginaActual = 1;
+    const PROD_POR_PAGINA = 5;
+    let prodFiltrados = [];
 
     window.filtrarProductos = function (cat) {
         cat = cat || document.getElementById('filtroCategoria')?.value || 'ALL';
-        const lista = cat === 'ALL' ? DB_PRODUCTS : DB_PRODUCTS.filter(p => p.id.startsWith(cat));
+        prodFiltrados = cat === 'ALL' ? DB_PRODUCTS : DB_PRODUCTS.filter(p => p.id.startsWith(cat));
+        prodPaginaActual = 1;
+        renderProductos();
+    };
+
+    window.prodPagina = function (dir) {
+        const tot = Math.ceil(prodFiltrados.length / PROD_POR_PAGINA);
+        prodPaginaActual = Math.max(1, Math.min(prodPaginaActual + dir, tot));
+        renderProductos();
+    };
+
+    function renderProductos() {
         const tbody = document.getElementById('productosBody');
-        if (lista.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-5">Sin productos en esta categoría.</td></tr>`;
+        const inicio = (prodPaginaActual - 1) * PROD_POR_PAGINA;
+        const pag = prodFiltrados.slice(inicio, inicio + PROD_POR_PAGINA);
+        const tot = Math.ceil(prodFiltrados.length / PROD_POR_PAGINA) || 1;
+
+        const elContador = document.getElementById('productosContador');
+        if (elContador) elContador.textContent = `Mostrando ${prodFiltrados.length} de ${DB_PRODUCTS.length} productos`;
+        
+        const elNum = document.getElementById('prodPaginaNum');
+        if (elNum) elNum.textContent = `${prodPaginaActual} / ${tot}`;
+        
+        const btnPrev = document.getElementById('prodPrev');
+        if (btnPrev) btnPrev.disabled = prodPaginaActual <= 1;
+        
+        const btnNext = document.getElementById('prodNext');
+        if (btnNext) btnNext.disabled = prodPaginaActual >= tot;
+
+        if (pag.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-5">Sin productos en esta categoría.</td></tr>`;
             return;
         }
-        tbody.innerHTML = lista.map(p => {
+        tbody.innerHTML = pag.map(p => {
             const prefix = p.id.split('-')[0];
             const badgeColor = { VUE:'#0b4182',ALO:'#15803d',TRA:'#92400e',PAQ:'#6d28d9',CRU:'#0e7490',SEG:'#b45309',TOU:'#065f46',ADM:'#991b1b' }[prefix]||'#374151';
             return `<tr>
-                <td class="ps-4 py-3"><span class="badge me-2" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span><span class="fw-semibold">${p.desc}</span></td>
-                <td class="text-end pe-4 py-3" style="min-width:130px;">
-                    <div class="d-flex flex-column align-items-end gap-1">
-                        <span class="fw-bold text-muted">$${p.price.toFixed(2)}</span>
-                        <div class="d-flex gap-1">
-                            <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2" onclick="editarProducto('${p.id}')"><i data-lucide="edit-2" style="width:14px;height:14px;"></i></button>
-                            <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="pedirEliminarProducto('${p.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
-                        </div>
+                <td class="ps-4 py-3"><span class="badge" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span></td>
+                <td class="py-3 fw-semibold">${p.desc}</td>
+                <td class="text-end py-3 fw-bold text-muted">$${p.price.toFixed(2)}</td>
+                <td class="text-end pe-4 py-3" style="min-width:100px;">
+                    <div class="d-flex justify-content-end gap-1">
+                        <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2" onclick="editarProducto('${p.id}')"><i data-lucide="edit-2" style="width:14px;height:14px;"></i></button>
+                        <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="pedirEliminarProducto('${p.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                     </div>
-                </td></tr>`;
+                </td>
+            </tr>`;
         }).join('');
         lucide.createIcons();
     };
