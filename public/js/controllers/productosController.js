@@ -10,9 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const PROD_POR_PAGINA = 5;
     let prodFiltrados = [];
 
-    window.filtrarProductos = function (cat) {
-        cat = cat || document.getElementById('filtroCategoria')?.value || 'ALL';
-        prodFiltrados = cat === 'ALL' ? DB_PRODUCTS : DB_PRODUCTS.filter(p => p.id.startsWith(cat));
+    window.filtrarProductos = function () {
+        const cat = document.getElementById('filtroCategoria')?.value || 'ALL';
+        const search = (document.getElementById('productoSearch')?.value || '').toLowerCase().trim();
+        
+        prodFiltrados = DB_PRODUCTS.filter(p => {
+            const matchCat = cat === 'ALL' || p.id.startsWith(cat);
+            const matchSearch = p.desc.toLowerCase().includes(search) || p.id.toLowerCase().includes(search);
+            return matchCat && matchSearch;
+        });
+        
         prodPaginaActual = 1;
         renderProductos();
     };
@@ -149,7 +156,28 @@ document.addEventListener('DOMContentLoaded', function () {
     async function recargarProductos() {
         ProductoModel.clearCache();
         DB_PRODUCTS = await ProductoModel.getAll();
-        window.filtrarProductos(document.getElementById('filtroCategoria')?.value || 'ALL');
+        poblarCategorias();
+        window.filtrarProductos();
+    }
+
+    function poblarCategorias() {
+        const select = document.getElementById('filtroCategoria');
+        if (!select) return;
+        
+        const valorActual = select.value;
+        const categoriasUnicas = [...new Set(DB_PRODUCTS.map(p => p.id.split('-')[0]))].filter(Boolean).sort();
+        
+        select.innerHTML = '<option value="ALL">Todas las Categorías</option>';
+        categoriasUnicas.forEach(cat => {
+            const desc = { VUE:'Boletos Aéreos', ALO:'Alojamiento', TRA:'Transporte', PAQ:'Paquetes', CRU:'Cruceros', SEG:'Seguros', TOU:'Tours', ADM:'Administrativos' }[cat] || cat;
+            select.innerHTML += `<option value="${cat}">${desc} (${cat})</option>`;
+        });
+        
+        if (categoriasUnicas.includes(valorActual)) {
+            select.value = valorActual;
+        } else {
+            select.value = 'ALL';
+        }
     }
 
     function mostrarToast(msg, tipo='success') {
@@ -163,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
     lucide.createIcons();
     ProductoModel.getAll().then(data => {
         DB_PRODUCTS = data;
-        window.filtrarProductos('ALL');
+        poblarCategorias();
+        window.filtrarProductos();
     }).catch(()=>mostrarToast('⚠️ No se pudo cargar los productos.','danger'));
 });
