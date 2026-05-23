@@ -178,10 +178,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Encontrar prefijos únicos en la BD
         const categoriasBD = [...new Set(DB_PRODUCTS.map(p => p.id.split('-')[0]))].filter(Boolean);
         
-        // Añadir las de la BD que no estén en la lista base
+        // Añadir las de la BD que no estén en la lista base, pero SOLO si son prefijos válidos (3 letras mayúsculas)
         categoriasBD.forEach(cat => {
-            if (!categoriasBase.find(c => c.id === cat)) {
-                categoriasBase.push({ id: cat, desc: cat }); // Si hay una categoría extraña, se muestra con su propio ID
+            if (/^[A-Z]{3}$/.test(cat) && !categoriasBase.find(c => c.id === cat)) {
+                categoriasBase.push({ id: cat, desc: cat }); 
             }
         });
         
