@@ -75,10 +75,9 @@ const Components = (function () {
                     </button>
                     <span class="h5 mb-0 fw-bold" style="color:#0b4182;">FACTU</span>
                 </div>
-                <button class="btn btn-light border" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+                <a href="configuracion.html" class="btn btn-light border" aria-label="Ir a Configuración">
                     <i data-lucide="settings-2" style="width:18px;height:18px;" aria-hidden="true"></i>
-                </button>
+                </a>
             </div>
         </div>`;
     }
