@@ -126,13 +126,15 @@
         <!-- Modal Eliminar Producto -->
         <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content border-0 shadow text-center p-4">
-                    <i data-lucide="alert-triangle" class="text-danger mx-auto mb-3" style="width: 48px; height: 48px;"></i>
-                    <h5 class="fw-bold mb-3">¿Eliminar producto?</h5>
-                    <p class="text-muted small mb-4">Se eliminará "<span id="elimProdNombre" class="fw-bold"></span>".</p>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-light w-50" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-danger w-50" onclick="confirmarEliminarProducto()">Eliminar</button>
+                <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
+                    <div class="modal-body p-4 text-center">
+                        <div style="font-size:2.5rem;">🗑️</div>
+                        <h5 class="fw-bold text-dark mb-1 mt-2">¿Eliminar producto?</h5>
+                        <p class="text-muted small mb-3">Se eliminará <strong><span id="elimProdNombre"></span></strong> permanentemente.</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-primary fw-bold flex-grow-1" onclick="confirmarEliminarProducto()">Sí, eliminar</button>
+                        </div>
                     </div>
                 </div>
             </div>
