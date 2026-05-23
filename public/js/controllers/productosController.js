@@ -165,15 +165,32 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!select) return;
         
         const valorActual = select.value;
-        const categoriasUnicas = [...new Set(DB_PRODUCTS.map(p => p.id.split('-')[0]))].filter(Boolean).sort();
         
-        select.innerHTML = '<option value="ALL">Todas las Categorías</option>';
-        categoriasUnicas.forEach(cat => {
-            const desc = { VUE:'Boletos Aéreos', ALO:'Alojamiento', TRA:'Transporte', PAQ:'Paquetes', CRU:'Cruceros', SEG:'Seguros', TOU:'Tours', ADM:'Administrativos' }[cat] || cat;
-            select.innerHTML += `<option value="${cat}">${desc} (${cat})</option>`;
+        // Categorías base obligatorias (igual al modal de Nuevo Producto)
+        const categoriasBase = [
+            { id: 'TOU', desc: 'Tour' },
+            { id: 'VUE', desc: 'Boleto Aéreo' },
+            { id: 'SEG', desc: 'Seguro' },
+            { id: 'PAQ', desc: 'Paquete' },
+            { id: 'ALO', desc: 'Alojamiento' }
+        ];
+        
+        // Encontrar prefijos únicos en la BD
+        const categoriasBD = [...new Set(DB_PRODUCTS.map(p => p.id.split('-')[0]))].filter(Boolean);
+        
+        // Añadir las de la BD que no estén en la lista base
+        categoriasBD.forEach(cat => {
+            if (!categoriasBase.find(c => c.id === cat)) {
+                categoriasBase.push({ id: cat, desc: cat }); // Si hay una categoría extraña, se muestra con su propio ID
+            }
         });
         
-        if (categoriasUnicas.includes(valorActual)) {
+        select.innerHTML = '<option value="ALL">Todas las Categorías</option>';
+        categoriasBase.forEach(cat => {
+            select.innerHTML += `<option value="${cat.id}">${cat.desc} (${cat.id})</option>`;
+        });
+        
+        if (valorActual === 'ALL' || categoriasBase.some(c => c.id === valorActual)) {
             select.value = valorActual;
         } else {
             select.value = 'ALL';
