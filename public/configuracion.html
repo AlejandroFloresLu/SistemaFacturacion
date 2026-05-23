@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTU - Configuración</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth-guard.js"></script>
+</head>
+<body>
+
+    <div id="topbar-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+    <div id="a11y-placeholder"></div>
+
+    <main class="main-content p-4 bg-light" style="min-height: 100vh;" role="main">
+        <div class="page-header-wrap mb-4">
+            <div>
+                <h1 class="page-title"><i data-lucide="settings" class="me-2 text-primary" aria-hidden="true"></i>Configuración del Sistema</h1>
+                <p class="page-subtitle text-muted">Ajusta tus preferencias de diseño y accesibilidad (WCAG 2.2).</p>
+            </div>
+        </div>
+
+        <div class="row g-4" style="max-width: 900px;">
+            <!-- TEMA -->
+            <div class="col-12 col-md-6">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-1 d-flex align-items-center"><i data-lucide="palette" class="me-2 text-primary"></i>Tema Visual</h5>
+                        <p class="text-muted small mb-4">Elige el esquema de colores de la interfaz.</p>
+                        
+                        <div class="d-flex gap-3">
+                            <input type="radio" class="btn-check" name="confTheme" id="themeLight" autocomplete="off" value="light">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="themeLight">
+                                <i data-lucide="sun" class="mb-2 mx-auto d-block" style="width:24px;height:24px;"></i> Claro
+                            </label>
+
+                            <input type="radio" class="btn-check" name="confTheme" id="themeDark" autocomplete="off" value="dark">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="themeDark">
+                                <i data-lucide="moon" class="mb-2 mx-auto d-block" style="width:24px;height:24px;"></i> Oscuro
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTRASTE -->
+            <div class="col-12 col-md-6">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: var(--border-radius);">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-1 d-flex align-items-center"><i data-lucide="contrast" class="me-2 text-primary"></i>Contraste (WCAG)</h5>
+                        <p class="text-muted small mb-4">Mejora la visibilidad con colores de alto impacto.</p>
+                        
+                        <div class="d-flex gap-3">
+                            <input type="radio" class="btn-check" name="confContrast" id="contrastNormal" autocomplete="off" value="normal">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="contrastNormal">
+                                <i data-lucide="circle-half-stroke" class="mb-2 mx-auto d-block" style="width:24px;height:24px;"></i> Normal
+                            </label>
+
+                            <input type="radio" class="btn-check" name="confContrast" id="contrastHigh" autocomplete="off" value="high-contrast">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="contrastHigh">
+                                <i data-lucide="eye" class="mb-2 mx-auto d-block" style="width:24px;height:24px;"></i> Alto Contraste
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAMAÑO DE LETRA -->
+            <div class="col-12">
+                <div class="card shadow-sm border-0" style="border-radius: var(--border-radius);">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-1 d-flex align-items-center"><i data-lucide="type" class="me-2 text-primary"></i>Tamaño de Letra</h5>
+                        <p class="text-muted small mb-4">Ajusta el tamaño global de los textos en toda la aplicación.</p>
+                        
+                        <div class="d-flex flex-wrap gap-3">
+                            <input type="radio" class="btn-check" name="confFont" id="fontNormal" autocomplete="off" value="normal">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="fontNormal">
+                                <span class="d-block fw-bold mb-1" style="font-size: 1rem;">Aa</span> Normal
+                            </label>
+
+                            <input type="radio" class="btn-check" name="confFont" id="fontLarge" autocomplete="off" value="large">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="fontLarge">
+                                <span class="d-block fw-bold mb-1" style="font-size: 1.25rem;">Aa</span> Grande
+                            </label>
+
+                            <input type="radio" class="btn-check" name="confFont" id="fontXlarge" autocomplete="off" value="xlarge">
+                            <label class="btn btn-outline-primary flex-grow-1 p-3 text-center rounded-3" for="fontXlarge">
+                                <span class="d-block fw-bold mb-1" style="font-size: 1.5rem;">Aa</span> Extra Grande
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/components.js"></script>
+    <script>Components.render('configuracion.html');</script>
+    <script src="js/controllers/configuracionController.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -43,11 +43,10 @@ const Components = (function () {
                 <div class="flex-grow-1" id="navAccordion" role="navigation" aria-label="Menú principal">
                     ${links}
                 </div>
-                <button type="button" class="a11y-panel-btn" data-bs-toggle="offcanvas"
-                    data-bs-target="#panelAccesibilidad" aria-label="Configuración">
+                <a href="configuracion.html" class="a11y-panel-btn text-decoration-none text-dark" aria-label="Ir a Configuración">
                     <i data-lucide="settings-2" class="me-2" style="width:16px;height:16px;" aria-hidden="true"></i>
                     <span class="small fw-medium">Configuración</span>
-                </button>
+                </a>
                 <div class="mt-auto p-3 bg-light rounded-4 border">
                     <div class="d-flex align-items-center gap-3">
                         <div class="avatar-circle" style="background-color:#0b4182;">${initials}</div>
