@@ -20,9 +20,9 @@ const ClienteModel = (function () {
         const r = await fetch(`${BASE}/buscar?ruc=${encodeURIComponent(ruc)}`, {
             headers: authHeaders(),
         });
-        if (r.status === 404) return null;
+        if (r.status === 404) return null;            // no existe en BD
         if (!r.ok) throw new Error('HTTP ' + r.status);
-        return await r.json();
+        return await r.json();                        // puede ser { activo:false } o datos completos
     }
 
     async function create(data) {

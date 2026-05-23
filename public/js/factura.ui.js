@@ -25,10 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const modalNuevoCliente         = new bootstrap.Modal(document.getElementById('modalNuevoCliente'));
     const vistaBusquedaCliente      = document.getElementById('vistaBusquedaCliente');
     const panelClienteNoEncontrado  = document.getElementById('panelClienteNoEncontrado');
+    const panelClienteInactivo      = document.getElementById('panelClienteInactivo');
     const txtRucNoEncontrado        = document.getElementById('txtRucNoEncontrado');
+    const txtRucInactivo            = document.getElementById('txtRucInactivo');
     const vistaClienteSeleccionado  = document.getElementById('vistaClienteSeleccionado');
     const btnBuscarDeNuevo          = document.getElementById('btnBuscarDeNuevo');
     const btnCrearNuevoClienteDirecto = document.getElementById('btnCrearNuevoClienteDirecto');
+    const btnBuscarDespuesInactivo  = document.getElementById('btnBuscarDespuesInactivo');
 
     // Pagos y Totales
     const methodSelect  = document.getElementById('paymentMethod');
@@ -333,15 +336,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // 5. Buscar en la API (usa ClienteModel que ya incluye authHeaders)
         try {
-            const encontrado = await ClienteModel.findByRuc(val);
-            if (encontrado) {
-                _clienteIdBD = encontrado.id;
-                setCliente(`${encontrado.nombre} ${encontrado.apellido}`, encontrado.ruc);
-            } else {
+            const resultado = await ClienteModel.findByRuc(val);
+
+            if (!resultado) {
+                // Caso A: No existe en BD
                 _clienteIdBD = null;
                 txtRucNoEncontrado.innerText = val;
                 vistaBusquedaCliente.classList.add('d-none');
                 panelClienteNoEncontrado.classList.remove('d-none');
+
+            } else if (resultado.activo === false) {
+                // Caso B: Existe pero está inactivo (soft-deleted)
+                _clienteIdBD = null;
+                txtRucInactivo.innerText = val;
+                vistaBusquedaCliente.classList.add('d-none');
+                panelClienteInactivo.classList.remove('d-none');
+
+            } else {
+                // Caso C: Cliente activo encontrado
+                _clienteIdBD = resultado.id;
+                setCliente(`${resultado.nombre} ${resultado.apellido}`, resultado.ruc);
             }
         } catch {
             _clienteIdBD = null;
@@ -362,6 +376,15 @@ document.addEventListener("DOMContentLoaded", function() {
         clienteSearch.value = '';
         clienteSearch.focus();
     });
+
+    if (btnBuscarDespuesInactivo) {
+        btnBuscarDespuesInactivo.addEventListener('click', () => {
+            panelClienteInactivo.classList.add('d-none');
+            vistaBusquedaCliente.classList.remove('d-none');
+            clienteSearch.value = '';
+            clienteSearch.focus();
+        });
+    }
 
     btnCrearNuevoClienteDirecto.addEventListener('click', () => {
         document.getElementById('modalRuc').value = txtRucNoEncontrado.innerText;
@@ -406,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function setCliente(name, ruc, doSave = true) {
         vistaBusquedaCliente.classList.add('d-none');
         panelClienteNoEncontrado.classList.add('d-none');
+        panelClienteInactivo.classList.add('d-none');
         vistaClienteSeleccionado.classList.remove('d-none');
         document.getElementById('nombreClienteSeleccionado').innerText = name;
         document.getElementById('rucClienteSeleccionado').innerText = ruc;

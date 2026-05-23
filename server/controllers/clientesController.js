@@ -100,14 +100,24 @@ async function buscarPorRuc(req, res) {
     const { ruc } = req.query;
     if (!ruc) return res.status(400).json({ error: 'Parámetro ruc requerido.' });
     try {
+        // Buscar SIN filtro de estado para detectar clientes inactivos
         const { rows } = await pool.query(
-            `SELECT id_cliente, ruc_o_cedula, nombres, apellidos, telefono, email, ultima_compra
-             FROM clientes WHERE ruc_o_cedula=$1 AND estado=true`,
+            `SELECT id_cliente, ruc_o_cedula, nombres, apellidos, telefono, email, ultima_compra, estado
+             FROM clientes WHERE ruc_o_cedula=$1`,
             [ruc]
         );
         if (rows.length === 0) return res.status(404).json({ error: 'Cliente no encontrado.' });
+
         const r = rows[0];
+
+        // Cliente existe pero está inactivo (soft-deleted)
+        if (!r.estado) {
+            return res.status(200).json({ activo: false, ruc: r.ruc_o_cedula });
+        }
+
+        // Cliente activo — devolver datos completos
         return res.json({
+            activo:       true,
             id:           r.id_cliente,
             ruc:          r.ruc_o_cedula,
             nombre:       r.nombres,
