@@ -66,18 +66,20 @@ window._abrirImpresionFactura = function (f) {
             </div>
 
             <!-- Tabla productos -->
-            <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
-                <thead>
-                    <tr style="background:#0b4182;color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.5px;">
-                        <th style="padding:8px;text-align:left;">Descripción</th>
-                        <th style="padding:8px;text-align:center;">Cant.</th>
-                        <th style="padding:8px;text-align:right;">P. Unit.</th>
-                        <th style="padding:8px;text-align:right;">IVA %</th>
-                        <th style="padding:8px;text-align:right;">Total</th>
-                    </tr>
-                </thead>
-                <tbody>${filasDetalle}</tbody>
-            </table>
+            <div style="overflow-x:auto; margin-bottom:16px; border-radius:4px;">
+                <table style="width:100%; border-collapse:collapse; min-width:480px;">
+                    <thead>
+                        <tr style="background:#0b4182;color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.5px;">
+                            <th style="padding:8px;text-align:left;">Descripción</th>
+                            <th style="padding:8px;text-align:center;">Cant.</th>
+                            <th style="padding:8px;text-align:right;">P. Unit.</th>
+                            <th style="padding:8px;text-align:right;">IVA %</th>
+                            <th style="padding:8px;text-align:right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>${filasDetalle}</tbody>
+                </table>
+            </div>
 
             <!-- Totales + Pagos -->
             <div style="display:flex;gap:24px;justify-content:flex-end;align-items:flex-start;">

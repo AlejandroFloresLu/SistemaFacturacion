@@ -116,20 +116,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const cat   = document.getElementById('nuevoProdCategoria').value;
         const desc  = document.getElementById('nuevoProdDesc').value.trim();
         const price = parseFloat(document.getElementById('nuevoProdPrecio').value);
-        let codigo  = document.getElementById('nuevoProdCodigo').value.trim().toUpperCase();
 
         if (!desc) { mostrarToast('La descripción es obligatoria','danger'); return; }
         if (isNaN(price)||price<=0) { mostrarToast('El precio debe ser mayor a 0','danger'); return; }
 
-        if (!codigo) {
-            catCounters[cat] = (catCounters[cat]||DB_PRODUCTS.filter(p=>p.id.startsWith(cat)).length)+1;
-            codigo = `${cat}-${String(catCounters[cat]).padStart(3,'0')}`;
-        }
+        // Encontrar el último número para esta categoría
+        const productosCat = DB_PRODUCTS.filter(p => p.id.startsWith(cat));
+        let maxNum = 0;
+        productosCat.forEach(p => {
+            const numPart = parseInt(p.id.split('-')[1] || '0', 10);
+            if (!isNaN(numPart) && numPart > maxNum) {
+                maxNum = numPart;
+            }
+        });
+        
+        const nuevoNum = maxNum + 1;
+        const codigo = `${cat}-${String(nuevoNum).padStart(3, '0')}`;
 
         try {
             await ProductoModel.create({ codigo, descripcion: desc, precio: price });
             bootstrap.Modal.getInstance(document.getElementById('modalNuevoProducto')).hide();
-            ['nuevoProdCodigo','nuevoProdDesc','nuevoProdPrecio'].forEach(id=>{ document.getElementById(id).value=''; });
+            ['nuevoProdDesc','nuevoProdPrecio'].forEach(id=>{ document.getElementById(id).value=''; });
             document.getElementById('filtroCategoria').value = cat;
             await recargarProductos();
             mostrarToast('✅ Producto añadido con éxito','success');

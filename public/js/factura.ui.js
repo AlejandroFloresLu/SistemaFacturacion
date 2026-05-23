@@ -1028,15 +1028,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     const facturaCompleta = await FacturaModel.getById(codigoFactura);
                     _abrirImpresionFactura(facturaCompleta);
                 } catch {
-                    // Si falla la carga del detalle, imprimir la página actual como fallback
-                    window.print();
+                    // Si falla la carga del detalle, mostrar alerta en lugar de window.print()
+                    mostrarToast('⚠️ Factura guardada, pero hubo un error al cargar la vista previa.', 'warning');
                 }
             }, 400);
         } catch (err) {
             mostrarToast(`⚠️ ${err.message || 'Error al guardar la factura.'}`, 'danger');
         } finally {
             btnConfirmar.disabled = false;
-            btnConfirmar.innerHTML = '<i data-lucide="printer" class="me-2" style="width:16px;"></i> Confirmar e Imprimir';
+            btnConfirmar.innerHTML = '<i data-lucide="check" class="me-2" style="width:16px;"></i> Aprobar y Ver Factura';
             lucide.createIcons();
         }
     });
