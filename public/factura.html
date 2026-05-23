@@ -137,7 +137,9 @@
                         <div id="vistaBusquedaCliente" class="input-group">
                             <span class="input-group-text bg-light border-0"><i data-lucide="user-search" class="text-muted" aria-hidden="true" style="width: 20px;"></i></span>
                             <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-muted"
-                                id="clienteSearch" placeholder="Cédula (10) o RUC (13)..." autofocus title="Pega la cédula (Ctrl+V) y presiona Enter" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="13">
+                                id="clienteSearch" placeholder="Cédula (10) o RUC (13)..." autofocus title="Pega la cédula (Ctrl+V) y presiona Enter" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="13"
+                                aria-label="Buscar cliente por cédula o RUC"
+                                aria-describedby="panelClienteNoEncontrado panelClienteInactivo">
                             
                             <button class="btn btn-factu rounded-end px-3 border-0 d-flex align-items-center" id="btnBuscarClienteIcon" type="button" title="Buscar Cliente (Atajo: Enter)" aria-label="Buscar cliente">
                                 <i data-lucide="search" style="width:16px;" aria-hidden="true"></i> <span class="d-none d-sm-inline ms-1 small fw-bold text-white">Buscar</span>
@@ -149,7 +151,7 @@
                         </div>
 
                         <!-- Panel de Cliente No Encontrado -->
-                        <div id="panelClienteNoEncontrado" class="d-none alert alert-warning mb-0 border-0 d-flex justify-content-between align-items-center">
+                        <div id="panelClienteNoEncontrado" class="d-none alert alert-warning mb-0 border-0 d-flex justify-content-between align-items-center" role="alert">
                             <div>
                                 <i data-lucide="alert-triangle" class="me-2 text-warning" aria-hidden="true"></i> 
                                 <span class="text-dark">No se encontró el cliente <strong><span id="txtRucNoEncontrado"></span></strong>.</span>
@@ -203,7 +205,8 @@
                     <div class="card-header bg-white border-0 pt-3 pb-2 border-bottom">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-0"><i data-lucide="search" class="text-muted" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-muted" id="spotlightProduct" placeholder="Buscar producto o servicio..." title="Despliega y escoge producto" list="productosList">
+                            <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-muted" id="spotlightProduct" placeholder="Buscar producto o servicio..." title="Despliega y escoge producto" list="productosList"
+                                aria-label="Buscar y añadir producto a la factura">
                             <datalist id="productosList"></datalist>
                             <button class="btn btn-secondary border-0 px-3 d-flex align-items-center rounded-end" id="btnBuscarProductoIcon" type="button" title="Añadir a Factura (Atajo: Enter)" aria-label="Añadir producto seleccionado">
                                 <i data-lucide="plus" style="width:16px;" aria-hidden="true"></i> <span class="d-none d-sm-inline ms-1 small fw-bold text-white">Añadir</span>
@@ -220,7 +223,10 @@
                                     <th width="20%" class="text-end">Total</th>
                                 </tr>
                             </thead>
-                            <tbody id="invoiceItems">
+                            <tbody id="invoiceItems"
+                                aria-live="polite"
+                                aria-label="Productos en la factura"
+                                aria-relevant="additions removals">
                                 <tr id="emptyInvoiceRow">
                                     <td colspan="4" class="text-center text-muted py-5"><i data-lucide="inbox"
                                             class="mb-2 opacity-50" style="width: 48px; height: 48px;" aria-hidden="true"></i><br>Agrega
@@ -249,6 +255,8 @@
                                     <span class="input-group-text border-1 bg-light">$</span>
                                     <input type="number" class="form-control border-1 shadow-none fw-bold"
                                         id="paymentAmount" value="0.00" disabled
+                                        aria-label="Monto del pago en dólares"
+                                        aria-describedby="paymentMethod"
                                         onkeydown="if(['e','E','+','-'].includes(event.key)) event.preventDefault();">
                                     <button class="btn btn-secondary" id="btnAddPayment" disabled aria-label="Agregar pago"><i data-lucide="plus"></i></button>
                                 </div>
@@ -292,52 +300,53 @@
 
 
             <!-- Modal Nuevo Cliente -->
-            <div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="modalNuevoCliente" tabindex="-1"
+                 aria-labelledby="modalNuevoClienteLabel" aria-modal="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                         <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
-                                <i data-lucide="user-plus" class="me-2 text-primary"></i>Crear Nuevo Cliente
+                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalNuevoClienteLabel">
+                                <i data-lucide="user-plus" class="me-2 text-primary" aria-hidden="true"></i>Crear Nuevo Cliente
                             </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body p-4 pt-0">
                             <hr class="text-muted mt-0 mb-4 opacity-10">
                             <form id="formNuevoCliente">
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Cédula / RUC</label>
-                                    <input type="text" class="form-control fw-bold bg-light" id="modalRuc" readonly>
+                                    <label for="modalRuc" class="form-label text-muted small fw-bold">Cédula / RUC</label>
+                                    <input type="text" class="form-control fw-bold bg-light" id="modalRuc" readonly aria-readonly="true">
                                 </div>
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label text-muted small fw-bold">Nombres</label>
-                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre" required>
+                                        <label for="modalNombre" class="form-label text-muted small fw-bold">Nombres</label>
+                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre" required autocomplete="given-name">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label text-muted small fw-bold">Apellidos</label>
-                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido" required>
+                                        <label for="modalApellido" class="form-label text-muted small fw-bold">Apellidos</label>
+                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido" required autocomplete="family-name">
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Dirección</label>
-                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
+                                    <label for="modalDir" class="form-label text-muted small fw-bold">Dirección</label>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" autocomplete="street-address">
                                 </div>
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-5">
-                                        <label class="form-label text-muted small fw-bold">País</label>
+                                        <label for="modalTelPais" class="form-label text-muted small fw-bold">País</label>
                                         <select class="form-select shadow-none border-1" id="modalTelPais">
                                             <option value="+593">🇪🇨 +593</option>
                                             <option value="+57">🇨🇴 +57</option>
                                         </select>
                                     </div>
                                     <div class="col-md-7">
-                                        <label class="form-label text-muted small fw-bold">Teléfono</label>
-                                        <input type="tel" class="form-control shadow-none border-1" id="modalTel" placeholder="999 999 9999" maxlength="10">
+                                        <label for="modalTel" class="form-label text-muted small fw-bold">Teléfono</label>
+                                        <input type="tel" class="form-control shadow-none border-1" id="modalTel" placeholder="999 999 9999" maxlength="10" autocomplete="tel-national">
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
-                                    <input type="email" class="form-control shadow-none border-1" id="editCliEmail">
+                                    <label for="editCliEmail" class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                                    <input type="email" class="form-control shadow-none border-1" id="editCliEmail" autocomplete="email">
                                 </div>
                             </form>
                         </div>
@@ -352,12 +361,15 @@
             </div>
 
             <!-- Modal Aprobación Final -->
-            <div class="modal fade" id="modalAprobarFactura" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="modalAprobarFactura" tabindex="-1"
+                 aria-labelledby="modalAprobarLabel" aria-modal="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                         <div class="modal-header border-0 bg-light" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i data-lucide="check-circle" class="me-2 text-success" aria-hidden="true"></i> Confirmar Emisión</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalAprobarLabel">
+                                <i data-lucide="check-circle" class="me-2 text-success" aria-hidden="true"></i> Confirmar Emisión
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body p-4 text-center">
                             <i data-lucide="file-check-2" style="width:64px;height:64px;" class="text-success opacity-75 mb-3" aria-hidden="true"></i>

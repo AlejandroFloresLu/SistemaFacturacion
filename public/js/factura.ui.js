@@ -1141,8 +1141,11 @@ document.addEventListener("DOMContentLoaded", function() {
     function mostrarToast(msg, tipo = 'success') {
         const t = document.createElement('div');
         t.className = `factu-toast ${tipo}`;
-        t.setAttribute('role', 'status');
-        t.setAttribute('aria-live', 'polite');
+        // WCAG 4.1.3: errores usan role="alert" + assertive; info/éxito usan "status" + polite
+        const esError = tipo === 'danger';
+        t.setAttribute('role', esError ? 'alert' : 'status');
+        t.setAttribute('aria-live', esError ? 'assertive' : 'polite');
+        t.setAttribute('aria-atomic', 'true');
         t.innerHTML = msg;
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 3800);

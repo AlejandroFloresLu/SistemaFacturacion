@@ -57,10 +57,14 @@ document.addEventListener('DOMContentLoaded', function () {
               <td class="d-none d-lg-table-cell text-muted small">${c.tel || '—'}<br>${c.email || '—'}</td>
               <td class="d-none d-md-table-cell"><span class="badge bg-light text-dark border">${c.ultimaCompra}</span></td>
               <td class="text-end pe-4">
-                <button class="btn btn-sm btn-light border-0 text-primary me-1" title="Editar" onclick="editarCliente(${c.id})">
-                  <i data-lucide="edit-2" style="width:15px;"></i></button>
-                <button class="btn btn-sm btn-light border-0 text-danger" title="Eliminar" onclick="pedirEliminarCliente(${c.id}, '${c.nombre} ${c.apellido}')">
-                  <i data-lucide="trash-2" style="width:15px;"></i></button>
+                <button class="btn btn-sm btn-light border-0 text-primary me-1"
+                  title="Editar cliente" aria-label="Editar cliente ${c.nombre} ${c.apellido}"
+                  onclick="editarCliente(${c.id})">
+                  <i data-lucide="edit-2" style="width:15px;" aria-hidden="true"></i></button>
+                <button class="btn btn-sm btn-light border-0 text-danger"
+                  title="Eliminar cliente" aria-label="Eliminar cliente ${c.nombre} ${c.apellido}"
+                  onclick="pedirEliminarCliente(${c.id}, '${c.nombre} ${c.apellido}')">
+                  <i data-lucide="trash-2" style="width:15px;" aria-hidden="true"></i></button>
               </td>
             </tr>`;
         }).join('');

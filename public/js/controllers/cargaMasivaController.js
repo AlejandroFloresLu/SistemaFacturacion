@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── Plantillas descargables ───────────────────────────────────────────────
     const PLANTILLAS = {
-        clientes:  'Nombre,Apellido,RUC_Cedula,Telefono,Email',
-        productos: 'Codigo,Descripcion,Precio',
+        clientes:  [['Nombre', 'Apellido', 'RUC_Cedula', 'Telefono', 'Email']],
+        productos: [['Codigo', 'Descripcion', 'Precio']],
     };
 
     // Estado temporal del proceso en curso (para el modal de confirmación)
@@ -82,8 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         function seleccionarArchivo(file) {
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                mostrarResultado(resEl, 'danger', '⚠️ Solo se aceptan archivos <strong>.CSV</strong>. Selecciona otro archivo.');
+            const ext = file.name.toLowerCase();
+            if (!ext.endsWith('.xlsx') && !ext.endsWith('.xls')) {
+                mostrarResultado(resEl, 'danger', '⚠️ Solo se aceptan archivos <strong>Excel (.XLSX / .XLS)</strong>. Selecciona otro archivo.');
                 return;
             }
             archivo = file;
@@ -101,8 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
             resEl.innerHTML = '';
 
             try {
-                const texto    = await leerArchivo(archivo);
-                const registros = parsearCSV(texto);
+                const arrayBuffer = await leerArchivo(archivo);
+                const registros = parsearExcel(arrayBuffer);
 
                 if (registros.length === 0) {
                     mostrarResultado(resEl, 'warning', '⚠️ El archivo no contiene filas de datos (solo cabeceras o vacío).');
@@ -140,32 +141,45 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // PARSEO DE CSV (lado cliente)
+    // PARSEO DE EXCEL (lado cliente usando SheetJS)
     // ═══════════════════════════════════════════════════════════════════════════
     function leerArchivo(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload  = (e) => resolve(e.target.result);
             reader.onerror = () => reject(new Error('Error al leer el archivo.'));
-            reader.readAsText(file, 'UTF-8');
+            reader.readAsArrayBuffer(file);
         });
     }
 
-    function parsearCSV(texto) {
-        // Elimina BOM si viene de Excel
-        const limpio = texto.replace(/^\uFEFF/, '').trim();
-        const lineas = limpio.split(/\r?\n/).filter(l => l.trim() !== '');
-        if (lineas.length < 2) return [];
-
-        const cabeceras = lineas[0].split(',').map(h => h.trim());
+    function parsearExcel(arrayBuffer) {
+        // Leer el archivo Excel
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        
+        // Tomar la primera hoja
+        const primeraHojaNombre = workbook.SheetNames[0];
+        const hoja = workbook.Sheets[primeraHojaNombre];
+        
+        // Convertir a JSON (defval: '' asegura que celdas vacías tengan string vacío)
+        const registrosBrutos = XLSX.utils.sheet_to_json(hoja, { defval: '' });
+        
         const registros = [];
-
-        for (let i = 1; i < lineas.length; i++) {
-            const valores = lineas[i].split(',').map(v => v.trim());
-            const fila = {};
-            cabeceras.forEach((h, idx) => { fila[h] = valores[idx] ?? ''; });
-            fila._fila = i + 1; // número de fila en el archivo (con cabecera como fila 1)
-            registros.push(fila);
+        
+        for (let i = 0; i < registrosBrutos.length; i++) {
+            const fila = registrosBrutos[i];
+            
+            // Trim de valores de texto para evitar espacios ocultos
+            const filaLimpia = {};
+            for (const key in fila) {
+                if (typeof fila[key] === 'string') {
+                    filaLimpia[key.trim()] = fila[key].trim();
+                } else {
+                    filaLimpia[key.trim()] = fila[key];
+                }
+            }
+            
+            filaLimpia._fila = i + 2; // +2 porque el índice es 0 y la primera fila (1) es cabecera
+            registros.push(filaLimpia);
         }
 
         return registros;
@@ -295,12 +309,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // HELPERS
     // ═══════════════════════════════════════════════════════════════════════════
     function descargarPlantilla(entidad) {
-        const bom  = '\uFEFF';
-        const blob = new Blob([bom + PLANTILLAS[entidad] + '\n'], { type: 'text/csv;charset=utf-8;' });
-        const url  = URL.createObjectURL(blob);
-        const a    = Object.assign(document.createElement('a'), { href: url, download: `plantilla_${entidad}.csv` });
-        document.body.appendChild(a); a.click(); a.remove();
-        URL.revokeObjectURL(url);
+        // Usar XLSX para generar el archivo Excel
+        const worksheet = XLSX.utils.aoa_to_sheet(PLANTILLAS[entidad]);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Plantilla");
+        
+        // Disparar la descarga
+        XLSX.writeFile(workbook, `plantilla_${entidad}.xlsx`);
     }
 
     function resetBoton(btn, entidad) {

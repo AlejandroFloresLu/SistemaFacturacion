@@ -64,7 +64,7 @@
     </main>
 
     <!-- Modal: Nuevo Cliente -->
-    <div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-labelledby="modalNuevoClienteLbl" aria-hidden="true">
+    <div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-labelledby="modalNuevoClienteLbl" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                 <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
@@ -78,29 +78,29 @@
                     <form id="formNuevoClienteCli">
                         <div class="row mb-3 g-2">
                             <div class="col-6">
-                                <label class="form-label text-muted small fw-bold">Nombres</label>
+                                <label for="cliNuevoNombre" class="form-label text-muted small fw-bold">Nombres</label>
                                 <input type="text" class="form-control shadow-none border-1" id="cliNuevoNombre"
                                     oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label text-muted small fw-bold">Apellidos</label>
+                                <label for="cliNuevoApellido" class="form-label text-muted small fw-bold">Apellidos</label>
                                 <input type="text" class="form-control shadow-none border-1" id="cliNuevoApellido"
                                     oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Cédula / RUC</label>
+                            <label for="cliNuevoRuc" class="form-label text-muted small fw-bold">Cédula / RUC</label>
                             <input type="text" class="form-control shadow-none border-1" id="cliNuevoRuc"
                                 inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="13" required>
                         </div>
                         <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Dirección</label>
+                                    <label for="modalDir" class="form-label text-muted small fw-bold">Dirección</label>
                                     <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Teléfono</label>
+                            <label for="cliNuevoTel" class="form-label text-muted small fw-bold">Teléfono</label>
                             <div class="input-group">
-                                <select class="form-select shadow-none border-1" id="cliNuevoTelPais" style="max-width:130px;">
+                                <select class="form-select shadow-none border-1" id="cliNuevoTelPais" style="max-width:130px;" aria-label="Código de país">
                                     <option value="+593">🇪🇨 +593</option>
                                     <option value="+57">🇨🇴 +57</option>
                                 </select>
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                            <label for="cliNuevoEmail" class="form-label text-muted small fw-bold">Correo Electrónico</label>
                             <input type="email" class="form-control shadow-none border-1" id="cliNuevoEmail">
                         </div>
                     </form>
@@ -126,7 +126,7 @@
     </div>
 
     <!-- Modal: Editar Cliente -->
-    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLbl" aria-hidden="true">
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLbl" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                 <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
@@ -141,28 +141,28 @@
                     <form id="formEditarCliente">
                         <div class="row mb-3 g-2">
                             <div class="col-6">
-                                <label class="form-label text-muted small fw-bold">Nombres</label>
+                                <label for="editCliNombre" class="form-label text-muted small fw-bold">Nombres</label>
                                 <input type="text" class="form-control shadow-none border-1" id="editCliNombre"
                                     oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label text-muted small fw-bold">Apellidos</label>
+                                <label for="editCliApellido" class="form-label text-muted small fw-bold">Apellidos</label>
                                 <input type="text" class="form-control shadow-none border-1" id="editCliApellido"
                                     oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Cédula / RUC (Bloqueado)</label>
-                            <input type="text" class="form-control fw-bold bg-light" id="editCliRuc" readonly>
+                            <label for="editCliRuc" class="form-label text-muted small fw-bold">Cédula / RUC (Bloqueado)</label>
+                            <input type="text" class="form-control fw-bold bg-light" id="editCliRuc" readonly aria-readonly="true">
                         </div>
                         <div class="mb-3">
-                                    <label class="form-label text-muted small fw-bold">Dirección</label>
-                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
+                                    <label for="modalDirEdit" class="form-label text-muted small fw-bold">Dirección</label>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDirEdit" required>
                                 </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Teléfono</label>
+                            <label for="editCliTel" class="form-label text-muted small fw-bold">Teléfono</label>
                             <div class="input-group">
-                                <select class="form-select shadow-none border-1" id="editCliTelPais" style="max-width:130px;">
+                                <select class="form-select shadow-none border-1" id="editCliTelPais" style="max-width:130px;" aria-label="Código de país">
                                     <option value="+593">🇪🇨 +593</option>
                                     <option value="+57">🇨🇴 +57</option>
                                 </select>
@@ -172,7 +172,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                            <label for="editCliEmail" class="form-label text-muted small fw-bold">Correo Electrónico</label>
                             <input type="email" class="form-control shadow-none border-1" id="editCliEmail">
                         </div>
                     </form>
@@ -188,12 +188,12 @@
     </div>
 
     <!-- Modal: Confirmar Eliminar Cliente -->
-    <div class="modal fade" id="modalEliminarCliente" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalEliminarCliente" tabindex="-1" aria-labelledby="modalEliminarClienteLbl" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                 <div class="modal-body p-4 text-center">
-                    <div class="mb-3 text-danger" style="font-size:2.5rem;">🗑️</div>
-                    <h5 class="fw-bold text-dark mb-1">¿Eliminar cliente?</h5>
+                    <div class="mb-3 text-danger" style="font-size:2.5rem;" aria-hidden="true">🗑️</div>
+                    <h5 class="fw-bold text-dark mb-1" id="modalEliminarClienteLbl">¿Eliminar cliente?</h5>
                     <p class="text-muted small mb-3">Esta acción no se puede deshacer. El cliente <strong id="elimCliNombre"></strong> será eliminado permanentemente.</p>
                     <div class="d-flex gap-2">
                         <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal">Cancelar</button>

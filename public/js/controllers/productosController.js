@@ -61,8 +61,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td class="text-end py-3 fw-bold text-muted">$${p.price.toFixed(2)}</td>
                 <td class="text-end pe-4 py-3" style="min-width:100px;">
                     <div class="d-flex justify-content-end gap-1">
-                        <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2" onclick="editarProducto('${p.id}')"><i data-lucide="edit-2" style="width:14px;height:14px;"></i></button>
-                        <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2" onclick="pedirEliminarProducto('${p.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                        <button class="btn btn-sm btn-outline-primary border-0 py-0 px-2"
+                            aria-label="Editar producto ${p.desc}"
+                            title="Editar producto"
+                            onclick="editarProducto('${p.id}')">
+                            <i data-lucide="edit-2" style="width:14px;height:14px;" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger border-0 py-0 px-2"
+                            aria-label="Eliminar producto ${p.desc}"
+                            title="Eliminar producto"
+                            onclick="pedirEliminarProducto('${p.id}')">
+                            <i data-lucide="trash-2" style="width:14px;height:14px;" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </td>
             </tr>`;
