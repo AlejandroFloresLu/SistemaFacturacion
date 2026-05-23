@@ -331,11 +331,10 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        // 5. Buscar en la API
+        // 5. Buscar en la API (usa ClienteModel que ya incluye authHeaders)
         try {
-            const res = await fetch(`${API_URL}/api/clientes/buscar?ruc=${encodeURIComponent(val)}`);
-            if (res.ok) {
-                const encontrado = await res.json();
+            const encontrado = await ClienteModel.findByRuc(val);
+            if (encontrado) {
                 _clienteIdBD = encontrado.id;
                 setCliente(`${encontrado.nombre} ${encontrado.apellido}`, encontrado.ruc);
             } else {
@@ -475,6 +474,21 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // Feedback verde en botón Añadir cuando el texto coincide con un producto válido
+    function actualizarEstadoBtnProducto() {
+        const term = spotlightInput.value.toLowerCase().trim();
+        const btnAdd = document.getElementById('btnBuscarProductoIcon');
+        if (!btnAdd) return;
+        if (term && DB_PRODUCTS.find(p => p.desc.toLowerCase().includes(term) || p.id.toLowerCase() === term)) {
+            btnAdd.classList.remove('btn-secondary');
+            btnAdd.classList.add('btn-success');
+        } else {
+            btnAdd.classList.remove('btn-success');
+            btnAdd.classList.add('btn-secondary');
+        }
+    }
+
+    spotlightInput.addEventListener('input', actualizarEstadoBtnProducto);
     spotlightInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') { e.preventDefault(); procesarBusquedaProducto(); }
     });
@@ -493,17 +507,9 @@ document.addEventListener("DOMContentLoaded", function() {
         btnAddPayment.disabled = false;
         renderLines();
         saveActive();
-
-        // Feedback visual verde en botón Añadir por 1.5 s
+        // Resetear botón Añadir a gris tras agregar (el input se vació)
         const btnAdd = document.getElementById('btnBuscarProductoIcon');
-        if (btnAdd) {
-            btnAdd.classList.remove('btn-secondary');
-            btnAdd.classList.add('btn-success');
-            setTimeout(() => {
-                btnAdd.classList.remove('btn-success');
-                btnAdd.classList.add('btn-secondary');
-            }, 1500);
-        }
+        if (btnAdd) { btnAdd.classList.remove('btn-success'); btnAdd.classList.add('btn-secondary'); }
     };
 
     window.removeProduct = function(id) {
@@ -646,6 +652,18 @@ document.addEventListener("DOMContentLoaded", function() {
     // =====================================================================
     // PAGOS MIXTOS
     // =====================================================================
+
+    // Indicador visual: verde cuando hay monto, gris cuando está en 0
+    function actualizarColorMonto() {
+        const v = parseFloat(amountInput.value);
+        const tieneValor = !isNaN(v) && v > 0;
+        amountInput.style.borderColor    = tieneValor ? '#15803d' : '';
+        amountInput.style.color          = tieneValor ? '#15803d' : '';
+        btnAddPayment.classList.toggle('btn-success',   tieneValor);
+        btnAddPayment.classList.toggle('btn-secondary', !tieneValor);
+    }
+    amountInput.addEventListener('input', actualizarColorMonto);
+
     btnAddPayment.addEventListener('click', () => {
         const idMetodo = parseInt(methodSelect.value, 10);
         const metodo   = methodSelect.options[methodSelect.selectedIndex].text;
@@ -677,6 +695,8 @@ document.addEventListener("DOMContentLoaded", function() {
         renderPayments();
         calculateTotals();
         saveActive();
+        // Resetear indicador visual de monto
+        actualizarColorMonto();
     });
 
     window.removePayment = function(id) {
