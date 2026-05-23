@@ -65,17 +65,17 @@
         </div>
         
         <!-- Modal Nuevo Producto -->
-        <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLbl" aria-modal="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                     <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i data-lucide="package-plus" class="me-2 text-primary"></i>Nuevo Producto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalNuevoProductoLbl"><i data-lucide="package-plus" class="me-2 text-primary" aria-hidden="true"></i>Nuevo Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body p-4 pt-0">
                         <hr class="text-muted mt-0 mb-4 opacity-10">
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Categoría</label>
+                            <label for="nuevoProdCategoria" class="form-label text-muted small fw-bold">Categoría</label>
                             <select id="nuevoProdCategoria" class="form-select">
                                 <option value="TOU">Tour (TOU)</option>
                                 <option value="VUE">Boleto Aéreo (VUE)</option>
@@ -86,11 +86,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Descripción / Nombre</label>
+                            <label for="nuevoProdDesc" class="form-label text-muted small fw-bold">Descripción / Nombre</label>
                             <input type="text" class="form-control" id="nuevoProdDesc" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
+                            <label for="nuevoProdPrecio" class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
                             <input type="number" step="0.01" class="form-control" id="nuevoProdPrecio" required>
                         </div>
                     </div>
@@ -103,26 +103,26 @@
         </div>
 
         <!-- Modal Editar Producto -->
-        <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLbl" aria-modal="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                     <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center"><i data-lucide="edit" class="me-2 text-primary"></i>Editar Producto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center" id="modalEditarProductoLbl"><i data-lucide="edit" class="me-2 text-primary" aria-hidden="true"></i>Editar Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body p-4 pt-0">
                         <hr class="text-muted mt-0 mb-4 opacity-10">
                         <input type="hidden" id="editProdId">
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Código</label>
-                            <input type="text" class="form-control bg-light" id="editProdCodigo" readonly>
+                            <label for="editProdCodigo" class="form-label text-muted small fw-bold">Código</label>
+                            <input type="text" class="form-control bg-light" id="editProdCodigo" readonly aria-readonly="true">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Descripción / Nombre</label>
+                            <label for="editProdDesc" class="form-label text-muted small fw-bold">Descripción / Nombre</label>
                             <input type="text" class="form-control" id="editProdDesc" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
+                            <label for="editProdPrecio" class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
                             <input type="number" step="0.01" class="form-control" id="editProdPrecio" required>
                         </div>
                     </div>
@@ -135,12 +135,12 @@
         </div>
 
         <!-- Modal Eliminar Producto -->
-        <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-labelledby="modalEliminarProductoLbl" aria-modal="true">
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
                     <div class="modal-body p-4 text-center">
-                        <div style="font-size:2.5rem;">🗑️</div>
-                        <h5 class="fw-bold text-dark mb-1 mt-2">¿Eliminar producto?</h5>
+                        <div style="font-size:2.5rem;" aria-hidden="true">🗑️</div>
+                        <h5 class="fw-bold text-dark mb-1 mt-2" id="modalEliminarProductoLbl">¿Eliminar producto?</h5>
                         <p class="text-muted small mb-3">Se eliminará <strong><span id="elimProdNombre"></span></strong> permanentemente.</p>
                         <div class="d-flex gap-2">
                             <button class="btn btn-light fw-bold flex-grow-1" data-bs-dismiss="modal">Cancelar</button>

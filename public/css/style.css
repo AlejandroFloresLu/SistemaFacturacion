@@ -10,6 +10,7 @@
     --text-dark: #1e293b;
     --white: #ffffff;
     --border-radius: 15px;
+    --saldo-color: #d97706;      /* Ámbar — saldo restante */
 }
 
 body { 
@@ -21,12 +22,7 @@ body {
 /* ==========================================================================
    ACCESIBILIDAD WCAG 2.2 - OPERABILIDAD
    ========================================================================== */
-*:focus-visible {
-    outline: 3px solid var(--primary-color) !important;
-    outline-offset: 3px !important;
-    border-radius: 4px;
-    box-shadow: 0 0 0 4px rgba(11, 65, 130, 0.2);
-}
+/* *:focus-visible consolidado abajo en WCAG 2.4.7 — no duplicar aquí */
 
 
 /* ==========================================================================
@@ -414,7 +410,8 @@ body {
    ========================================================================== */
 *:focus-visible {
     outline: 3px solid var(--primary-color) !important;
-    outline-offset: 2px !important;
+    outline-offset: 3px !important;
+    border-radius: 4px !important;
     box-shadow: 0 0 0 5px rgba(11, 65, 130, 0.2) !important;
 }
 
@@ -542,11 +539,14 @@ html[data-color="tritanopia"]   { filter: hue-rotate(200deg) saturate(0.75); }
         max-width: 480px !important;
         font-size: .82rem !important;
         border-radius: 10px !important;
+        /* El keyframe de móvil se declara una sola vez — ver @keyframes factu-slidein-mobile */
+        animation: factu-slidein-mobile .3s ease;
     }
-    @keyframes factu-slidein {
-        from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-        to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
+}
+
+@keyframes factu-slidein-mobile {
+    from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 /* ==========================================================================

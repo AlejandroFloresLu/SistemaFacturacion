@@ -80,12 +80,12 @@
         </div>
 
         <!-- Modal Detalle Anulado (y para confirmar anulación) -->
-        <div class="modal fade" id="modalDetalleAnulado" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="modalDetalleAnulado" tabindex="-1" aria-labelledby="modalDetalleLbl" aria-modal="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius);">
                     <div class="modal-header border-0 bg-white" style="border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                        <h5 class="modal-title fw-bold text-dark"><i data-lucide="info" class="me-2 text-primary"></i>Detalle de Factura</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 class="modal-title fw-bold text-dark" id="modalDetalleLbl"><i data-lucide="info" class="me-2 text-primary" aria-hidden="true"></i>Detalle de Factura</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body p-4 pt-0">
                         <hr class="text-muted mt-0 mb-4 opacity-10">

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!pagina.length) {
             tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-5">
-                <i data-lucide="search-x" style="width:40px;height:40px;opacity:.4;" class="mb-2"></i>
+                <i data-lucide="search-x" style="width:40px;height:40px;opacity:.4;" class="mb-2" aria-hidden="true"></i>
                 <br>No hay facturas con esos filtros</td></tr>`;
             lucide.createIcons(); return;
         }
@@ -64,10 +64,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 : `<span class="fw-bold text-muted text-decoration-line-through">$ ${f.total.toFixed(2)}</span>`;
             const accion = esAprobado
                 ? `<div class="d-flex gap-1 justify-content-end">
-                     <button class="btn btn-sm btn-primary" title="Imprimir PDF" onclick="imprimirFactura('${f.id}')"><i data-lucide="printer" style="width:15px;"></i></button>
-                     <button class="btn btn-sm btn-outline-danger" title="Anular Factura" onclick="pedirAnularFactura('${f.id}')"><i data-lucide="ban" style="width:15px;"></i></button>
+                     <button class="btn btn-sm btn-primary"
+                       title="Imprimir PDF" aria-label="Imprimir factura ${f.id}"
+                       onclick="imprimirFactura('${f.id}')">
+                       <i data-lucide="printer" style="width:15px;" aria-hidden="true"></i>
+                     </button>
                    </div>`
-                : `<button class="btn btn-sm btn-outline-secondary" title="Ver Detalle Anulado" onclick="verAnulado('${f.id}')"><i data-lucide="eye" style="width:15px;"></i></button>`;
+                : `<button class="btn btn-sm btn-outline-secondary"
+                     title="Ver Detalle Anulado" aria-label="Ver detalle de factura anulada ${f.id}"
+                     onclick="verAnulado('${f.id}')">
+                     <i data-lucide="eye" style="width:15px;" aria-hidden="true"></i>
+                   </button>`;
             return `<tr>
                 <td class="ps-4 fw-bold ${esAprobado ? 'text-primary' : 'text-muted'}">${f.id}</td>
                 <td class="d-none d-md-table-cell text-muted small">${f.fechaDisplay}</td>
