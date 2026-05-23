@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const prefix = p.id.split('-')[0];
             const badgeColor = { VUE:'#0b4182',ALO:'#15803d',TRA:'#92400e',PAQ:'#6d28d9',CRU:'#0e7490',SEG:'#b45309',TOU:'#065f46',ADM:'#991b1b' }[prefix]||'#374151';
             return `<tr>
-                <td class="ps-4 py-3"><span class="badge" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span></td>
+                <td class="ps-4 py-3 d-none d-md-table-cell"><span class="badge" style="background-color:${badgeColor};font-size:.7rem;">${p.id}</span></td>
                 <td class="py-3 fw-semibold">${p.desc}</td>
                 <td class="text-end py-3 fw-bold text-muted">$${p.price.toFixed(2)}</td>
                 <td class="text-end pe-4 py-3" style="min-width:100px;">

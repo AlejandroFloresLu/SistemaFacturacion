@@ -18,12 +18,12 @@
     <div id="a11y-placeholder"></div>
 
     <main class="main-content p-4 bg-light" style="min-height: 100vh;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="page-header-wrap">
             <div>
-                <h2 class="fw-bold m-0 text-dark"><i data-lucide="package" class="me-2 text-primary"></i>Inventario Comercial</h2>
-                <p class="text-muted mt-1 mb-0">Gestión de boletos, tours y paquetes turísticos.</p>
+                <h2 class="page-title"><i data-lucide="package" class="me-2 text-primary"></i>Inventario Comercial</h2>
+                <p class="page-subtitle text-muted">Gestión de boletos, tours y paquetes turísticos.</p>
             </div>
-            <div>
+            <div class="page-actions">
                 <button class="btn btn-factu shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto"><i data-lucide="plus" class="me-1"></i> Añadir Producto</button>
             </div>
         </div>
@@ -43,7 +43,7 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-light text-muted" style="font-size:.78rem;letter-spacing:.4px;">
                         <tr>
-                            <th class="ps-4">Código</th>
+                            <th class="ps-4 d-none d-md-table-cell">Código</th>
                             <th>Descripción / Producto</th>
                             <th class="text-end">Precio</th>
                             <th class="text-end pe-4">Acciones</th>
