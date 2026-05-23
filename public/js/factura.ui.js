@@ -740,21 +740,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function renderPayments() {
         paymentList.innerHTML = '';
+
+        if (payments.length === 0) {
+            paymentList.innerHTML = `<div class="text-muted text-center small p-3 rounded-3" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">Aún no se han añadido pagos.</div>`;
+            return;
+        }
+
         payments.forEach(p => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2';
+            const div = document.createElement('div');
+            div.className = 'card border-0 shadow-sm rounded-3';
+            div.style.backgroundColor = '#f8fafc';
+            div.style.borderLeft = '4px solid #0b4182 !important';
             const btnEliminarPagoDisabled = modoNCActivo ? 'disabled' : '';
-            li.innerHTML = `
-                <span><i data-lucide="check-circle" class="text-success me-2" style="width:14px;height:14px;" aria-hidden="true"></i>${p.method}</span>
-                <span>
-                    <span class="fw-bold me-3" aria-label="Monto $${p.amount.toFixed(2)}">$${p.amount.toFixed(2)}</span>
-                    <button class="btn btn-sm text-danger p-0 border-0" onclick="removePayment(${p.id})" ${btnEliminarPagoDisabled} aria-label="Quitar pago de ${p.method}">
-                        <i data-lucide="x" style="width:16px;height:16px;" aria-hidden="true"></i>
-                    </button>
-                </span>`;
-            paymentList.appendChild(li);
+            div.innerHTML = `
+                <div class="card-body p-2 px-3 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px;height:28px;">
+                            <i data-lucide="check" class="text-primary" style="width:14px;height:14px;" aria-hidden="true"></i>
+                        </div>
+                        <div class="fw-bold text-dark" style="font-size:0.85rem;">${p.method}</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-bold text-primary" aria-label="Monto $${p.amount.toFixed(2)}">$${p.amount.toFixed(2)}</span>
+                        <button class="btn btn-outline-danger btn-sm border-0 px-2 py-1" onclick="removePayment(${p.id})" ${btnEliminarPagoDisabled} title="Eliminar pago" aria-label="Quitar pago de ${p.method}">
+                            <i data-lucide="trash-2" style="width:16px;height:16px;" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>`;
+            paymentList.appendChild(div);
         });
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     // =====================================================================
@@ -1023,20 +1038,39 @@ document.addEventListener("DOMContentLoaded", function() {
             await FacturaModel.create(payload);
 
             bootstrap.Modal.getInstance(document.getElementById('modalAprobarFactura')).hide();
-            clearActive();
-            limpiarFormulario();
             mostrarToast(`✅ Factura ${codigoFactura} emitida y guardada en la base de datos.`, 'success');
 
-            // Abrir vista previa de impresión con los datos reales de la BD
+            // ── Abrir vista previa con datos reales de la BD ──────────────────
+            // Se espera un tick para que el modal de aprobación termine de ocultarse
+            // antes de inyectar el nuevo modal de impresión en el DOM.
             setTimeout(async () => {
+                let facturaParaMostrar = null;
                 try {
-                    const facturaCompleta = await FacturaModel.getById(codigoFactura);
-                    _abrirImpresionFactura(facturaCompleta);
+                    facturaParaMostrar = await FacturaModel.getById(codigoFactura);
                 } catch {
-                    // Si falla la carga del detalle, mostrar alerta en lugar de window.print()
-                    mostrarToast('⚠️ Factura guardada, pero hubo un error al cargar la vista previa.', 'warning');
+                    mostrarToast('⚠️ Factura guardada, pero no se pudo cargar la vista previa.', 'warning');
+                    // Aunque falle la preview, hacemos limpieza igual
+                    clearActive();
+                    limpiarFormulario();
+                    return;
                 }
-            }, 400);
+
+                _abrirImpresionFactura(facturaParaMostrar);
+
+                // ── Limpiar SOLO cuando el usuario cierre la vista previa ──────
+                // Usamos { once: true } para que el listener se auto-destruya.
+                const modalImpresionEl = document.getElementById('modalImpresion');
+                if (modalImpresionEl) {
+                    modalImpresionEl.addEventListener('hidden.bs.modal', () => {
+                        clearActive();
+                        limpiarFormulario();
+                    }, { once: true });
+                } else {
+                    // Fallback: si el modal no existe en DOM, limpiar de inmediato
+                    clearActive();
+                    limpiarFormulario();
+                }
+            }, 350);
         } catch (err) {
             mostrarToast(`⚠️ ${err.message || 'Error al guardar la factura.'}`, 'danger');
         } finally {
