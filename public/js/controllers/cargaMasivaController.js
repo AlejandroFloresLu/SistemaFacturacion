@@ -27,9 +27,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     btnConfirm.addEventListener('click', async () => {
         if (!_pendiente) return;
+        
+        const originalText = btnConfirm.innerHTML;
+        btnConfirm.disabled = true;
+        btnConfirm.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+
+        const cargaPendiente = _pendiente;
+        _pendiente = null; // Clear it so the hidden event doesn't think it was cancelled
+
+        await ejecutarCarga(cargaPendiente);
+        
+        btnConfirm.disabled = false;
+        btnConfirm.innerHTML = originalText;
         modalBS.hide();
-        await ejecutarCarga(_pendiente);
-        _pendiente = null;
     });
 
     // Limpiar pendiente si el usuario cierra el modal sin confirmar

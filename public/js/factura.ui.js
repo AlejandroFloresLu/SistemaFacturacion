@@ -107,7 +107,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     qty:   d.cantidad,
                     total: d.subtotal
                 }));
-                payments = [];
+                payments = (fac.pagos || []).map(p => ({
+                    id:       p.idPago || Date.now() + Math.random(),
+                    idMetodo: p.idMetodo,
+                    method:   p.metodo,
+                    amount:   p.monto
+                }));
                 renderLines();
                 renderPayments();
                 modoNCActivo = true;
