@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── Inicializar secciones ─────────────────────────────────────────────────
-    initSeccion('clientes',  { drop:'dropClientes',  input:'inputClientes',  status:'statusClientes',  nombre:'nameClientes',  btnSubir:'btnSubirClientes',  btnDl:'btnDlClientes',  res:'resClientes'  });
-    initSeccion('productos', { drop:'dropProductos', input:'inputProductos', status:'statusProductos', nombre:'nameProductos', btnSubir:'btnSubirProductos', btnDl:'btnDlProductos', res:'resProductos' });
+    initSeccion('clientes',  { drop:'dropClientes',  input:'inputClientes',  status:'statusClientes',  nombre:'nameClientes',  btnSubir:'btnSubirClientes',  btnDl:'btnDlClientes',  btnRemove:'btnRemoveClientes', res:'resClientes'  });
+    initSeccion('productos', { drop:'dropProductos', input:'inputProductos', status:'statusProductos', nombre:'nameProductos', btnSubir:'btnSubirProductos', btnDl:'btnDlProductos', btnRemove:'btnRemoveProductos', res:'resProductos' });
 
     lucide.createIcons();
 
@@ -58,8 +58,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const nombreEl  = document.getElementById(ids.nombre);
         const btnSubir  = document.getElementById(ids.btnSubir);
         const btnDl     = document.getElementById(ids.btnDl);
+        const btnRemove = document.getElementById(ids.btnRemove);
         const resEl     = document.getElementById(ids.res);
         let   archivo   = null;
+
+        // Quitar archivo
+        if (btnRemove) {
+            btnRemove.addEventListener('click', () => {
+                archivo = null;
+                inputEl.value = '';
+                statusEl.classList.add('d-none');
+                resEl.innerHTML = '';
+            });
+        }
 
         // Descarga plantilla
         btnDl.addEventListener('click', () => descargarPlantilla(entidad));
@@ -195,24 +206,27 @@ document.addEventListener('DOMContentLoaded', function () {
             const n = row._fila;
 
             if (entidad === 'clientes') {
-                if (!row.Nombre || row.Nombre.length < 2)
+                if (!row.Nombre || String(row.Nombre).length < 2)
                     errores.push(`Fila ${n}: El campo "Nombre" está vacío o es demasiado corto.`);
-                if (!row.Apellido || row.Apellido.length < 2)
+                if (!row.Apellido || String(row.Apellido).length < 2)
                     errores.push(`Fila ${n}: El campo "Apellido" está vacío o es demasiado corto.`);
-                if (!row.RUC_Cedula || row.RUC_Cedula.trim() === '')
+                if (!row.RUC_Cedula || String(row.RUC_Cedula).trim() === '')
                     errores.push(`Fila ${n}: El campo "RUC_Cedula" está vacío.`);
-                else if (!/^\d{10}$/.test(row.RUC_Cedula) && !/^\d{13}$/.test(row.RUC_Cedula))
-                    errores.push(`Fila ${n}: "RUC_Cedula" debe ser una cédula de 10 dígitos o RUC de 13 dígitos (valor: "${row.RUC_Cedula}").`);
-                if (row.Email && row.Email !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.Email))
+                else {
+                    let rucStr = String(row.RUC_Cedula).trim();
+                    if (!/^\d{10}$/.test(rucStr) && !/^\d{13}$/.test(rucStr))
+                        errores.push(`Fila ${n}: "RUC_Cedula" debe ser una cédula de 10 dígitos o RUC de 13 dígitos (valor: "${rucStr}").`);
+                }
+                if (row.Email && String(row.Email).trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(row.Email)))
                     errores.push(`Fila ${n}: El campo "Email" no tiene un formato válido (valor: "${row.Email}").`);
             }
 
             if (entidad === 'productos') {
-                if (!row.Codigo || row.Codigo.trim() === '')
+                if (!row.Codigo || String(row.Codigo).trim() === '')
                     errores.push(`Fila ${n}: El campo "Codigo" está vacío.`);
-                if (!row.Descripcion || row.Descripcion.trim() === '')
+                if (!row.Descripcion || String(row.Descripcion).trim() === '')
                     errores.push(`Fila ${n}: El campo "Descripcion" está vacío.`);
-                if (!row.Precio || row.Precio.trim() === '')
+                if (row.Precio === undefined || row.Precio === null || String(row.Precio).trim() === '')
                     errores.push(`Fila ${n}: El campo "Precio" está vacío.`);
                 else if (isNaN(parseFloat(row.Precio)) || parseFloat(row.Precio) <= 0)
                     errores.push(`Fila ${n}: "Precio" debe ser un número mayor a 0 (valor: "${row.Precio}").`);

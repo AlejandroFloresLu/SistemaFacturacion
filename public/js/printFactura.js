@@ -82,16 +82,16 @@ window._abrirImpresionFactura = function (f) {
             </div>
 
             <!-- Totales + Pagos -->
-            <div style="display:flex;gap:24px;justify-content:flex-end;align-items:flex-start;">
+            <div style="display:flex;flex-wrap:wrap;gap:24px;justify-content:flex-end;align-items:flex-start;">
                 ${filasPagos ? `
-                <div style="flex:1;">
+                <div style="flex:1 1 200px;">
                     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6b7280;margin-bottom:6px;">FORMA DE PAGO</div>
                     <table style="width:100%;border-collapse:collapse;font-size:12px;">
                         <tbody>${filasPagos}</tbody>
                     </table>
                 </div>` : ''}
 
-                <div style="min-width:210px;">
+                <div style="flex:1 1 210px; max-width: 300px; margin-left: auto;">
                     <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:#6b7280;border-bottom:1px solid #f1f5f9;">
                         <span>Subtotal:</span><span>${subtotal}</span>
                     </div>
