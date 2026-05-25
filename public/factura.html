@@ -342,16 +342,16 @@
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-6">
                                         <label for="modalNombre" class="form-label text-muted small fw-bold">Nombres</label>
-                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre" required autocomplete="given-name">
+                                        <input type="text" class="form-control shadow-none border-1" id="modalNombre" maxlength="100" required autocomplete="given-name">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="modalApellido" class="form-label text-muted small fw-bold">Apellidos</label>
-                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido" required autocomplete="family-name">
+                                        <input type="text" class="form-control shadow-none border-1" id="modalApellido" maxlength="100" required autocomplete="family-name">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="modalDir" class="form-label text-muted small fw-bold">Dirección</label>
-                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" autocomplete="street-address">
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" maxlength="150" autocomplete="street-address">
                                 </div>
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-5">
@@ -368,7 +368,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="editCliEmail" class="form-label text-muted small fw-bold">Correo Electrónico</label>
-                                    <input type="email" class="form-control shadow-none border-1" id="editCliEmail" autocomplete="email">
+                                    <input type="email" class="form-control shadow-none border-1" id="editCliEmail" maxlength="100" autocomplete="email">
                                 </div>
                             </form>
                         </div>

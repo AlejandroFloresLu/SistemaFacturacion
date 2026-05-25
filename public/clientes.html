@@ -80,12 +80,12 @@
                             <div class="col-6">
                                 <label for="cliNuevoNombre" class="form-label text-muted small fw-bold">Nombres</label>
                                 <input type="text" class="form-control shadow-none border-1" id="cliNuevoNombre"
-                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" maxlength="100" required>
                             </div>
                             <div class="col-6">
                                 <label for="cliNuevoApellido" class="form-label text-muted small fw-bold">Apellidos</label>
                                 <input type="text" class="form-control shadow-none border-1" id="cliNuevoApellido"
-                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" maxlength="100" required>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -95,7 +95,7 @@
                         </div>
                         <div class="mb-3">
                                     <label for="modalDir" class="form-label text-muted small fw-bold">Dirección</label>
-                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" required>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDir" maxlength="150" required>
                         </div>
                         <div class="mb-3">
                             <label for="cliNuevoTel" class="form-label text-muted small fw-bold">Teléfono</label>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="cliNuevoEmail" class="form-label text-muted small fw-bold">Correo Electrónico</label>
-                            <input type="email" class="form-control shadow-none border-1" id="cliNuevoEmail">
+                            <input type="email" class="form-control shadow-none border-1" id="cliNuevoEmail" maxlength="100">
                         </div>
                     </form>
                 </div>
@@ -143,12 +143,12 @@
                             <div class="col-6">
                                 <label for="editCliNombre" class="form-label text-muted small fw-bold">Nombres</label>
                                 <input type="text" class="form-control shadow-none border-1" id="editCliNombre"
-                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" maxlength="100" required>
                             </div>
                             <div class="col-6">
                                 <label for="editCliApellido" class="form-label text-muted small fw-bold">Apellidos</label>
                                 <input type="text" class="form-control shadow-none border-1" id="editCliApellido"
-                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" required>
+                                    oninput="this.value=this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g,'');" maxlength="100" required>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -157,7 +157,7 @@
                         </div>
                         <div class="mb-3">
                                     <label for="modalDirEdit" class="form-label text-muted small fw-bold">Dirección</label>
-                                    <input type="text" class="form-control shadow-none border-1" id="modalDirEdit" required>
+                                    <input type="text" class="form-control shadow-none border-1" id="modalDirEdit" maxlength="150" required>
                                 </div>
                         <div class="mb-3">
                             <label for="editCliTel" class="form-label text-muted small fw-bold">Teléfono</label>
@@ -173,7 +173,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editCliEmail" class="form-label text-muted small fw-bold">Correo Electrónico</label>
-                            <input type="email" class="form-control shadow-none border-1" id="editCliEmail">
+                            <input type="email" class="form-control shadow-none border-1" id="editCliEmail" maxlength="100">
                         </div>
                     </form>
                 </div>
